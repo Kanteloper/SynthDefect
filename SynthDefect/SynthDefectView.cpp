@@ -140,7 +140,7 @@ int CSynthDefectView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	// TODO:  Add your specialized creation code here
 	// create a opengl child view to occupy the client area of the frame
 	// AFX_IDW_PANE_FIRST :  
-	if (!m_glwndView.Create(NULL, NULL, AFX_WS_DEFAULT_VIEW, CRect(0, 0, 0, 0), this, AFX_IDW_PANE_FIRST, NULL))
+	if (!m_glwndView.Create(NULL, NULL, AFX_WS_DEFAULT_VIEW, CRect(0, 0, 0, 0), this, NULL))
 	{
 		TRACE0("Failed to create opengl view window\n");
 		return -1;
