@@ -1,5 +1,5 @@
 
-// CGLWnd.h : interface of the CGLWnd class
+// GLWnd.h : interface of the CGLWnd class
 
 #pragma once
 #include <afxwin.h>
