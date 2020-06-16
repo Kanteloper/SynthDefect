@@ -3,6 +3,7 @@
 //
 
 #pragma once
+#include "GLWnd.h"
 
 
 class CSynthDefectView : public CView
@@ -14,7 +15,7 @@ protected: // create from serialization only
 // Attributes
 public:
 	CSynthDefectDoc* GetDocument() const;
-	CWnd m_wndChild;
+	CGLWnd m_glwndView;
 
 // Operations
 public:
