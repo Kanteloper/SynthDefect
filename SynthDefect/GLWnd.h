@@ -25,8 +25,9 @@ protected:
 // Implementation
 public:
 	virtual ~CGLWnd();
+	void InitGL();
 
-
-
+	DECLARE_MESSAGE_MAP()
+	afx_msg void OnPaint();
 };
 
