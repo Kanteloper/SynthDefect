@@ -3,7 +3,6 @@
 //
 
 #pragma once
-#include "GLWnd.h"
 
 
 class CSynthDefectView : public CView
@@ -15,7 +14,8 @@ protected: // create from serialization only
 // Attributes
 public:
 	CSynthDefectDoc* GetDocument() const;
-	CGLWnd m_glwndView;
+	bool m_bInitGL;
+	CWnd m_wndChild;
 
 // Operations
 public:
@@ -24,6 +24,8 @@ public:
 public:
 	virtual void OnDraw(CDC* pDC);  // overridden to draw this view
 	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
+	void InitChildView();
+
 protected:
 
 // Implementation
@@ -51,6 +53,7 @@ public:
 	afx_msg void OnClose();
 	afx_msg void OnDestroy();
 	afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
+	afx_msg void OnTimer(UINT_PTR nIDEvent);
 };
 
 #ifndef _DEBUG  // debug version in SynthDefectView.cpp

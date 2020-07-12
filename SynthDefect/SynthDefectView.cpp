@@ -62,9 +62,8 @@ BOOL CSynthDefectView::PreCreateWindow(CREATESTRUCT& cs)
 	return CView::PreCreateWindow(cs);
 }
 
+
 // CSynthDefectView drawing
-void InitGL();
-int DrawGLScene();
 void CSynthDefectView::OnDraw(CDC* /*pDC*/)
 {
 	CSynthDefectDoc* pDoc = GetDocument();
@@ -72,9 +71,20 @@ void CSynthDefectView::OnDraw(CDC* /*pDC*/)
 	if (!pDoc)
 		return;
 
-	if (m_bInitGL) InitGL(); //Initialization of the GL window if first call
-	DrawGLScene();					//Global drawing procedure
+	if (m_bInitGL) InitChildView();											//Initialization of the GL window if first call
+	DrawGLScene();															//Global drawing procedure
 }
+
+
+/// <summary>
+/// 
+/// </summary>
+void CSynthDefectView::InitChildView()
+{
+	m_bInitGL = FALSE;
+	InitGL();
+}
+
 
 void CSynthDefectView::OnRButtonUp(UINT /* nFlags */, CPoint point)
 {
@@ -175,7 +185,6 @@ void CSynthDefectView::OnTimer(UINT_PTR nIDEvent)
 	}
 	CView::OnTimer(nIDEvent);
 }
-
 
 
 void CSynthDefectView::OnClose()
