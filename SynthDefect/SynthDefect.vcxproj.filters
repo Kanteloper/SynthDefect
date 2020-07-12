@@ -45,7 +45,10 @@
     <ClInclude Include="pch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GLWnd.h">
+    <ClInclude Include="GLRoutine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GlobDrawGL.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -71,7 +74,10 @@
     <ClCompile Include="pch.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GLWnd.cpp">
+    <ClCompile Include="GLRoutine.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GlobDrawGL.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
