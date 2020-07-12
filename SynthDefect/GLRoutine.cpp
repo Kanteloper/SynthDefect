@@ -1,16 +1,11 @@
 // GLRoutine.cpp for the common Global OpenGL Procedures
 
-
-#include "GLRoutine.h"
-#include <GL/glut.h>
-#include <GL/GL.h>
-#include <GL/GLU.h>
-
+#include "pch.h"
 
 /// <summary>
 /// Create OpenGL window
 /// </summary>
-/// <param name="pWnd">: the client area of a specified window of CWnd class type </param>
+/// <param name="pWnd">: the client area of a specified window </param>
 /// <param name="bits">: the size of Color buffer(= Color Depth)</param>
 /// <returns> bool </returns>
 bool CreateGLWindow(CWnd* pWnd, int bits)
@@ -115,7 +110,7 @@ bool CreateGLWindow(CWnd* pWnd, int bits)
 	//                       and activates the window
 	// The system assigns a slightly higher priority to the thread that created the foreground window
 	SetForegroundWindow(pWnd->m_hWnd);
-	// ReSizeGLScene(rect.Width(), rect.Height());				// Set Up Our Perspective GL Screen
+	InitGLScene(rect.Width(), rect.Height());				// Set Up Our Perspective GL Screen
 
 	return TRUE;
 }
@@ -123,7 +118,7 @@ bool CreateGLWindow(CWnd* pWnd, int bits)
 /// <summary>
 /// Properly Kill the Window
 /// </summary>
-/// <param name="pWnd">: the client area of a specified window of CWnd class type </param>
+/// <param name="pWnd">: the client area of a specified window </param>
 /// <returns> bool </returns>
 bool KillGLWindow(CWnd* pWnd)
 {
@@ -176,4 +171,38 @@ bool KillGLWindow(CWnd* pWnd)
 	}
 
 	return TRUE;
+}
+
+GLfloat fNearPlane = 0.1f, fFarPlane = 100.f, fViewAngle = 45.f, fAspect;
+RECT m_viewRect;
+
+/// <summary>
+/// Initialize the OpenGL window
+/// </summary>
+/// <param name="width">: width of OpenGL window </param>
+/// <param name="height">: height of OpenGL window </param>
+/// <returns></returns>
+GLvoid InitGLScene(GLsizei width, GLsizei height)
+{
+	if (height == 0)									// Prevent A Divide By Zero By
+	{
+		height = 1;										// Making Height Equal One
+	}
+	m_viewRect.left = m_viewRect.top = 0;				// The coordinates of the upper-left corner are (0,0).
+	m_viewRect.right = width;
+	m_viewRect.bottom = height;
+
+	glViewport(0, 0, width, height);					// Reset The Current Viewport
+
+	// glMatrixMode - Specify which matrix is the current matrix
+	// GL_PROJECTION - Apply subsequent matrix operations to the projection matrix stack
+	glMatrixMode(GL_PROJECTION);						// Select The Projection Matrix
+	glLoadIdentity();									// Reset The Projection Matrix to Identity Matrix
+
+	// gluPerspective - Set up a Perspective Projection Matrix
+	// Specify a Viewing frustrum into the World coordinate system
+	gluPerspective(fViewAngle, (GLfloat)width / (GLfloat)height, fNearPlane, fFarPlane);  
+
+	glMatrixMode(GL_MODELVIEW);							// Select The Modelview Matrix
+	glLoadIdentity();									// Reset The Modelview Matrix
 }
