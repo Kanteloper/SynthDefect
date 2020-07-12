@@ -17,6 +17,8 @@
 #define new DEBUG_NEW
 #endif
 
+#define ID_TIMER_PLAY 100					// Unique ID of system timer for a specific window
+
 
 // CSynthDefectView
 
@@ -29,11 +31,13 @@ BEGIN_MESSAGE_MAP(CSynthDefectView, CView)
 	ON_WM_CLOSE()
 	ON_WM_DESTROY()
 	ON_WM_SHOWWINDOW()
+	ON_WM_TIMER()
 END_MESSAGE_MAP()
 
 // CSynthDefectView construction/destruction
 
 CSynthDefectView::CSynthDefectView() noexcept
+	: m_bInitGL(TRUE)
 {
 	// TODO: add construction code here
 }
@@ -42,16 +46,25 @@ CSynthDefectView::~CSynthDefectView()
 {
 }
 
+// 생성되는 window의 다양한 속성 변경
 BOOL CSynthDefectView::PreCreateWindow(CREATESTRUCT& cs)
 {
-	// TODO: Modify the Window class or styles here by modifying
-	//  the CREATESTRUCT cs
+	// WS_EX_CLIENTEDGE: Specify that a window has a 3D look - a border with a sunken edge
+	// WS_BORDER: a window has a border
+	cs.style &= ~WS_BORDER; // &=  operator :  remove WS_BORDER style
+	// CS_HREDRAW: Redraws the entire window if a movement or size adjustment changes the width of the client area.
+	// CS_VREDRAW: Redraws the entire window if a movement or size adjustment changes the height of the client area.
+	// CS_DBLCLKS: Sends a double-click message to the window procedure when the user double-clicks the mouse
+	//             while the cursor is within a window belonging to the class.
+	cs.lpszClass = AfxRegisterWndClass(CS_HREDRAW | CS_VREDRAW | CS_DBLCLKS,
+		::LoadCursor(NULL, IDC_ARROW), reinterpret_cast<HBRUSH>(COLOR_WINDOW + 1), NULL); // allow to register own window classes
 
 	return CView::PreCreateWindow(cs);
 }
 
 // CSynthDefectView drawing
-
+void InitGL();
+int DrawGLScene();
 void CSynthDefectView::OnDraw(CDC* /*pDC*/)
 {
 	CSynthDefectDoc* pDoc = GetDocument();
@@ -59,7 +72,8 @@ void CSynthDefectView::OnDraw(CDC* /*pDC*/)
 	if (!pDoc)
 		return;
 
-	// TODO: add draw code for native data here
+	if (m_bInitGL) InitGL(); //Initialization of the GL window if first call
+	DrawGLScene();					//Global drawing procedure
 }
 
 void CSynthDefectView::OnRButtonUp(UINT /* nFlags */, CPoint point)
@@ -139,13 +153,29 @@ int CSynthDefectView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	// TODO:  Add your specialized creation code here
 	// create a opengl child view to occupy the client area of the frame
-	if (!m_glwndView.Create(NULL, NULL, AFX_WS_DEFAULT_VIEW, CRect(30, 30, 30, 30), this, AFX_IDW_PANE_FIRST, NULL))
-	{
-		TRACE0("Failed to create opengl view window\n");
-		return -1;
-	}
+	CreateGLWindow(this, 32);
+	// SetTimer - Install a system timer
+	SetTimer(ID_TIMER_PLAY, 15, NULL);
+	// m_wndChild.Create(TEXT("STATIC"), TEXT("DEMO"), WS_CHILD|WS_VISIBLE|WS_BORDER, CRect(30, 30, 180, 180), this, 1234);
 	return 0;
 }
+
+
+void CSynthDefectView::OnTimer(UINT_PTR nIDEvent)
+{
+	// TODO: Add your message handler code here and/or call default
+	bool bRslt = FALSE;
+	switch (nIDEvent)
+	{
+	case ID_TIMER_PLAY:
+		bRslt = DrawGLScene();									// OpenGL drawing procedure
+		if (bRslt)
+			SwapBuffers(wglGetCurrentDC());
+		break;
+	}
+	CView::OnTimer(nIDEvent);
+}
+
 
 
 void CSynthDefectView::OnClose()
