@@ -110,7 +110,7 @@ bool CreateGLWindow(CWnd* pWnd, int bits)
 	//                       and activates the window
 	// The system assigns a slightly higher priority to the thread that created the foreground window
 	SetForegroundWindow(pWnd->m_hWnd);
-	InitGLScene(rect.Width(), rect.Height());				// Set Up Our Perspective GL Screen
+	ResizeGLScene(rect.Width(), rect.Height());				// Set Up Our Perspective GL Screen
 
 	return TRUE;
 }
@@ -177,12 +177,12 @@ GLfloat fNearPlane = 0.1f, fFarPlane = 100.f, fViewAngle = 45.f, fAspect;
 RECT m_viewRect;
 
 /// <summary>
-/// Initialize the OpenGL window
+/// Resize and Initialize the OpenGL window
 /// </summary>
 /// <param name="width">: width of OpenGL window </param>
 /// <param name="height">: height of OpenGL window </param>
 /// <returns></returns>
-GLvoid InitGLScene(GLsizei width, GLsizei height)
+GLvoid ResizeGLScene(GLsizei width, GLsizei height)
 {
 	if (height == 0)									// Prevent A Divide By Zero By
 	{
