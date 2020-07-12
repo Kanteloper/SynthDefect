@@ -4,15 +4,20 @@
 
 #include "pch.h"
 #include "GLWnd.h"
-#include <gl/GL.h>
-#include <gl/GLU.h>
+#include <GL/glut.h>
+#include <GL/GL.h>
+#include <GL/GLU.h>
 
 #ifdef DEBUG
 #define new DEBUG_NEW						// Assists in finding memory leaks in debug mode				
 #endif
 
+#define ID_TIMER_PLAY 100					// Unique ID of system timer for a specific window
+
 BEGIN_MESSAGE_MAP(CGLWnd, CWnd)
 	ON_WM_PAINT()
+	ON_WM_CREATE()
+	ON_WM_TIMER()
 END_MESSAGE_MAP()
 
 CGLWnd::CGLWnd():m_bInitGL(TRUE)
@@ -74,5 +79,17 @@ void CGLWnd::InitGL()
 	// Certain aspects of GL behavior can be controlled with hints.
 	// GL_PERSPECTIVE_CORRECTION_HINT: Indicates the quality of color, texture coordinate, and fog(¾È°³) coordinate interpolation.
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+}
+
+
+int CGLWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
+{
+	if (CWnd::OnCreate(lpCreateStruct) == -1)
+		return -1;
+
+	CreateGLWindow(this, 32);
+	// SetTimer - Install a system timer
+	SetTimer(ID_TIMER_PLAY, 15, NULL);
+	return 0;
 }
 
