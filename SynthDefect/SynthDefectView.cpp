@@ -76,9 +76,6 @@ void CSynthDefectView::OnDraw(CDC* /*pDC*/)
 }
 
 
-/// <summary>
-/// 
-/// </summary>
 void CSynthDefectView::InitChildView()
 {
 	m_bInitGL = FALSE;
