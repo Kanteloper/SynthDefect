@@ -38,6 +38,15 @@ CSynthDefectDoc::~CSynthDefectDoc()
 {
 }
 
+
+/// <summary>
+/// Called by the framework as part of the File 'New' command
+/// </summary>
+/// <returns> Nonzero if the document was successfully initialized; otherwise 0</returns>
+// If the users chooses the File 'New' command in an SDI application, 
+// the framework uses this function to 'reintialize' the existing document, rather than creating a new one.
+// Must place 'initialization' code in this function instead of in the constructor
+// for the File 'New' command to be effective in SDI applications.
 BOOL CSynthDefectDoc::OnNewDocument()
 {
 	if (!CDocument::OnNewDocument())
@@ -51,9 +60,40 @@ BOOL CSynthDefectDoc::OnNewDocument()
 }
 
 
+/// <summary>
+/// Called by the framework as part of the File 'Open' command
+/// </summary>
+/// <param name="lpszPathName">: Points to the path of the document to be opened</param>
+/// <returns>Nonzero if the document was successfully loaded; otherwise 0</returns>
+// LPCTSTR - Long Point Constant Typecasting String
+BOOL CSynthDefectDoc::OnOpenDocument(LPCTSTR lpszPathName)
+{
+	if (!CDocument::OnOpenDocument(lpszPathName))
+		return FALSE;
+	AfxMessageBox(lpszPathName);
+	// File load code
 
-// CSynthDefectDoc serialization
+	CFile file;
+	VERIFY(file.Open(lpszPathName, CFile::modeRead, NULL));
 
+	BYTE buffer[4096];
+	DWORD dwRead;
+
+	do
+	{
+		dwRead = file.Read(buffer, 4096);
+		// save mesh data to data structure for mesh
+	} while (dwRead > 0);
+
+	// close file
+	file.Close();
+
+
+
+	return TRUE;
+}
+
+// CSynthDefectDoc serialization - not used
 void CSynthDefectDoc::Serialize(CArchive& ar)
 {
 	if (ar.IsStoring())
@@ -136,3 +176,5 @@ void CSynthDefectDoc::Dump(CDumpContext& dc) const
 
 
 // CSynthDefectDoc commands
+
+
