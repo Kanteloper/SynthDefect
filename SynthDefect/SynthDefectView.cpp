@@ -32,6 +32,7 @@ BEGIN_MESSAGE_MAP(CSynthDefectView, CView)
 	ON_WM_DESTROY()
 	ON_WM_SHOWWINDOW()
 	ON_WM_TIMER()
+	ON_WM_SIZE()
 END_MESSAGE_MAP()
 
 // CSynthDefectView construction/destruction
@@ -162,9 +163,21 @@ int CSynthDefectView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	// create a opengl child view to occupy the client area of the frame
 	CreateGLWindow(this, 32);
 	// SetTimer - Install a system timer
-	SetTimer(ID_TIMER_PLAY, 15, NULL);
+	SetTimer(ID_TIMER_PLAY, 10, NULL);
 	// m_wndChild.Create(TEXT("STATIC"), TEXT("DEMO"), WS_CHILD|WS_VISIBLE|WS_BORDER, CRect(30, 30, 180, 180), this, 1234);
 	return 0;
+}
+
+/// <summary>
+/// message handler that calls after the window's size has changed
+/// </summary>
+/// <param name="nType">: Specify the type of resizing requested</param>
+/// <param name="cx">: Specify the new width of the client area</param>
+/// <param name="cy">: Specify the new height of the client area</param>
+void CSynthDefectView::OnSize(UINT nType, int cx, int cy)
+{
+	CView::OnSize(nType, cx, cy);
+	ResizeGLScene(cx, cy);
 }
 
 
@@ -206,3 +219,5 @@ void CSynthDefectView::OnShowWindow(BOOL bShow, UINT nStatus)
 
 	// TODO: Add your message handler code here
 }
+
+
