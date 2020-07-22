@@ -382,9 +382,7 @@ void CMainFrame::OnSettingChange(UINT uFlags, LPCTSTR lpszSection)
 void CMainFrame::OnClose()
 {
 	// TODO: Add your message handler code here and/or call default
-	AfxMessageBox(TEXT("wm_close ¹ß»ý"));
 	CFrameWndEx::OnClose();
-	TRACE(TEXT("CMainFrame::OnClose() - Return\n"));
 }
 
 
