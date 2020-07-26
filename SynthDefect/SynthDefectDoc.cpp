@@ -14,6 +14,9 @@
 #include <gl/GL.h>
 #include <gl/GLU.h>
 #include <propkey.h>
+#include <cstdio>
+
+#include <iostream>
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -70,23 +73,15 @@ BOOL CSynthDefectDoc::OnOpenDocument(LPCTSTR lpszPathName)
 {
 	if (!CDocument::OnOpenDocument(lpszPathName))
 		return FALSE;
-	AfxMessageBox(lpszPathName);
-	// File load code
+	
+	// load target file
+	FILE *fp;
+	errno_t err;
+	err = fopen_s(&fp, (const char*)lpszPathName, "r");
+	ASSERT(err != 0);
+	while (1)
 
-	CFile file;
-	VERIFY(file.Open(lpszPathName, CFile::modeRead, NULL));
 
-	BYTE buffer[4096];
-	DWORD dwRead;
-
-	do
-	{
-		dwRead = file.Read(buffer, 4096);
-		// save mesh data to data structure for mesh
-	} while (dwRead > 0);
-
-	// close file
-	file.Close();
 
 
 
