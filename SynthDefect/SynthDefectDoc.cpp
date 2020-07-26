@@ -77,9 +77,29 @@ BOOL CSynthDefectDoc::OnOpenDocument(LPCTSTR lpszPathName)
 	// load target file
 	FILE *fp;
 	errno_t err;
-	err = fopen_s(&fp, (const char*)lpszPathName, "r");
-	ASSERT(err != 0);
-	while (1)
+	const char* filePath;
+
+	// In order to for the macros to have space to store the a temporary length, 
+	// it is necessary to declare a local variable called '_convert'
+	// See https://docs.microsoft.com/ko-kr/cpp/mfc/tn059-using-mfc-mbcs-unicode-conversion-macros?view=vs-2019
+	USES_CONVERSION;
+	// convert lptstr(MBCS) to unicode(const char*)
+	filePath = T2A(lpszPathName);
+
+	err = fopen_s(&fp, filePath, "r");
+	ASSERT(err == 0);
+
+	//while (1)
+	//{
+	//	char lineHeader[128];
+	//	int res;
+	//	// read the first word of the line
+	//	if ((res = fscanf_s(fp, "%s", lineHeader)) == EOF)
+	//		break;
+
+	//	std::clog << lineHeader << std::endl;
+
+	//}
 
 
 
