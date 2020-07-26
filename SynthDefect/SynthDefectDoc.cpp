@@ -84,29 +84,31 @@ BOOL CSynthDefectDoc::OnOpenDocument(LPCTSTR lpszPathName)
 	// See https://docs.microsoft.com/ko-kr/cpp/mfc/tn059-using-mfc-mbcs-unicode-conversion-macros?view=vs-2019
 	USES_CONVERSION;
 	// convert lptstr(MBCS) to unicode(const char*)
-	filePath = T2A(lpszPathName);
+	filePath = W2A(lpszPathName);
 
-	err = fopen_s(&fp, filePath, "r");
-	ASSERT(err == 0);
-
-	//while (1)
-	//{
-	//	char lineHeader[128];
-	//	int res;
-	//	// read the first word of the line
-	//	if ((res = fscanf_s(fp, "%s", lineHeader)) == EOF)
-	//		break;
-
-	//	std::clog << lineHeader << std::endl;
-
-	//}
-
-
-
-
+	// Check file format
+	CString fileFormat = getFileFormat(filePath);
+	// Possible to add other fileformat of Mesh
+	ASSERT(fileFormat == "obj");
 
 	return TRUE;
 }
+
+
+/// <summary>
+/// extract file format from file path
+/// </summary>
+/// <param name="path">: Relative or Absolute path of selected file </param>
+/// <returns> file </returns>
+CString CSynthDefectDoc::getFileFormat(const char* path)
+{
+	int curPos = 0;
+	CString tmpStr(path);
+	curPos = tmpStr.Find(_T("."));
+	tmpStr = tmpStr.Tokenize(_T("."), curPos);
+	return tmpStr;
+}
+
 
 // CSynthDefectDoc serialization - not used
 void CSynthDefectDoc::Serialize(CArchive& ar)

@@ -30,7 +30,7 @@ public:
 // Implementation
 public:
 	virtual ~CSynthDefectDoc();
-	void init();									// initialize OpenGL states
+	CString getFileFormat(const char*);									// get file format
 #ifdef _DEBUG
 	virtual void AssertValid() const;
 	virtual void Dump(CDumpContext& dc) const;
