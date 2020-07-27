@@ -1,3 +1,4 @@
+// GlobDrawGL.cpp for implementation Rendering process using OpenGL
 
 #include "pch.h"
 

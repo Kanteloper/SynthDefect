@@ -9,7 +9,7 @@
 #include "MainFrm.h"
 
 #ifdef _DEBUG
-#define new DEBUG_NEW
+#define new DEBUG_NEW		// Assist in finding memory leaks, https://docs.microsoft.com/en-us/previous-versions/visualstudio/visual-studio-2010/tz7sxz99(v=vs.100)
 #endif
 
 // CMainFrame
