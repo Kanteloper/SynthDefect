@@ -189,6 +189,7 @@
   <ItemGroup>
     <ClInclude Include="framework.h" />
     <ClInclude Include="GlobDrawGL.h" />
+    <ClInclude Include="GlobMyProc.h" />
     <ClInclude Include="GLRoutine.h" />
     <ClInclude Include="MainFrm.h" />
     <ClInclude Include="OutputWnd.h" />
@@ -202,6 +203,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GlobDrawGL.cpp" />
+    <ClCompile Include="GlobMyProc.cpp" />
     <ClCompile Include="GLRoutine.cpp" />
     <ClCompile Include="MainFrm.cpp" />
     <ClCompile Include="OutputWnd.cpp" />

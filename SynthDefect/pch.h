@@ -13,5 +13,6 @@
 #include "framework.h"
 #include "GLRoutine.h"
 #include "GlobDrawGL.h"
+#include "GlobMyProc.h"
 
 #endif //PCH_H
