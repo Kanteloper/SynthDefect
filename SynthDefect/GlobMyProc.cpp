@@ -61,15 +61,16 @@ BOOL LoadObject(LPCTSTR pathName)
 			TCHAR lineHeader[128];
 			int res;
 			// Read the first word of the line
-			if ((res = _ftscanf_s(file, _T("%s"), lineHeader, _countof(lineHeader))) == EOF)
+			if ((res = _ftscanf_s(file, _T("%s"), lineHeader, static_cast<unsigned int>_countof(lineHeader))) == EOF)
 				break;
 
 			// Parse line header
+
 		}
 	}
 	else
 	{
-		//AfxMessageBox(L"Not support \'" fileFormat , MB_OK | MB_ICONERROR);
+		AfxMessageBox(L"Not support \'" + fileFormat , MB_OK | MB_ICONERROR);
 		return FALSE;
 	}
 
