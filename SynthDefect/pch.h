@@ -7,12 +7,11 @@
 #ifndef PCH_H
 #define PCH_H
 
-#pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:console")
-
 // add headers that you want to pre-compile here
 #include "framework.h"
 #include "GLRoutine.h"
 #include "GlobDrawGL.h"
 #include "GlobMyProc.h"
+
 
 #endif //PCH_H
