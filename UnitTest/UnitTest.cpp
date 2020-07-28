@@ -18,7 +18,7 @@ namespace UnitTest
 
 		TEST_METHOD(TestMyFileOpen)
 		{
-			FILE* file = MyFileOpen(_T("D:\Research\UnitTest\\testMesh.obj"), _T("r"));
+			FILE* file = MyFileOpen(_T("D:\Research\UnitTest\testMesh.obj"), _T("r"));
 			Assert::IsNull(file, _T("File not found"));
 		}
 	};
