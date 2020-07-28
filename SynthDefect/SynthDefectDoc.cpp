@@ -14,9 +14,6 @@
 #include <gl/GL.h>
 #include <gl/GLU.h>
 #include <propkey.h>
-#include <cstdio>
-
-#include <iostream>
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -74,55 +71,11 @@ BOOL CSynthDefectDoc::OnOpenDocument(LPCTSTR lpszPathName)
 	if (!CDocument::OnOpenDocument(lpszPathName))
 		return FALSE;
 	
-	// In order to for the macros to have space to store the a temporary length, 
-	// it is necessary to declare a local variable called '_convert'
-	// See https://docs.microsoft.com/ko-kr/cpp/mfc/tn059-using-mfc-mbcs-unicode-conversion-macros?view=vs-2019
-	USES_CONVERSION;
-	// convert lptstr(MBCS) to unicode(const char*)
-	const char* filePath = W2A(lpszPathName);
-
-	// Check file format
-	CString fileFormat = getFileFormat(filePath);
-	// Possible to add other fileformat of Mesh
-	if (fileFormat == "obj")
-	{
-		FILE* fp;
-		errno_t err = fopen_s(&fp, filePath, "r");
-		ASSERT(err == 0);
-
-		while (1)
-		{
-			char lineHeader[128];
-			int res;
-			// Read the first word of the line
-			if ((res = fscanf_s(fp, "%s", lineHeader, _countof(lineHeader))) == EOF)
-				break;
-
-			// Parse line header
-		}
-	}
-	else
-	{
-		//AfxMessageBox(L"Not support \'" fileFormat , MB_OK | MB_ICONERROR);
-	}
+	LoadObject(lpszPathName);
 
 	return TRUE;
 }
 
-
-/// <summary>
-/// extract file format from file path
-/// </summary>
-/// <param name="path">: Relative or Absolute path of selected file </param>
-/// <returns> file </returns>
-CString CSynthDefectDoc::getFileFormat(const char* path)
-{
-	int curPos = 0;
-	CString tmpStr(path);
-	curPos = tmpStr.Find(_T("."));
-	tmpStr = tmpStr.Tokenize(_T("."), curPos);
-	return tmpStr;
-}
 
 
 // CSynthDefectDoc serialization - not used
