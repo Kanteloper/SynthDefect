@@ -117,13 +117,15 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>D:\Research\vcpkg\installed\x86-windows\include;../include;$(VCInstallDir)Auxiliary\VS\UnitTest\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Project\Research\SynthDefect\vcpkg\installed\x86-windows\include;../include;$(VCInstallDir)Auxiliary\VS\UnitTest\include</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>
       </DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
-      <AdditionalLibraryDirectories>D:\Research\vcpkg\installed\x86-windows\lib;../lib;$(VCInstallDir)Auxiliary\VS\UnitTest\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>D:\Project\Research\SynthDefect\vcpkg\installed\x86-windows\lib;../lib;$(VCInstallDir)Auxiliary\VS\UnitTest\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>
+      </AdditionalDependencies>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
@@ -139,6 +141,9 @@
       <Command>
       </Command>
     </PostBuildEvent>
+    <ProjectReference>
+      <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
+    </ProjectReference>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
