@@ -117,11 +117,13 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>../include;$(VCInstallDir)Auxiliary\VS\UnitTest\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Research\vcpkg\installed\x86-windows\include;../include;$(VCInstallDir)Auxiliary\VS\UnitTest\include</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>
+      </DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
-      <AdditionalLibraryDirectories>../lib;$(VCInstallDir)Auxiliary\VS\UnitTest\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>D:\Research\vcpkg\installed\x86-windows\lib;../lib;$(VCInstallDir)Auxiliary\VS\UnitTest\lib</AdditionalLibraryDirectories>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
