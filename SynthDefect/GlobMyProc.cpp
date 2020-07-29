@@ -3,32 +3,6 @@
 #include "pch.h"
 
 /// <summary>
-/// Load selected object file
-/// </summary>
-/// <param name="pathName">: the path of selected file </param>
-/// <returns> TRUE if load success, FALSE on failure </returns>
-BOOL LoadModel(LPCTSTR pathName)
-{
-	Assimp::Importer import;
-	const aiScene* scene = import.ReadFile(ConvertStdString(pathName),
-		aiProcess_CalcTangentSpace |
-		aiProcess_Triangulate | 
-		aiProcess_RemoveComponent |
-		aiProcess_JoinIdenticalVertices |
-		aiProcess_ValidateDataStructure );
-
-	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
-	{
-		TRACE("Failed to load model using assimp");
-		return FALSE;
-	}
-
-
-	return TRUE;
-}
-
-
-/// <summary>
 /// Convert LPCTSTR to std::string
 /// </summary>
 /// <param name="target">: Target LPCTSTR of conversion </param>
