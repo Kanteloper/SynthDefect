@@ -45,7 +45,7 @@ CString getFileFormat(LPCTSTR path)
 /// </summary>
 /// <param name="pathName">: the path of selected file </param>
 /// <returns> TRUE if load success, FALSE on failure </returns>
-BOOL LoadObject(LPCTSTR pathName)
+BOOL LoadModel(LPCTSTR pathName)
 {
 	// Check file format
 	CString fileFormat = getFileFormat(pathName);

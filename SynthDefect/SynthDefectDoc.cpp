@@ -71,7 +71,7 @@ BOOL CSynthDefectDoc::OnOpenDocument(LPCTSTR lpszPathName)
 	if (!CDocument::OnOpenDocument(lpszPathName))
 		return FALSE;
 	
-	LoadObject(lpszPathName);
+	LoadModel(lpszPathName);
 
 	return TRUE;
 }
