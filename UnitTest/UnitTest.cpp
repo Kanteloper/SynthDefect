@@ -9,17 +9,12 @@ namespace UnitTest
 	TEST_CLASS(TestMyProc)
 	{
 	public:
-		
-		TEST_METHOD(TestGetFileFormat)
+		TEST_METHOD(TestConvertStdString)
 		{
-			CString filePath = getFileFormat("D:\\test\\test.obj");
-			Assert::AreEqual(filePath, _T("obj"));
-		}
-
-		TEST_METHOD(TestMyFileOpen)
-		{
-			FILE* file = MyFileOpen(_T("D:\Research\UnitTest\testMesh.obj"), _T("r"));
-			Assert::IsNull(file, _T("File not found"));
+			LPCTSTR target = _T("test");
+			std::string compare("test");
+			std::string result = ConvertStdString(target);
+			Assert::AreEqual(result, compare);
 		}
 	};
 }
