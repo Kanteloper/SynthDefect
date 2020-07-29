@@ -33,6 +33,7 @@ BEGIN_MESSAGE_MAP(CSynthDefectView, CView)
 	ON_WM_SHOWWINDOW()
 	ON_WM_TIMER()
 	ON_WM_SIZE()
+//	ON_WM_UPDATEUISTATE()
 END_MESSAGE_MAP()
 
 // CSynthDefectView construction/destruction
@@ -197,6 +198,13 @@ void CSynthDefectView::OnTimer(UINT_PTR nIDEvent)
 }
 
 
+void CSynthDefectView::OnUpdate(CView* /*pSender*/, LPARAM /*lHint*/, CObject* /*pHint*/)
+{
+	// TODO: Add your specialized code here and/or call the base class
+}
+
+
+
 void CSynthDefectView::OnClose()
 {
 	// TODO: Add your message handler code here and/or call default
@@ -219,5 +227,3 @@ void CSynthDefectView::OnShowWindow(BOOL bShow, UINT nStatus)
 
 	// TODO: Add your message handler code here
 }
-
-

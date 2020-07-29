@@ -55,6 +55,8 @@ public:
 	afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
 	afx_msg void OnTimer(UINT_PTR nIDEvent);
 	afx_msg void OnSize(UINT nType, int cx, int cy);
+//	afx_msg void OnUpdateUIState(UINT /*nAction*/, UINT /*nUIElement*/);
+	virtual void OnUpdate(CView* /*pSender*/, LPARAM /*lHint*/, CObject* /*pHint*/);
 };
 
 #ifndef _DEBUG  // debug version in SynthDefectView.cpp
