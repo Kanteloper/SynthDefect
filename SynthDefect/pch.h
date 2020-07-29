@@ -13,6 +13,7 @@
 #include "GlobDrawGL.h"
 #include "GlobMyProc.h"
 #include "Mesh.h"
+#include "Model.h"
 
 
 #endif //PCH_H

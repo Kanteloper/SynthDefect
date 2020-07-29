@@ -25,10 +25,7 @@ class Mesh
 {
 // Construction
 public:
-	Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices) : m_vertices(vertices), m_indices(indices)
-	{
-		
-	};
+	Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices) : m_vertices(vertices), m_indices(indices) {};
 
 // Attributes
 private:
