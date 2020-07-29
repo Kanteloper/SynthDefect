@@ -70,9 +70,6 @@ BOOL CSynthDefectDoc::OnOpenDocument(LPCTSTR lpszPathName)
 {
 	if (!CDocument::OnOpenDocument(lpszPathName))
 		return FALSE;
-	
-	LoadModel(lpszPathName);
-
 	return TRUE;
 }
 
@@ -87,7 +84,9 @@ void CSynthDefectDoc::Serialize(CArchive& ar)
 	}
 	else
 	{
-		// TODO: add loading code here
+		TRACE("Log: load file");
+		// load model
+
 	}
 }
 
