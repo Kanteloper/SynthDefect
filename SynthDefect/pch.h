@@ -12,6 +12,7 @@
 #include "GLRoutine.h"
 #include "GlobDrawGL.h"
 #include "GlobMyProc.h"
+#include "Mesh.h"
 
 
 #endif //PCH_H
