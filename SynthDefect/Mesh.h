@@ -9,17 +9,20 @@ struct Vertex {
 	glm::vec3 Position;
 	// surface normal
 	glm::vec3 Normal;
+	// texCoordinates
+	glm::vec2 TexCoords;
 	// tangent
 	glm::vec3 Tangent;
 	// bitangent
 	glm::vec3 Bitanget;
 };
 
+
 class Mesh
 {
 public:
 	// mesh data
-	std::vector<Vertex>		vertices;
+	std::vector<Vertex>			vertices;
 	std::vector<unsigned int>	 indices;
 
 	Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices);
