@@ -2,6 +2,9 @@
 
 // Model.h : interface of Model class
 
+#include "assimp/Importer.hpp"
+#include "assimp/scene.h"
+#include "assimp/postprocess.h"
 #include <vector>
 #include <string>
 
@@ -9,7 +12,7 @@ class Model
 {
 	// Constructor
 public:
-	Model(std::string const& path);
+	Model();
 
 	// Attributes
 public:
@@ -19,11 +22,11 @@ public:
 	// Impelementation
 public:
 	~Model();
+	
 
 private:
 	BOOL LoadModel(LPCTSTR pathName);
-
-
-
+	void ProcessNode(aiNode *node, const aiScene *scene);
+	Mesh ProcessMesh(aiMesh *mesh, const aiScene *scene);
 };
 
