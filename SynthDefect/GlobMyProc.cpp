@@ -10,7 +10,18 @@
 BOOL LoadModel(LPCTSTR pathName)
 {
 	Assimp::Importer import;
-	const aiScene* scene = import.ReadFile(ConvertStdString(pathName), aiProcess_Triangulate | aiProcess_FlipUVs);
+	const aiScene* scene = import.ReadFile(ConvertStdString(pathName),
+		aiProcess_CalcTangentSpace |
+		aiProcess_Triangulate | 
+		aiProcess_RemoveComponent |
+		aiProcess_JoinIdenticalVertices |
+		aiProcess_ValidateDataStructure );
+
+	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
+	{
+		TRACE("Failed to load model using assimp");
+		return FALSE;
+	}
 
 
 	return TRUE;
