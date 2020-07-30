@@ -5,7 +5,6 @@
 
 #pragma once
 
-
 class CSynthDefectDoc : public CDocument
 {
 protected: // create from serialization only
@@ -13,10 +12,8 @@ protected: // create from serialization only
 	DECLARE_DYNCREATE(CSynthDefectDoc)
 
 // Attributes
-public:
-
-// Operations
-public:
+private:
+	CModel m_Model;
 
 // Overrides
 public:
