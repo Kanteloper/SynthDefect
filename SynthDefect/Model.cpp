@@ -3,19 +3,13 @@
 #include "pch.h"
 #include <string>
 
-
-CModel::CModel()
-{
+IMPLEMENT_SERIAL(CModel, CObject, 0);
+CModel::CModel() {}
+CModel::CModel(LPCTSTR filePath) 
+{ 
+	LoadModel(filePath); 
 }
-
-CModel::CModel(LPCTSTR filePath)
-{
-	LoadModel(filePath);
-}
-
-CModel::~CModel()
-{
-}
+CModel::~CModel(){}
 
 /// <summary>
 /// Load selected object file
@@ -134,5 +128,10 @@ BOOL CModel::IsTexCoordsExisted(aiMesh* mesh)
 		return TRUE;
 	else
 		return FALSE;
+}
+
+
+void CModel::Serialize(CArchive& ar)
+{
 }
 

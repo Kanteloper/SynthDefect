@@ -7,7 +7,7 @@
 
 #include <vector>
 
-class CModel
+class CModel : public CObject
 {
 	// Constructor
 public:
@@ -22,6 +22,8 @@ public:
 	// Impelementation
 public:
 	~CModel();
+	void Serialize(CArchive& ar);
+	DECLARE_SERIAL(CModel);
 
 private:
 	void LoadModel(LPCTSTR pathName);
