@@ -21,11 +21,12 @@ struct Vertex {
 };
 
 
-class Mesh
+class CMesh
 {
 // Construction
 public:
-	Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices) : m_vertices(vertices), m_indices(indices) {};
+	CMesh();
+	CMesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices) : m_vertices(vertices), m_indices(indices) {};
 
 // Attributes
 private:
@@ -38,6 +39,6 @@ public:
 
 // Implementation
 public:
-	virtual ~Mesh();
+	virtual ~CMesh();
 };
 
