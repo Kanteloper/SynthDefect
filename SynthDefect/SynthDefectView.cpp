@@ -78,10 +78,18 @@ void CSynthDefectView::OnDraw(CDC* /*pDC*/)
 }
 
 
+void CSynthDefectView::OnUpdate(CView* /*pSender*/, LPARAM /*lHint*/, CObject* /*pHint*/)
+{
+	// 변경된 Mesh로 Rendering 되도록 바꾸기
+}
+
+
 void CSynthDefectView::InitChildView()
 {
 	m_bInitGL = FALSE;
+	// configure global opengl state
 	InitGL();
+	// build and compile shaders
 }
 
 
@@ -196,13 +204,6 @@ void CSynthDefectView::OnTimer(UINT_PTR nIDEvent)
 	}
 	CView::OnTimer(nIDEvent);
 }
-
-
-void CSynthDefectView::OnUpdate(CView* /*pSender*/, LPARAM /*lHint*/, CObject* /*pHint*/)
-{
-	// TODO: Add your specialized code here and/or call the base class
-}
-
 
 
 void CSynthDefectView::OnClose()
