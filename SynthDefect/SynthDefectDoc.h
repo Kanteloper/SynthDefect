@@ -12,8 +12,8 @@ protected: // create from serialization only
 	DECLARE_DYNCREATE(CSynthDefectDoc)
 
 // Attributes
-private:
-	CModel m_Model;
+public:
+	CModel m_model;
 
 // Overrides
 public:
