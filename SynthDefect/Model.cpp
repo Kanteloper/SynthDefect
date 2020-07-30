@@ -22,7 +22,7 @@ CModel::~CModel()
 /// </summary>
 /// <param name="pathName">: the path of selected file </param>
 /// <returns> TRUE if load success, FALSE on failure </returns>
-BOOL CModel::LoadModel(LPCTSTR pathName)
+void CModel::LoadModel(LPCTSTR pathName)
 {
 	Assimp::Importer import;
 	const aiScene* scene = import.ReadFile(ConvertStdString(pathName),
@@ -35,21 +35,31 @@ BOOL CModel::LoadModel(LPCTSTR pathName)
 	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 	{
 		TRACE(import.GetErrorString());
-		return FALSE;
+		return;
 	}
 
 	CModel::ProcessNode(scene->mRootNode, scene);
-	return TRUE;
 }
 
+
+/// <summary>
+/// Process a node in Assimp's structure
+/// </summary>
+/// <param name="node">: A part of structure of the imported data</param>
+/// <param name="scene">: The root structure of the imported data</param>
 void CModel::ProcessNode(aiNode* node, const aiScene* scene)
 {
+	// process all the node's meshes (if any)
+	for (unsigned int i = 0; i < node->mNumMeshes; i++)
+	{
+		aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
+		meshes.push_back(ProcessMesh(mesh, scene));
+	}
+	// then do the same for each of its children
 }
 
-
-//Mesh CModel::ProcessMesh(aiMesh* mesh, const aiScene* scene)
-//{
-//	return Mesh();
-//}
-
+CMesh CModel::ProcessMesh(aiMesh* mesh, const aiScene* scene)
+{
+	return CMesh();
+}
 
