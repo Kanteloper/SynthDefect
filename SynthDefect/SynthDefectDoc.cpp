@@ -70,6 +70,9 @@ BOOL CSynthDefectDoc::OnOpenDocument(LPCTSTR lpszPathName)
 {
 	if (!CDocument::OnOpenDocument(lpszPathName))
 		return FALSE;
+
+	// load model
+	m_Model = CModel(lpszPathName);
 	return TRUE;
 }
 
@@ -160,5 +163,3 @@ void CSynthDefectDoc::Dump(CDumpContext& dc) const
 
 
 // CSynthDefectDoc commands
-
-
