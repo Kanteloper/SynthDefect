@@ -207,6 +207,7 @@
     <ClInclude Include="pch.h" />
     <ClInclude Include="PropertiesWnd.h" />
     <ClInclude Include="Resource.h" />
+    <ClInclude Include="Shader.h" />
     <ClInclude Include="SynthDefect.h" />
     <ClInclude Include="SynthDefectDoc.h" />
     <ClInclude Include="SynthDefectView.h" />
@@ -227,6 +228,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="PropertiesWnd.cpp" />
+    <ClCompile Include="Shader.cpp" />
     <ClCompile Include="SynthDefect.cpp" />
     <ClCompile Include="SynthDefectDoc.cpp" />
     <ClCompile Include="SynthDefectView.cpp" />
