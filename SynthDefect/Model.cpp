@@ -98,7 +98,7 @@ CMesh CModel::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 			glm::vec2 vecForTwoComp;
 			// Assimp allows a model to have up to 8 different texture coordinates per vertex.
 			vecForTwoComp.x = mesh->mTextureCoords[0][i].x;
-			vecForTwoComp.x = mesh->mTextureCoords[0][i].y;
+			vecForTwoComp.y = mesh->mTextureCoords[0][i].y;
 			vertex.TexCoords = vecForTwoComp;
 		}
 		else
