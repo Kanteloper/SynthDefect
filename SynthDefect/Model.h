@@ -27,5 +27,6 @@ private:
 	void LoadModel(LPCTSTR pathName);
 	void ProcessNode(aiNode* node, const aiScene* scene);
 	CMesh ProcessMesh(aiMesh *mesh, const aiScene *scene);
+	BOOL IsTexCoordsExisted(aiMesh *mesh);
 };
 
