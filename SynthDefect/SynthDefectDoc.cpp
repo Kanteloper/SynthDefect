@@ -73,6 +73,7 @@ BOOL CSynthDefectDoc::OnOpenDocument(LPCTSTR lpszPathName)
 
 	// load model
 	m_model = CModel(lpszPathName);
+	SetModifiedFlag(TRUE);
 	return TRUE;
 }
 
@@ -87,8 +88,6 @@ void CSynthDefectDoc::Serialize(CArchive& ar)
 	}
 	else
 	{
-		TRACE("Log: load file");
-		// load model
 
 	}
 }
