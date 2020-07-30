@@ -1,32 +1,31 @@
 #pragma once
 
 // Model.h : interface of Model class
-
 #include "assimp/Importer.hpp"
 #include "assimp/scene.h"
 #include "assimp/postprocess.h"
-#include <vector>
-#include <string>
 
-class Model
+#include <vector>
+
+class CModel
 {
 	// Constructor
 public:
-	Model();
+	CModel();
+	CModel(LPCTSTR filePath);
 
 	// Attributes
 public:
 	// model data
-	std::vector<Mesh>	meshes;
+	std::vector<CMesh>	meshes;
 
 	// Impelementation
 public:
-	~Model();
-	
+	~CModel();
 
 private:
 	BOOL LoadModel(LPCTSTR pathName);
-	void ProcessNode(aiNode *node, const aiScene *scene);
-	Mesh ProcessMesh(aiMesh *mesh, const aiScene *scene);
+	void ProcessNode(aiNode* node, const aiScene* scene);
+	// CMesh ProcessMesh(aiMesh *mesh, const aiScene *scene);
 };
 
