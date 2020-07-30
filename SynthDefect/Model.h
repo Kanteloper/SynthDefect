@@ -15,7 +15,7 @@ public:
 	CModel(LPCTSTR filePath);
 
 	// Attributes
-private:
+public:
 	// model data
 	std::vector<CMesh>	meshes;
 
@@ -24,8 +24,8 @@ public:
 	~CModel();
 
 private:
-	void LoadModel(LPCTSTR pathName);
+	BOOL LoadModel(LPCTSTR pathName);
 	void ProcessNode(aiNode* node, const aiScene* scene);
-	CMesh ProcessMesh(aiMesh *mesh, const aiScene *scene);
+	// CMesh ProcessMesh(aiMesh *mesh, const aiScene *scene);
 };
 
