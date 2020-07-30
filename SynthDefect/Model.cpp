@@ -3,7 +3,6 @@
 #include "pch.h"
 #include <string>
 
-IMPLEMENT_SERIAL(CModel, CObject, 0);
 CModel::CModel() {}
 CModel::CModel(LPCTSTR filePath) 
 { 
@@ -129,9 +128,3 @@ BOOL CModel::IsTexCoordsExisted(aiMesh* mesh)
 	else
 		return FALSE;
 }
-
-
-void CModel::Serialize(CArchive& ar)
-{
-}
-
