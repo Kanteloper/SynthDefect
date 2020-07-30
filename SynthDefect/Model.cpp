@@ -1,6 +1,8 @@
 // Model.cpp for 3D model data
 
 #include "pch.h"
+#include "Model.h"
+
 #include <string>
 
 CModel::CModel() {}

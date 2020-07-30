@@ -8,6 +8,7 @@
 #include "assimp/postprocess.h"
 
 #include <vector>
+#include "Mesh.h"
 
 class CModel
 {

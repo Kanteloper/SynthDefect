@@ -5,6 +5,9 @@
 
 #pragma once
 
+#include "Model.h"
+
+
 class CSynthDefectDoc : public CDocument
 {
 protected: // create from serialization only
