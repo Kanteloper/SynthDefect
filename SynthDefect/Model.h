@@ -1,6 +1,8 @@
+
+// Model.h : Interface of Model class
+
 #pragma once
 
-// Model.h : interface of Model class
 #include "assimp/Importer.hpp"
 #include "assimp/scene.h"
 #include "assimp/postprocess.h"
