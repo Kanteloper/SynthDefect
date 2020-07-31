@@ -16,5 +16,11 @@ namespace UnitTest
 			std::string result = ConvertStdString(target);
 			Assert::AreEqual(result, compare);
 		}
+
+		TEST_METHOD(TestRetrieveCode)
+		{
+			const char* result = RetrieveCode("D:\Project\Research\SynthDefect\UnitTest\\test.vs");
+			Assert::IsNull(result);
+		}
 	};
 }

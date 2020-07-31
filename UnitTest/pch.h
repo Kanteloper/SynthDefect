@@ -10,5 +10,8 @@
 // add headers that you want to pre-compile here
 #include <atlstr.h>
 #include <string>
+#include <fstream>
+#include <sstream>
+#include <iostream>
 
 #endif //PCH_H
