@@ -5,9 +5,17 @@
 // All global Setup for OpenGL
 void InitGL()
 {
+	// Initialize glew entry points to create a valid OpenGL rendering context
+	glewExperimental = TRUE;
+	GLenum err = glewInit();
+	if (err != GLEW_OK) {
+		// Problem: glewInit failed, something is seriously wrong.
+		TRACE("Log: failed to initialize glew");
+		exit(1);
+	}
+
 	glShadeModel(GL_SMOOTH);							// Enable Smooth Shading
 	glEnable(GL_DEPTH_TEST);							// Enables Depth Testing
-
 	// The Type Of Depth Testing To Do
 	// GL_LEQUAL : Passes if the incoming depth value is less than or equal to the stored depth value.
 	glDepthFunc(GL_LEQUAL);
