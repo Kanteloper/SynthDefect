@@ -2,6 +2,11 @@
 
 #include "pch.h"
 
+#include <string>
+#include <fstream>
+#include <sstream>
+#include <iostream>
+
 /// <summary>
 /// Convert LPCTSTR to std::string
 /// </summary>
@@ -16,4 +21,36 @@ std::string ConvertStdString(LPCTSTR target)
 	CString tmpStr = T2CW(target);
 	std::string result((CStringA)tmpStr);
 	return result;
+}
+
+
+/// <summary>
+/// Retrieve the vertex/fragment shader code from file
+/// </summary>
+/// <param name="filePath">: the file of vertex/fragment shader</param>
+/// <returns>vertex/fragment shader code</returns>
+const char* RetrieveCode(const char* filePath)
+{
+	std::string tmpStr;
+	std::ifstream file;
+
+	file.exceptions(std::ifstream::failbit | std::ifstream::badbit);
+	try
+	{
+		// open vertex shader, fragment shader code file
+		file.open(filePath);
+		// read file's buffer contents into streams
+		std::stringstream stream;
+		stream << file.rdbuf();
+		// close internal stream buffer
+		file.close();
+		// convert stream into string
+		tmpStr = stream.str();
+		return tmpStr.c_str();
+	}
+	catch (std::ifstream::failure e)
+	{
+		TRACE(e.what());
+		return nullptr;
+	}
 }
