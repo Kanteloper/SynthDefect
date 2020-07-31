@@ -5,7 +5,6 @@
 #pragma once
 
 #include <gl/glew.h>
-#include <gl/GL.h>
 #include <gl/GLU.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -22,7 +21,7 @@ struct Vertex {
 	// tangent
 	glm::vec3 Tangent;
 	// bitangent
-	glm::vec3 Bitanget;
+	glm::vec3 BiTangent;
 };
 
 
@@ -33,6 +32,7 @@ public:
 	CMesh();
 	CMesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices) : m_vertices(vertices), m_indices(indices) 
 	{
+		// set the vertex buffers and its attribute pointers
 		setupMesh();
 	};
 

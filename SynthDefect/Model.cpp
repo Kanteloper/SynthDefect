@@ -107,7 +107,7 @@ CMesh CModel::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 		vecForThreeComp.x = mesh->mBitangents[i].x;
 		vecForThreeComp.y = mesh->mBitangents[i].y;
 		vecForThreeComp.z = mesh->mBitangents[i].z;
-		vertex.Bitanget = vecForThreeComp;
+		vertex.BiTangent = vecForThreeComp;
 		vertices.push_back(vertex);
 	}
 
