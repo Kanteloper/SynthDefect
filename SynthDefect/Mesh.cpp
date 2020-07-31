@@ -1,7 +1,11 @@
 // Mesh.cpp for Mesh data as parts of 3D model
 
+
 #include "pch.h"
+#include <gl/glew.h>
+#include <gl/GLU.h>
 #include "Mesh.h"
+
 
 CMesh::CMesh()
 {
@@ -30,12 +34,18 @@ void CMesh::setupMesh()
 	// vertex positions - x, y, z
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
-	// vertex normals - n_x, n_y, n_z
+	// vertex normals - nor_x, nor_y, nor_z
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Normal));
-	// vertex texture coordinates - t_x, t_y
+	// vertex texture coordinates - tex_x, tex_y
 	glEnableVertexAttribArray(2);
 	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, TexCoords));
-	// tangent
-	// bitangent
+	// tangent - tan_x, tan_y, tan_z
+	glEnableVertexAttribArray(3);
+	glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Tangent));
+	// bitangent - btan_x, btan_y, btan_z
+	glEnableVertexAttribArray(4);
+	glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, BiTangent));
+	// break the existing vertex array object binding
+	glBindVertexArray(0);
 }
