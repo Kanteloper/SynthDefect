@@ -8,7 +8,6 @@
 #define PCH_H
 
 // add headers that you want to pre-compile here
-#include "GL/glew.h"
 #include "framework.h"
 #include "GLRoutine.h"
 #include "GlobDrawGL.h"

@@ -1,7 +1,9 @@
 #pragma once
 
-#include <GL/glut.h>
-#include <GL/GLU.h>
+#include <gl/glew.h>
+#include <gl/glut.h>
+#include <gl/GL.h>
+#include <gl/GLU.h>
 
 
 void InitGL();
