@@ -12,12 +12,15 @@
 
 #include "SynthDefectDoc.h"
 #include "SynthDefectView.h"
+#include "Shader.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
 
 #define ID_TIMER_PLAY 100					// Unique ID of system timer for a specific window
+#define VSHADER_CODE_PATH ""				// The current path of vertex shader code file
+#define FSHADER_CODE_PATH ""					// The current path of fragment shader code file
 
 
 // CSynthDefectView
@@ -90,6 +93,7 @@ void CSynthDefectView::InitChildView()
 	// configure global opengl state
 	InitGL();
 	// build and compile shaders
+	CShader shaders(VSHADER_CODE_PATH, FSHADER_CODE_PATH);
 }
 
 
