@@ -14,13 +14,18 @@ public:
 
 	// Attributes
 private:
-	const char* vShaderCode;
-	const char* fShaderCode;
+	const char* m_vShaderCode;
+	const char* m_fShaderCode;
+	unsigned int m_vertexShader;
+	unsigned int m_fragmentShader;
 
 public:
 	unsigned int ID;			// the program ID
 
 	// Implement
+private:
+	void CompileShaderCode();
+	void CreateShaderProgram();
 public:
 	~CShader();
 };
