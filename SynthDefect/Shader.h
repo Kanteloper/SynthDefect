@@ -14,8 +14,8 @@ public:
 
 	// Attributes
 private:
-	const char* m_vShaderCode;
-	const char* m_fShaderCode;
+	std::string m_vShaderCode;
+	std::string m_fShaderCode;
 	unsigned int m_vertexShader;
 	unsigned int m_fragmentShader;
 
