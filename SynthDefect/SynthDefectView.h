@@ -31,6 +31,9 @@ protected:
 // Implementation
 public:
 	virtual ~CSynthDefectView();
+	void InitGL();
+	int DrawGLScene();
+
 #ifdef _DEBUG
 	virtual void AssertValid() const;
 	virtual void Dump(CDumpContext& dc) const;

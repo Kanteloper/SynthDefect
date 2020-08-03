@@ -10,6 +10,9 @@
 #include "SynthDefect.h"
 #endif
 
+#include <gl/glew.h>
+#include <gl/glut.h>
+#include <gl/GLU.h>
 #include "SynthDefectDoc.h"
 #include "SynthDefectView.h"
 
@@ -76,7 +79,40 @@ void CSynthDefectView::OnDraw(CDC* /*pDC*/)
 		return;
 
 	if (m_bInitGL) InitChildView();											//Initialization of the GL window if first call
-	DrawGLScene();															//Global drawing procedure
+	DrawGLScene();															
+}
+
+/// <summary>
+/// 
+/// </summary>
+void CSynthDefectView::InitGL()
+{
+	// Initialize glew entry points to create a valid OpenGL rendering context
+	glewExperimental = TRUE;
+	GLenum err = glewInit();
+	if (err != GLEW_OK) {
+		// Problem: glewInit failed, something is seriously wrong.
+		TRACE("Log: failed to initialize glew");
+		exit(1);
+	}
+
+	glShadeModel(GL_SMOOTH);							// Enable Smooth Shading
+	glEnable(GL_DEPTH_TEST);							// Enables Depth Testing
+	// The Type Of Depth Testing To Do
+	// GL_LEQUAL : Passes if the incoming depth value is less than or equal to the stored depth value.
+	glDepthFunc(GL_LEQUAL);
+}
+
+/// <summary>
+/// 
+/// </summary>
+int CSynthDefectView::DrawGLScene()
+{
+	glClearColor(0.0f, 0.0f, 0.0f, 0.5f);				// Black Background
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glClearDepth(1.0f);									// Depth Buffer Setup
+
+	return TRUE;
 }
 
 
