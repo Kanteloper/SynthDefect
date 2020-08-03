@@ -198,7 +198,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="framework.h" />
-    <ClInclude Include="GlobDrawGL.h" />
     <ClInclude Include="GlobMyProc.h" />
     <ClInclude Include="GLRoutine.h" />
     <ClInclude Include="MainFrm.h" />
@@ -215,7 +214,6 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="GlobDrawGL.cpp" />
     <ClCompile Include="GlobMyProc.cpp" />
     <ClCompile Include="GLRoutine.cpp" />
     <ClCompile Include="MainFrm.cpp" />
