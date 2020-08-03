@@ -18,6 +18,7 @@ CShader::CShader(const char* vertexPath, const char* fragmentPath = nullptr)
 	m_fShaderCode = RetrieveCode(vertexPath);
 	CompileShaderCode();
 	CreateShaderProgram();
+	DeleteShaders();
 }
 
 
@@ -28,7 +29,7 @@ void CShader::CompileShaderCode()
 {
 	// vertex shader
 	// A shader object is used to maintain the source code strings that define a shader
-	m_vertexShader = glCreateShader(GL_VERTEX_SHADER);			// create shader object
+	m_vertexShader = glCreateShader(GL_VERTEX_SHADER);			// create an empty shader object
 	glShaderSource(m_vertexShader, 1, &m_vShaderCode, NULL);	// set the source code in shader object
 	glCompileShader(m_vertexShader);							// compile the shader object
 	CheckCompileErrors(m_vertexShader, "VERTEX");
@@ -38,6 +39,20 @@ void CShader::CompileShaderCode()
 	glShaderSource(m_fragmentShader, 1, &m_fShaderCode, NULL);
 	glCompileShader(m_fragmentShader);
 	CheckCompileErrors(m_fragmentShader, "FRAGMENT");
+}
+
+
+/// <summary>
+/// Link the vertex and fragment shader
+/// </summary>
+void CShader::CreateShaderProgram()
+{
+	// A program object is an object to which shader objects can be attached
+	ID = glCreateProgram();										// create an empty program object
+	glAttachShader(ID, m_vertexShader);							// attach a shader object to a program object
+	glAttachShader(ID, m_fragmentShader);
+	glLinkProgram(ID);											// link a program object
+	CheckCompileErrors(ID, "PROGRAM");
 }
 
 
@@ -69,10 +84,10 @@ void CShader::CheckCompileErrors(GLuint object, std::string type)
 
 
 /// <summary>
-/// Link the vertex and fragment shader
+/// Delete the shader objects
 /// </summary>
-void CShader::CreateShaderProgram()
+void CShader::DeleteShaders()
 {
-}
 
+}
 
