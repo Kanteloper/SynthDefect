@@ -26,6 +26,7 @@ public:
 private:
 	void CompileShaderCode();
 	void CreateShaderProgram();
+	void CheckCompileErrors(GLuint object, std::string type);
 public:
 	~CShader();
 };
