@@ -3,7 +3,7 @@
 //
 
 #pragma once
-
+#include "Shader.h"
 
 class CSynthDefectView : public CView
 {
@@ -12,13 +12,13 @@ protected: // create from serialization only
 	DECLARE_DYNCREATE(CSynthDefectView)
 
 // Attributes
-public:
-	CSynthDefectDoc* GetDocument() const;
+private:
 	bool m_bInitGL;
 	CWnd m_wndChild;
+	CShader m_shaders;
 
-// Operations
 public:
+	CSynthDefectDoc* GetDocument() const;
 
 // Overrides
 public:
