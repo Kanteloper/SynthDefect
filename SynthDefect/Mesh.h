@@ -7,6 +7,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <vector>
+#include "Shader.h"
 
 
 struct Vertex {
@@ -46,8 +47,11 @@ public:
 	std::vector<unsigned int>	 m_indices;
 
 // Implementation
+private:
+	void setupMesh();
 public:
 	virtual ~CMesh();
-	void setupMesh();
+	void Draw(CShader& shaders);
+	
 };
 

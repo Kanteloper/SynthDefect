@@ -49,3 +49,12 @@ void CMesh::setupMesh()
 	// break the existing vertex array object binding
 	glBindVertexArray(0);
 }
+
+void CMesh::Draw(CShader& shaders)
+{
+	// bind appropriate textures
+	// draw mesh
+	glBindVertexArray(VAO);
+	glDrawElements(GL_TRIANGLES, (int)m_indices.size(), GL_UNSIGNED_INT, 0);
+	glBindVertexArray(0);
+}
