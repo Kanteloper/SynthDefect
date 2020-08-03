@@ -65,13 +65,15 @@ void CShader::CreateShaderProgram()
 /// <param name="type">: a type of shader or program</param>
 void CShader::CheckCompileErrors(GLuint object, std::string type)
 {
-	GLint success;
+	GLint success, logSize;
 	GLchar infoLog[1024];
 	if (type != "PROGRAM") 
 	{
 		// The information log for a shader object is modified when the shader is compiled.
 		glGetShaderInfoLog(object, 1024, NULL, infoLog);		// return the information log for a shader object
-		TRACE("ERROR::SHADER_COMPILATION_ERROR of %s \n %s", type.c_str(), infoLog);
+		glGetShaderiv(object, GL_INFO_LOG_LENGTH, &logSize);
+		if (logSize != 0)
+			TRACE("ERROR::SHADER_COMPILATION_ERROR of %s \n %s", type.c_str(), infoLog);
 	}
 	else
 	{
