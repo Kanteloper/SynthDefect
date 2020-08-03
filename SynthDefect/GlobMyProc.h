@@ -3,4 +3,4 @@
 #include <string>
 
 std::string ConvertStdString(LPCTSTR target);
-const char* RetrieveCode(const char* filePath);
+std::string RetrieveCode(const char* filePath);

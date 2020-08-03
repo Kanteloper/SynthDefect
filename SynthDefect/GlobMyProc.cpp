@@ -29,7 +29,7 @@ std::string ConvertStdString(LPCTSTR target)
 /// </summary>
 /// <param name="filePath">: the file of vertex/fragment shader</param>
 /// <returns>vertex/fragment shader code</returns>
-const char* RetrieveCode(const char* filePath)
+std::string RetrieveCode(const char* filePath)
 {
 	std::string tmpStr;
 	std::ifstream file;
@@ -46,7 +46,7 @@ const char* RetrieveCode(const char* filePath)
 		file.close();
 		// convert stream into string
 		tmpStr = stream.str();
-		return tmpStr.c_str();
+		return tmpStr;
 	}
 	catch (std::ifstream::failure e)
 	{
