@@ -149,5 +149,7 @@
     <None Include="res\SynthDefect.rc2">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="fragment_shader.glsl" />
+    <None Include="vertex_shader.glsl" />
   </ItemGroup>
 </Project>
