@@ -88,6 +88,7 @@ void CShader::CheckCompileErrors(GLuint object, std::string type)
 /// </summary>
 void CShader::DeleteShaders()
 {
-
+	glDeleteShader(m_vertexShader);
+	glDeleteShader(m_fragmentShader);
 }
 
