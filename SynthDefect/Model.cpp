@@ -38,6 +38,19 @@ void CModel::LoadModel(LPCTSTR pathName)
 
 
 /// <summary>
+/// Draw the model, and thus all its meshes
+/// </summary>
+/// <param name="shader">: </param>
+void CModel::DrawModel(CShader& shaders)
+{
+	for (unsigned int i = 0; i < meshes.size(); i++)
+	{
+		meshes[i].Draw(shaders);
+	}
+}
+
+
+/// <summary>
 /// Process a node in Assimp's structure in a recursive way
 /// </summary>
 /// <param name="node">: A part of structure of the imported data</param>
