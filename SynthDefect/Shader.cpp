@@ -3,10 +3,6 @@
 #include <gl/glew.h>
 #include <gl/GLU.h>
 
-CShader::CShader()
-{
-}
-
 CShader::~CShader()
 {
 }
@@ -94,5 +90,14 @@ void CShader::DeleteShaders()
 {
 	glDeleteShader(m_vertexShader);
 	glDeleteShader(m_fragmentShader);
+}
+
+
+/// <summary>
+/// Activate the shader objects
+/// </summary>
+void CShader::Use()
+{
+	glUseProgram(ID);
 }
 

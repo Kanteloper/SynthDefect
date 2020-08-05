@@ -9,7 +9,7 @@ class CShader
 {
 	// Constructor
 public:
-	CShader();
+	CShader() : ID(0), m_vShaderCode(""), m_fShaderCode(""), m_vertexShader(0), m_fragmentShader(0) {};
 	CShader(const char* vertexPath, const char* fragmentPath);
 
 	// Attributes
@@ -28,6 +28,9 @@ private:
 	void CreateShaderProgram();
 	void DeleteShaders();
 	void CheckCompileErrors(GLuint object, std::string type);
+
+public:
+	void Use();
 public:
 	~CShader();
 };
