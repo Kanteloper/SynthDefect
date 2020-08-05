@@ -33,6 +33,7 @@ public:
 	virtual ~CSynthDefectView();
 	void InitGL();
 	int DrawGLScene();
+	void SetGLBackground();
 
 #ifdef _DEBUG
 	virtual void AssertValid() const;

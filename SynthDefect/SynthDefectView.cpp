@@ -82,8 +82,9 @@ void CSynthDefectView::OnDraw(CDC* /*pDC*/)
 	DrawGLScene();															
 }
 
+
 /// <summary>
-/// 
+/// Initialize global setting for rendering using OpenGL
 /// </summary>
 void CSynthDefectView::InitGL()
 {
@@ -95,7 +96,6 @@ void CSynthDefectView::InitGL()
 		TRACE("Log: failed to initialize glew");
 		exit(1);
 	}
-
 	glShadeModel(GL_SMOOTH);							// Enable Smooth Shading
 	glEnable(GL_DEPTH_TEST);							// Enables Depth Testing
 	// The Type Of Depth Testing To Do
@@ -103,16 +103,45 @@ void CSynthDefectView::InitGL()
 	glDepthFunc(GL_LEQUAL);
 }
 
+
 /// <summary>
-/// 
+/// Render the OpenGL scene
 /// </summary>
+/// <returns> TRUE if rendering is successful, FALSE on failure </returns>
 int CSynthDefectView::DrawGLScene()
 {
-	glClearColor(0.0f, 0.0f, 0.0f, 0.5f);				// Black Background
+	// clear buffers
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glClearDepth(1.0f);									// Depth Buffer Setup
+	glClearDepth(1.0f);
+	// set background
+	SetGLBackground();
+
 
 	return TRUE;
+}
+
+
+/// <summary>
+/// Set default Workspace background
+/// </summary>
+void CSynthDefectView::SetGLBackground()
+{
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+
+	glBegin(GL_QUADS);
+	// blue color
+	glColor3f(0.04f, 0.4f, 0.6f);
+	glVertex2f(-1.0, 1.0);
+	glVertex2f(1.0, 1.0);
+	// black color
+	glColor3f(0.0f, 0.0f, 0.0f);
+	glVertex2f(1.0, -1.0);
+	glVertex2f(-1.0, -1.0);
+	glEnd();
 }
 
 
@@ -228,10 +257,9 @@ void CSynthDefectView::OnSize(UINT nType, int cx, int cy)
 	ResizeGLScene(cx, cy);
 }
 
-
+// Render loop
 void CSynthDefectView::OnTimer(UINT_PTR nIDEvent)
 {
-	// TODO: Add your message handler code here and/or call default
 	bool bRslt = FALSE;
 	switch (nIDEvent)
 	{
