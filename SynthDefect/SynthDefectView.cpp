@@ -116,6 +116,8 @@ int CSynthDefectView::DrawGLScene()
 	glClearDepth(1.0f);
 	// set background
 	SetGLBackground();
+	// enable shaders
+	m_shaders.Use();
 
 
 	return TRUE;
@@ -127,11 +129,6 @@ int CSynthDefectView::DrawGLScene()
 /// </summary>
 void CSynthDefectView::SetGLBackground()
 {
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-
 	glBegin(GL_QUADS);
 	// blue color
 	glColor3f(0.04f, 0.4f, 0.6f);
