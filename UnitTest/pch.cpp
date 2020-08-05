@@ -11,7 +11,7 @@ std::string ConvertStdString(LPCTSTR target)
 	return result;
 }
 
-const char* RetrieveCode(const char* filePath)
+std::string RetrieveCode(const char* filePath)
 {
 	std::string tmpStr;
 	std::ifstream file;
@@ -28,10 +28,10 @@ const char* RetrieveCode(const char* filePath)
 		file.close();
 		// convert stream into string
 		tmpStr = stream.str();
-		return tmpStr.c_str();
+		return tmpStr;
 	}
 	catch (std::ifstream::failure e)
 	{
-		return nullptr;
+		return NULL;
 	}
 }

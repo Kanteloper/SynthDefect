@@ -19,8 +19,9 @@ namespace UnitTest
 
 		TEST_METHOD(TestRetrieveCode)
 		{
-			const char* result = RetrieveCode("D:\Project\Research\SynthDefect\UnitTest\\test.vs");
-			Assert::IsNull(result);
+			std::string testFile("D:\\Project\\Research\\SynthDefect\\UnitTest\\test.vs");
+			std::string result = RetrieveCode(testFile.c_str());
+			Assert::IsFalse(result.empty());
 		}
 	};
 }
