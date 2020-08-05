@@ -174,16 +174,15 @@ bool KillGLWindow(CWnd* pWnd)
 }
 
 GLfloat fNearPlane = 0.1f, fFarPlane = 100.f, fViewAngle = 45.f, fAspect;
-RECT m_viewRect;
-
 /// <summary>
 /// Resize and Initialize the OpenGL window
 /// </summary>
 /// <param name="width">: width of OpenGL window </param>
 /// <param name="height">: height of OpenGL window </param>
-/// <returns></returns>
 GLvoid ResizeGLScene(GLsizei width, GLsizei height)
 {
+	RECT m_viewRect;
+
 	if (height == 0)									// Prevent A Divide By Zero By
 	{
 		height = 1;										// Making Height Equal One
