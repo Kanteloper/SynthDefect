@@ -208,7 +208,6 @@ void CSynthDefectView::OnContextMenu(CWnd* /* pWnd */, CPoint point)
 
 CSynthDefectView::~CSynthDefectView()
 {
-	delete m_model;
 }
 
 // CSynthDefectView diagnostics
