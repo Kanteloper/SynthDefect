@@ -3,8 +3,6 @@
 
 #pragma once
 
-
-
 class CShader
 {
 	// Constructor

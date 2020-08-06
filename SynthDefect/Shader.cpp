@@ -1,11 +1,11 @@
+
+// Shader.cpp for Shader program of OpenGL pipeline
+
 #include "pch.h"
 #include "Shader.h"
 #include <gl/glew.h>
 #include <gl/GLU.h>
 
-CShader::~CShader()
-{
-}
 
 CShader::CShader(const char* vertexPath, const char* fragmentPath = nullptr)
 {
@@ -101,3 +101,7 @@ void CShader::Use()
 	glUseProgram(ID);
 }
 
+
+CShader::~CShader()
+{
+}

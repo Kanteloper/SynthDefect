@@ -1,5 +1,5 @@
-// Mesh.cpp for Mesh data as parts of 3D model
 
+// Mesh.cpp for Mesh data as parts of 3D model
 
 #include "pch.h"
 #include <gl/glew.h>
@@ -11,10 +11,10 @@ CMesh::CMesh()
 {
 }
 
-CMesh::~CMesh()
-{
-}
 
+/// <summary>
+/// Initialize all the buffer objects / arrays
+/// </summary>
 void CMesh::setupMesh()
 {
 	// generate the reference of a VAO, VBO and an EBO 
@@ -50,6 +50,11 @@ void CMesh::setupMesh()
 	glBindVertexArray(0);
 }
 
+
+/// <summary>
+/// Render the Mesh
+/// </summary>
+/// <param name="shaders">: liked Shader objects</param>
 void CMesh::Draw(CShader& shaders)
 {
 	// bind appropriate textures
@@ -57,4 +62,9 @@ void CMesh::Draw(CShader& shaders)
 	glBindVertexArray(VAO);
 	glDrawElements(GL_TRIANGLES, (int)m_indices.size(), GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
+}
+
+
+CMesh::~CMesh()
+{
 }

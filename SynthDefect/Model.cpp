@@ -1,3 +1,4 @@
+
 // Model.cpp for 3D model data
 
 #include "pch.h"
@@ -5,12 +6,16 @@
 
 #include <string>
 
-CModel::CModel() {}
+CModel::CModel() 
+{
+}
+
+
 CModel::CModel(LPCTSTR filePath) 
 { 
 	LoadModel(filePath); 
 }
-CModel::~CModel(){}
+
 
 /// <summary>
 /// Load selected object file
@@ -136,10 +141,21 @@ CMesh CModel::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 	return CMesh(vertices, indices);
 }
 
+
+/// <summary>
+/// Check whether the texture coordinates is existed or not in aiMesh structure
+/// </summary>
+/// <param name="mesh">: Meshes in loaded Model </param>
+/// <returns> TRUE if existed, otherwise FALSE </returns>
 BOOL CModel::IsTexCoordsExisted(aiMesh* mesh)
 {
 	if (mesh->mTextureCoords[0])
 		return TRUE;
 	else
 		return FALSE;
+}
+
+
+CModel::~CModel()
+{
 }

@@ -1,6 +1,5 @@
 
 // Mesh.h : interface of the Mesh class
-//
 
 #pragma once
 
