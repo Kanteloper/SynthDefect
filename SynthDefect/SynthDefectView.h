@@ -15,9 +15,9 @@ protected: // create from serialization only
 // Attributes
 private:
 	bool m_bInitGL;
-	CWnd m_wndChild;
 	CShader m_shaders;
 	CCamera m_camera;
+	CModel* m_model = nullptr;
 
 public:
 	CSynthDefectDoc* GetDocument() const;
@@ -35,7 +35,6 @@ public:
 	virtual ~CSynthDefectView();
 	void InitGL();
 	int DrawGLScene();
-	void SetGLBackground();
 
 #ifdef _DEBUG
 	virtual void AssertValid() const;
