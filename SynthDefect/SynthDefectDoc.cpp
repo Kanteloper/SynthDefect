@@ -36,6 +36,7 @@ CSynthDefectDoc::CSynthDefectDoc() noexcept
 
 CSynthDefectDoc::~CSynthDefectDoc()
 {
+	delete m_model;
 }
 
 
@@ -52,9 +53,8 @@ BOOL CSynthDefectDoc::OnNewDocument()
 	if (!CDocument::OnNewDocument())
 		return FALSE;
 
-	// TODO: add reinitialization code here
-	// (SDI documents will reuse this document)
-	SetModifiedFlag(TRUE);
+	// initialization / reinitialization
+	m_model = nullptr;
 
 	return TRUE;
 }
@@ -72,8 +72,8 @@ BOOL CSynthDefectDoc::OnOpenDocument(LPCTSTR lpszPathName)
 		return FALSE;
 
 	// load model
-	m_model = CModel(lpszPathName);
-	SetModifiedFlag(TRUE);
+	m_model = new CModel(lpszPathName);
+
 	return TRUE;
 }
 

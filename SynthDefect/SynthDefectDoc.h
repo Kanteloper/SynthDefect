@@ -16,7 +16,7 @@ protected: // create from serialization only
 
 // Attributes
 public:
-	CModel m_model;
+	CModel* m_model;
 
 // Overrides
 public:
