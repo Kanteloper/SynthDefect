@@ -49,9 +49,7 @@ CSynthDefectView::CSynthDefectView() noexcept
 	// TODO: add construction code here
 }
 
-CSynthDefectView::~CSynthDefectView()
-{
-}
+
 
 // 생성되는 window의 다양한 속성 변경
 BOOL CSynthDefectView::PreCreateWindow(CREATESTRUCT& cs)
@@ -78,6 +76,8 @@ void CSynthDefectView::OnDraw(CDC* /*pDC*/)
 	if (!pDoc)
 		return;
 
+	// receive loaded model
+
 	if (m_bInitGL) InitChildView();											//Initialization of the GL window if first call
 	DrawGLScene();															
 }
@@ -88,6 +88,8 @@ void CSynthDefectView::OnDraw(CDC* /*pDC*/)
 /// </summary>
 void CSynthDefectView::InitGL()
 {
+	// Init Camera
+	m_camera = CCamera(glm::vec3(0.0f, 0.0f, 3.0f));
 	// Initialize glew entry points to create a valid OpenGL rendering context
 	glewExperimental = TRUE;
 	GLenum err = glewInit();
@@ -115,9 +117,12 @@ int CSynthDefectView::DrawGLScene()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glClearDepth(1.0f);
 	// set background
-	SetGLBackground();
+	// SetGLBackground();
 	// enable shaders
 	m_shaders.Use();
+	// view/projection transformations
+	// glm::mat4 projection = glm::perspective(glm::radians(), );
+	// render the loaded model
 
 
 	return TRUE;
@@ -171,6 +176,10 @@ void CSynthDefectView::OnContextMenu(CWnd* /* pWnd */, CPoint point)
 #endif
 }
 
+
+CSynthDefectView::~CSynthDefectView()
+{
+}
 
 // CSynthDefectView diagnostics
 
