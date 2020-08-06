@@ -197,6 +197,7 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="GlobMyProc.h" />
     <ClInclude Include="GLRoutine.h" />
@@ -214,6 +215,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="GlobMyProc.cpp" />
     <ClCompile Include="GLRoutine.cpp" />
     <ClCompile Include="MainFrm.cpp" />
