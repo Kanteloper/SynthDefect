@@ -102,6 +102,144 @@ void CShader::Use()
 }
 
 
+/// <summary>
+/// Specify the value of a uniform variable of boolean type for the current program object
+/// </summary>
+/// <param name="name">: the name of uniform variable whose location is to be queried </param>
+/// <param name="value">: the value of uniform variable to set </param>
+void CShader::SetBool(const std::string& name, BOOL value) const
+{
+	glUniform1i(glGetUniformLocation(ID, name.c_str()), (int)value);
+}
+
+
+/// <summary>
+/// Specify the value of a uniform variable of integer type for the current program object
+/// </summary>
+/// <param name="name">: the name of uniform variable whose location is to be queried </param>
+/// <param name="value">: the value of uniform variable to set </param>
+void CShader::SetInt(const std::string& name, int value) const
+{
+	glUniform1i(glGetUniformLocation(ID, name.c_str()), value);
+}
+
+
+/// <summary>
+/// Specify the value of a uniform variable of float type for the current program object
+/// </summary>
+/// <param name="name">: the name of uniform variable whose location is to be queried </param>
+/// <param name="value">: the value of uniform variable to set </param>
+void CShader::SetFloat(const std::string& name, float value) const
+{
+	glUniform1f(glGetUniformLocation(ID, name.c_str()), value);
+}
+
+
+/// <summary>
+/// Specify the value of a uniform variable of vec2 type for the current program object
+/// </summary>
+/// <param name="name">: the name of uniform variable whose location is to be queried </param>
+/// <param name="value">: the value of uniform variable to set </param>
+void CShader::SetVec2(const std::string& name, const glm::vec2& value) const
+{
+	glUniform2fv(glGetUniformLocation(ID, name.c_str()), 1, &value[0]);
+}
+
+
+/// <summary>
+/// Specify the value of a uniform variable of vec2 type for the current program object
+/// </summary>
+/// <param name="name">: the name of uniform variable for the current program object </param>
+/// <param name="x">: X coordinate </param>
+/// <param name="y">: Y coordinate </param>
+void CShader::SetVec2(const std::string& name, float x, float y) const
+{
+	glUniform2f(glGetUniformLocation(ID, name.c_str()), x, y);
+}
+
+
+/// <summary>
+/// Specify the value of a uniform variable of vec3 type for the current program object
+/// </summary>
+/// <param name="name">: the name of uniform variable whose location is to be queried </param>
+/// <param name="value">: the value of uniform variable to set </param>
+void CShader::SetVec3(const std::string& name, const glm::vec3& value) const
+{
+	glUniform3fv(glGetUniformLocation(ID, name.c_str()), 1, &value[0]);
+}
+
+
+/// <summary>
+/// Specify the value of a uniform variable of vec3 type for the current program object
+/// </summary>
+/// <param name="name">: the name of uniform variable whose location is to be queried </param>
+/// <param name="x"> X coordinate </param>
+/// <param name="y"> Y coordinate </param>
+/// <param name="z"> Z coordiante </param>
+void CShader::SetVec3(const std::string& name, float x, float y, float z) const
+{
+	glUniform3f(glGetUniformLocation(ID, name.c_str()), x, y, z);
+}
+
+
+/// <summary>
+/// Specify the value of a uniform variable of vec4 type for the current program object
+/// </summary>
+/// <param name="name">: the name of uniform variable whose location is to be queried </param>
+/// <param name="value">: the value of uniform variable to set </param>
+void CShader::SetVec4(const std::string& name, const glm::vec4& value) const
+{
+	glUniform4fv(glGetUniformLocation(ID, name.c_str()), 1, &value[0]);
+}
+
+
+/// <summary>
+/// Specify the value of a uniform variable of vec4 type for the current program object
+/// </summary>
+/// <param name="name"></param>
+/// <param name="x">: X coordinate </param>
+/// <param name="y">: Y coordinate </param>
+/// <param name="z">: Z coordiante </param>
+/// <param name="w">: direction </param>
+void CShader::SetVec4(const std::string& name, float x, float y, float z, float w) const
+{
+	glUniform4f(glGetUniformLocation(ID, name.c_str()), x, y, z, w);
+}
+
+
+/// <summary>
+/// Specify the value of a uniform variable of mat2 type for the current program object
+/// </summary>
+/// <param name="name">: the name of uniform variable whose location is to be queried </param>
+/// <param name="mat">: the value of uniform variable to set </param>
+void CShader::SetMat2(const std::string& name, const glm::mat2& mat) const
+{
+	glUniformMatrix2fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, &mat[0][0]);
+}
+
+
+/// <summary>
+/// Specify the value of a uniform variable of mat3 type for the current program object
+/// </summary>
+/// <param name="name">: the name of uniform variable whose location is to be queried </param>
+/// <param name="mat">: the value of uniform variable to set </param>
+void CShader::SetMat3(const std::string& name, const glm::mat3& mat) const
+{
+	glUniformMatrix3fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, &mat[0][0]);
+}
+
+
+/// <summary>
+/// Specify the value of a uniform variable of mat4 type for the current program object
+/// </summary>
+/// <param name="name">: the name of uniform variable whose location is to be queried </param>
+/// <param name="mat">: the value of uniform variable to set </param>
+void CShader::SetMat4(const std::string& name, const glm::mat4& mat) const
+{
+	glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, &mat[0][0]);
+}
+
+
 CShader::~CShader()
 {
 }
