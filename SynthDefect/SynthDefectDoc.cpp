@@ -53,7 +53,7 @@ BOOL CSynthDefectDoc::OnNewDocument()
 	if (!CDocument::OnNewDocument())
 		return FALSE;
 
-	// initialization / reinitialization
+	// initialization
 	m_model = nullptr;
 
 	return TRUE;
