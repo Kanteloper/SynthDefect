@@ -25,11 +25,11 @@ public:
 
 	// Impelementation
 public:
+	void DrawModel(CShader& shaders);
 	~CModel();
 
 private:
 	void LoadModel(LPCTSTR pathName);
-	void DrawModel(CShader &shaders);
 	void ProcessNode(aiNode* node, const aiScene* scene);
 	CMesh ProcessMesh(aiMesh *mesh, const aiScene *scene);
 	BOOL IsTexCoordsExisted(aiMesh *mesh);

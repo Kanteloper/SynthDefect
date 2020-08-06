@@ -38,7 +38,7 @@ void CModel::LoadModel(LPCTSTR pathName)
 		return;
 	}
 
-	CModel::ProcessNode(scene->mRootNode, scene);
+  	CModel::ProcessNode(scene->mRootNode, scene);
 }
 
 
