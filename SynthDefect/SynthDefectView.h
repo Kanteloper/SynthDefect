@@ -17,7 +17,7 @@ private:
 	bool m_bInitGL;
 	CShader m_shaders;
 	CCamera m_camera;
-	CModel* m_model = nullptr;
+	CModel* m_model;
 
 public:
 	CSynthDefectDoc* GetDocument() const;
@@ -31,6 +31,8 @@ public:
 protected:
 
 // Implementation
+private:
+	void SetGLBackground();
 public:
 	virtual ~CSynthDefectView();
 	void InitGL();

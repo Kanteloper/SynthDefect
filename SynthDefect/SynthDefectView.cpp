@@ -44,7 +44,7 @@ END_MESSAGE_MAP()
 // CSynthDefectView construction/destruction
 
 CSynthDefectView::CSynthDefectView() noexcept
-	: m_bInitGL(TRUE)
+	: m_bInitGL(TRUE), m_model(nullptr)
 {
 	// TODO: add construction code here
 }
@@ -77,9 +77,7 @@ void CSynthDefectView::OnDraw(CDC* /*pDC*/)
 
 	if (m_bInitGL) 
 		InitChildView();											//Initialization of the GL window if first call
-
-	if (m_model)
-		DrawGLScene();															
+	DrawGLScene();															
 }
 
 
@@ -116,29 +114,59 @@ int CSynthDefectView::DrawGLScene()
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glClearDepth(1.0f);
-	// set background
-	// SetGLBackground();
-	// enable shaders
-	m_shaders.Use();
 
-	// view/projection transformations
-	CRect rect;
-	this->GetClientRect(&rect);
-	glm::mat4 projMatrix = glm::perspective(glm::radians(m_camera.Zoom), (float)rect.Width() / (float)rect.Height(), 0.1f, 100.0f);
-	glm::mat4 viewMatrix = m_camera.GetViewMatrix();
-	m_shaders.SetMat4("projection", projMatrix);
-	m_shaders.SetMat4("view", viewMatrix);
+	if (!m_model)
+	{
+		// show default screen
+		SetGLBackground();
+	}
+	else
+	{
+		// enable shaders
+		m_shaders.Use();
 
+		// view/projection transformations
+		CRect rect;
+		this->GetClientRect(&rect);
+		glm::mat4 projMatrix = glm::perspective(glm::radians(m_camera.Zoom), (float)rect.Width() / (float)rect.Height(), 0.1f, 100.0f);
+		glm::mat4 viewMatrix = m_camera.GetViewMatrix();
+		m_shaders.SetMat4("projection", projMatrix);
+		m_shaders.SetMat4("view", viewMatrix);
 
-	// render the loaded model
-	glm::mat4 model = glm::mat4(1.0f);
-	model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
-	model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
-	m_shaders.SetMat4("model", model);
-	m_model->DrawModel(m_shaders);
+		// render the loaded model
+		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
+		m_shaders.SetMat4("model", model);
+		m_model->DrawModel(m_shaders);
+	}
 
 	return TRUE;
 }
+
+
+/// <summary>
+/// 
+/// </summary>
+void CSynthDefectView::SetGLBackground()
+{
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+
+	glBegin(GL_QUADS);
+	// blue color
+	glColor3f(0.04f, 0.4f, 0.6f);
+	glVertex2f(-1.0, 1.0);
+	glVertex2f(1.0, 1.0);
+	// black color
+	glColor3f(0.0f, 0.0f, 0.0f);
+	glVertex2f(1.0, -1.0);
+	glVertex2f(-1.0, -1.0);
+	glEnd();
+}
+
 
 
 void CSynthDefectView::OnUpdate(CView* /*pSender*/, LPARAM /*lHint*/, CObject* /*pHint*/)
@@ -180,6 +208,7 @@ void CSynthDefectView::OnContextMenu(CWnd* /* pWnd */, CPoint point)
 
 CSynthDefectView::~CSynthDefectView()
 {
+	delete m_model;
 }
 
 // CSynthDefectView diagnostics
@@ -267,16 +296,13 @@ void CSynthDefectView::OnSize(UINT nType, int cx, int cy)
 // Render loop
 void CSynthDefectView::OnTimer(UINT_PTR nIDEvent)
 {
-	BOOL bRslt = FALSE;
 	switch (nIDEvent)
 	{
 	case ID_TIMER_PLAY:
-		if (m_model)
-			bRslt = DrawGLScene();
-		else
-			break;
-		if (bRslt)
+		if (DrawGLScene())
+		{
 			SwapBuffers(wglGetCurrentDC());
+		}
 		break;
 	}
 	CView::OnTimer(nIDEvent);
