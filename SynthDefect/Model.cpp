@@ -13,7 +13,7 @@ CModel::CModel()
 
 CModel::CModel(LPCTSTR filePath) 
 { 
-	LoadModel(filePath); 
+	LoadModel(filePath);
 }
 
 
@@ -45,7 +45,7 @@ void CModel::LoadModel(LPCTSTR pathName)
 /// <summary>
 /// Draw the model, and thus all its meshes
 /// </summary>
-/// <param name="shader">: </param>
+/// <param name="shader">: linked shaders</param>
 void CModel::DrawModel(CShader& shaders)
 {
 	for (unsigned int i = 0; i < meshes.size(); i++)

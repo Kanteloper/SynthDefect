@@ -21,7 +21,7 @@ public:
 	// Attributes
 public:
 	// model data
-	std::vector<CMesh>	meshes;
+	std::vector<CMesh> meshes;
 
 	// Impelementation
 public:
