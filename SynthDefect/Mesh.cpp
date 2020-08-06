@@ -48,6 +48,8 @@ void CMesh::setupMesh()
 	glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, BiTangent));
 	// break the existing vertex array object binding
 	glBindVertexArray(0);
+	if (glGetError() != 0)
+		TRACE("glDraw Error");
 }
 
 
@@ -61,6 +63,9 @@ void CMesh::Draw(CShader& shaders)
 	// draw mesh
 	glBindVertexArray(VAO);
 	glDrawElements(GL_TRIANGLES, (int)m_indices.size(), GL_UNSIGNED_INT, 0);
+	if (glGetError() != 0)
+		TRACE("glDraw Error");
+
 	glBindVertexArray(0);
 }
 
