@@ -8,15 +8,14 @@
 
 CModel::CModel() 
 {
-	// add default background mesh
-	m_meshes.push_back(SetDefaultBackground());
+	m_meshes.push_back(SetDefaultBackground());		// background
 }
 
 
 CModel::CModel(LPCTSTR filePath) 
 { 
 	// add default background mesh
-	//SetDefaultBackground();
+	m_meshes.push_back(SetDefaultBackground());		// background
 	LoadModel(filePath);
 }
 
