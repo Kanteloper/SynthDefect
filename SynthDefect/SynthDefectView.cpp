@@ -116,30 +116,6 @@ int CSynthDefectView::DrawGLScene()
 }
 
 
-/// <summary>
-/// 
-/// </summary>
-void CSynthDefectView::SetGLBackground()
-{
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-
-	glBegin(GL_QUADS);
-	// blue color
-	glColor3f(0.04f, 0.4f, 0.6f);
-	glVertex2f(-1.0, 1.0);
-	glVertex2f(1.0, 1.0);
-	// black color
-	glColor3f(0.0f, 0.0f, 0.0f);
-	glVertex2f(1.0, -1.0);
-	glVertex2f(-1.0, -1.0);
-	glEnd();
-}
-
-
-
 void CSynthDefectView::OnUpdate(CView* /*pSender*/, LPARAM /*lHint*/, CObject* /*pHint*/)
 {
 	CSynthDefectDoc* pDoc = GetDocument();

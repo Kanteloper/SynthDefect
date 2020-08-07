@@ -31,8 +31,6 @@ public:
 protected:
 
 // Implementation
-private:
-	void SetGLBackground();
 public:
 	virtual ~CSynthDefectView();
 	int DrawGLScene();
