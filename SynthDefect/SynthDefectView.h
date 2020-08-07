@@ -35,7 +35,6 @@ private:
 	void SetGLBackground();
 public:
 	virtual ~CSynthDefectView();
-	void InitGL();
 	int DrawGLScene();
 
 #ifdef _DEBUG
