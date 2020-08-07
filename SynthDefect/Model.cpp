@@ -59,28 +59,44 @@ CMesh CModel::SetDefaultBackground()
 	top_left.Position.x = -1.0f;
 	top_left.Position.y = 1.0f;
 	top_left.Position.z = 0.0f;
+	top_left.Color.r = 0.04f;
+	top_left.Color.g = 0.4f;
+	top_left.Color.b = 0.6f;
+	top_left.Color.a = 1.0f;
 	vertices.push_back(top_left);
 	// top right
 	top_right.Position.x = 1.0f;
 	top_right.Position.y = 1.0f;
 	top_right.Position.z = 0.0f;
+	top_right.Color.r = 0.04f;
+	top_right.Color.g = 0.4f;
+	top_right.Color.b = 0.6f;
+	top_right.Color.a = 1.0f;
 	vertices.push_back(top_right);
 
 	Vertex bottom_left, bottom_right;
 	// bottom left
-	bottom_left.Position.x = 1.0f;
+	bottom_left.Position.x = -1.0f;
 	bottom_left.Position.y = -1.0f;
 	bottom_left.Position.z = 0.0f;
+	bottom_left.Color.r = 0.0f;
+	bottom_left.Color.g = 0.0f;
+	bottom_left.Color.b = 0.0f;
+	bottom_left.Color.a = 1.0f;
 	vertices.push_back(bottom_left);
 	// bottom right
 	bottom_right.Position.x = 1.0f;
 	bottom_right.Position.y = -1.0f;
 	bottom_right.Position.z = 0.0f;
+	bottom_right.Color.r = 0.0f;
+	bottom_right.Color.g = 0.0f;
+	bottom_right.Color.b = 0.0f;
+	bottom_right.Color.a = 1.0f;
 	vertices.push_back(bottom_right);
 
 	indices = {
-		0, 2, 1,
-		2, 3, 1
+		0, 3, 1,
+		2, 3, 0
 	};
 
 	return CMesh(vertices, indices);
@@ -93,7 +109,6 @@ CMesh CModel::SetDefaultBackground()
 /// <param name="shader">: linked shaders</param>
 void CModel::DrawModel(CShader& shaders)
 {
-	//TRACE1("Log: mesh size: %d\n", m_meshes.size());
 	for (unsigned int i = 0; i < m_meshes.size(); i++)
 	{
 		m_meshes[i].Draw(shaders);
