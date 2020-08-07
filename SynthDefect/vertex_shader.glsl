@@ -21,5 +21,5 @@ void main()
     // TexCoords = aTexCoords;    
     // gl_Position is built-in variable in vertex language
     gl_Position = vec4(aPos, 1.0);
-    vertexColor = vec4(1.0f, 0.0f, 0.0f, 0.0f);
+    vertexColor = vec4(0.5, 1.0, 1.0, 1.0);
 }
