@@ -15,8 +15,8 @@ class CModel
 {
 	// Constructor
 public:
-	CModel();
-	CModel(LPCTSTR filePath);
+	CModel::CModel(float x, float y, float z);
+	CModel::CModel(LPCTSTR filePath, float x, float y, float z);
 
 	// Attributes
 public:
@@ -30,7 +30,7 @@ public:
 
 private:
 	void LoadModel(LPCTSTR pathName);
-	CMesh SetDefaultBackground();
+	CMesh SetDefaultBackground(float x, float y, float z);
 	void ProcessNode(aiNode* node, const aiScene* scene);
 	CMesh ProcessMesh(aiMesh *mesh, const aiScene *scene);
 	BOOL IsTexCoordsExisted(aiMesh *mesh);
