@@ -38,7 +38,7 @@ public:
 private:
 	// render data
 	// VAO - Vertex Array Object, VBO - Vertex Buffer Object, EBO - Element Buffer Object
-	unsigned int VAO, VBO, EBO;
+	unsigned int m_VAO, m_VBO, m_EBO;
 
 public:
 	// mesh data

@@ -9,7 +9,7 @@
 
 CMesh::CMesh()
 {
-	VAO = VBO = EBO = 0;
+	m_VAO = m_VBO = m_EBO = 0;
 }
 
 
@@ -19,17 +19,17 @@ CMesh::CMesh()
 void CMesh::setupMesh()
 {
 	// generate the reference of a VAO, VBO and an EBO 
-	glGenVertexArrays(1, &VAO);
-	glGenBuffers(1, &VBO);
-	glGenBuffers(1, &EBO);
+	glGenVertexArrays(1, &m_VAO);
+	glGenBuffers(1, &m_VBO);
+	glGenBuffers(1, &m_EBO);
 
 	// Vertices
-	glBindVertexArray(VAO);
+	glBindVertexArray(m_VAO);
 	// Vertex Attributes
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
 	glBufferData(GL_ARRAY_BUFFER, m_vertices.size() * sizeof(Vertex), &m_vertices[0], GL_DYNAMIC_DRAW);
 	// Vertex Array Indices
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_indices.size() * sizeof(unsigned int), &m_indices[0], GL_DYNAMIC_DRAW);
 
 	// vertex positions - x, y, z
@@ -62,7 +62,7 @@ void CMesh::Draw(CShader& shaders)
 {
 	// bind appropriate textures
 	// draw mesh
-	glBindVertexArray(VAO);
+	glBindVertexArray(m_VAO);
 	glDrawElements(GL_TRIANGLES, (int)m_indices.size(), GL_UNSIGNED_INT, 0);
 	if (glGetError() != 0)
 		TRACE("glDraw Error");
