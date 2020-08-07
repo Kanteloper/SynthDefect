@@ -27,30 +27,35 @@ void CMesh::setupMesh()
 	glBindVertexArray(m_VAO);
 	// Vertex Attributes
 	glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
+	TRACE1("Log: vertex size = %d\n", m_vertices.size());
 	glBufferData(GL_ARRAY_BUFFER, m_vertices.size() * sizeof(Vertex), &m_vertices[0], GL_DYNAMIC_DRAW);
 	// Vertex Array Indices
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO);
+	TRACE1("Log: indice size = %d\n", m_indices.size());
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_indices.size() * sizeof(unsigned int), &m_indices[0], GL_DYNAMIC_DRAW);
 
 	// vertex positions - x, y, z
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
-	// vertex normals - nor_x, nor_y, nor_z
+	// vertex color - r, g, b, a
 	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Normal));
-	// vertex texture coordinates - tex_x, tex_y
+	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Color));
+	// vertex normals - nor_x, nor_y, nor_z
 	glEnableVertexAttribArray(2);
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, TexCoords));
-	// tangent - tan_x, tan_y, tan_z
+	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Normal));
+	// vertex texture coordinates - tex_x, tex_y
 	glEnableVertexAttribArray(3);
-	glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Tangent));
-	// bitangent - btan_x, btan_y, btan_z
+	glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, TexCoords));
+	// tangent - tan_x, tan_y, tan_z
 	glEnableVertexAttribArray(4);
-	glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, BiTangent));
+	glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Tangent));
+	// bitangent - btan_x, btan_y, btan_z
+	glEnableVertexAttribArray(5);
+	glVertexAttribPointer(5, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, BiTangent));
 	// break the existing vertex array object binding
 	glBindVertexArray(0);
 	if (glGetError() != 0)
-		TRACE("glDraw Error");
+		TRACE("ERROR: glVertexAttribPointer\n");
 }
 
 
@@ -65,7 +70,7 @@ void CMesh::Draw(CShader& shaders)
 	glBindVertexArray(m_VAO);
 	glDrawElements(GL_TRIANGLES, (int)m_indices.size(), GL_UNSIGNED_INT, 0);
 	if (glGetError() != 0)
-		TRACE("glDraw Error");
+		TRACE("ERROR: glDrawElements\n");
 
 	glBindVertexArray(0);
 }
