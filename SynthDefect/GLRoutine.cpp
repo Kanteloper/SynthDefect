@@ -205,3 +205,25 @@ GLvoid ResizeGLScene(GLsizei width, GLsizei height)
 	glMatrixMode(GL_MODELVIEW);							// Select The Modelview Matrix
 	glLoadIdentity();									// Reset The Modelview Matrix
 }
+
+
+/// <summary>
+/// Initialize global setting for rendering using OpenGL
+/// </summary>
+void InitializeGLEngine()
+{
+	// Initialize glew entry points to create a valid OpenGL rendering context
+	glewExperimental = GL_TRUE;
+	GLenum err = glewInit();
+	if (err != GLEW_OK) {
+		// Problem: glewInit failed, something is seriously wrong.
+		TRACE("Log: failed to initialize glew\n");
+		exit(1);
+	}
+
+	glShadeModel(GL_SMOOTH);							// Enable Smooth Shading
+	glEnable(GL_DEPTH_TEST);							// Enables Depth Testing
+	// The Type Of Depth Testing To Do
+	// GL_LEQUAL : Passes if the incoming depth value is less than or equal to the stored depth value.
+	glDepthFunc(GL_LEQUAL);
+}
