@@ -8,11 +8,15 @@
 
 CModel::CModel() 
 {
+	// add default background mesh
+	m_meshes.push_back(SetDefaultBackground());
 }
 
 
 CModel::CModel(LPCTSTR filePath) 
 { 
+	// add default background mesh
+	//SetDefaultBackground();
 	LoadModel(filePath);
 }
 
@@ -43,14 +47,56 @@ void CModel::LoadModel(LPCTSTR pathName)
 
 
 /// <summary>
+/// Set background mesh with the default color
+/// </summary>
+CMesh CModel::SetDefaultBackground()
+{
+	std::vector<Vertex>			vertices;
+	std::vector<unsigned int>	indices;
+
+	Vertex top_left, top_right;
+	// top left
+	top_left.Position.x = -1.0f;
+	top_left.Position.y = 1.0f;
+	top_left.Position.z = 0.0f;
+	vertices.push_back(top_left);
+	// top right
+	top_right.Position.x = 1.0f;
+	top_right.Position.y = 1.0f;
+	top_right.Position.z = 0.0f;
+	vertices.push_back(top_right);
+
+	Vertex bottom_left, bottom_right;
+	// bottom left
+	bottom_left.Position.x = 1.0f;
+	bottom_left.Position.y = -1.0f;
+	bottom_left.Position.z = 0.0f;
+	vertices.push_back(bottom_left);
+	// bottom right
+	bottom_right.Position.x = 1.0f;
+	bottom_right.Position.y = -1.0f;
+	bottom_right.Position.z = 0.0f;
+	vertices.push_back(bottom_right);
+
+	indices = {
+		0, 2, 1,
+		2, 3, 1
+	};
+
+	return CMesh(vertices, indices);
+}
+
+
+/// <summary>
 /// Draw the model, and thus all its meshes
 /// </summary>
 /// <param name="shader">: linked shaders</param>
 void CModel::DrawModel(CShader& shaders)
 {
-	for (unsigned int i = 0; i < meshes.size(); i++)
+	//TRACE1("Log: mesh size: %d\n", m_meshes.size());
+	for (unsigned int i = 0; i < m_meshes.size(); i++)
 	{
-		meshes[i].Draw(shaders);
+		m_meshes[i].Draw(shaders);
 	}
 }
 
@@ -68,7 +114,7 @@ void CModel::ProcessNode(aiNode* node, const aiScene* scene)
 		// the node object only contains indices to index the actual objects in the scene
 		// the scene contains all the data, node is just to keep stuff organized
 		aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-		meshes.push_back(ProcessMesh(mesh, scene));
+		m_meshes.push_back(ProcessMesh(mesh, scene));
 	}
 	// then do the same for each of its children
 	for (unsigned int i = 0; i < node->mNumChildren; i++)

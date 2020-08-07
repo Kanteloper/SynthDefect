@@ -21,7 +21,7 @@ public:
 	// Attributes
 public:
 	// model data
-	std::vector<CMesh> meshes;
+	std::vector<CMesh> m_meshes;
 
 	// Impelementation
 public:
@@ -30,6 +30,7 @@ public:
 
 private:
 	void LoadModel(LPCTSTR pathName);
+	CMesh SetDefaultBackground();
 	void ProcessNode(aiNode* node, const aiScene* scene);
 	CMesh ProcessMesh(aiMesh *mesh, const aiScene *scene);
 	BOOL IsTexCoordsExisted(aiMesh *mesh);
