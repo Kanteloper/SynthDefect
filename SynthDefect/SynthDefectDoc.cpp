@@ -54,7 +54,7 @@ BOOL CSynthDefectDoc::OnNewDocument()
 		return FALSE;
 
 	// initialization
-	m_model = nullptr;
+	m_model = new CModel();
 
 	return TRUE;
 }
