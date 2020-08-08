@@ -6,16 +6,16 @@
 
 #include <string>
 
-CModel::CModel() 
+CModel::CModel(float x, float y, float z) 
 {
-	m_meshes.push_back(SetDefaultBackground());		// background
+	m_meshes.push_back(SetDefaultBackground(x, y, z));		// background
 }
 
 
-CModel::CModel(LPCTSTR filePath) 
+CModel::CModel(LPCTSTR filePath, float x, float y, float z) 
 { 
 	// add default background mesh
-	m_meshes.push_back(SetDefaultBackground());		// background
+	m_meshes.push_back(SetDefaultBackground(x, y, z));		// background
 	LoadModel(filePath);
 }
 
