@@ -134,7 +134,7 @@ void CSynthDefectView::InitChildView()
 	// build and compile shaders
 	m_shaders = CShader(VSHADER_CODE_PATH, FSHADER_CODE_PATH);
 	// Initialize Camera
-	m_camera = CCamera(glm::vec3(3.0f, 0.0f, 0.0f));
+	m_camera = CCamera(glm::vec3(0.0f, 0.0f, 3.0f));
 }
 
 
