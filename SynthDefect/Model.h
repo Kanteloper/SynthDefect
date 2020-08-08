@@ -30,7 +30,7 @@ public:
 
 private:
 	void LoadModel(LPCTSTR pathName);
-	CMesh SetDefaultBackground();
+	CMesh CModel::SetDefaultBackground(float x, float y, float z);
 	void ProcessNode(aiNode* node, const aiScene* scene);
 	CMesh ProcessMesh(aiMesh *mesh, const aiScene *scene);
 	BOOL IsTexCoordsExisted(aiMesh *mesh);
