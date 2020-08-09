@@ -54,7 +54,7 @@ BOOL CSynthDefectDoc::OnNewDocument()
 		return FALSE;
 
 	// initialization
-	m_model = new CModel();
+	m_model = new CModel(1.0f, 1.0f, 1.0f);
 
 	return TRUE;
 }
@@ -72,7 +72,7 @@ BOOL CSynthDefectDoc::OnOpenDocument(LPCTSTR lpszPathName)
 		return FALSE;
 
 	// load model
-	m_model = new CModel(lpszPathName);
+	//m_model = new CModel(lpszPathName);
 
 	return TRUE;
 }
