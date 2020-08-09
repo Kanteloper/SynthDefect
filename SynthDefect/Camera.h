@@ -16,27 +16,27 @@ class CCamera
 	// Constructor
 public:
 	CCamera();
-	CCamera(glm::vec3 pos, glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f))
-		: Front(glm::vec3(0.0f, 0.0f, -1.0f)), MoveSpeed(SPEED), MoveSensitivity(SENSITIVITY), Zoom(FOV) 
+	CCamera(glm::vec3 pos) : m_ForwardAxis(glm::vec3(0.0f, 0.0f, -1.0f)), m_MoveSpeed(SPEED), m_MoveSensitivity(SENSITIVITY), m_Zoom(FOV) 
 	{
-		Position = pos;
-		WorldUp = up;
-		Right = glm::normalize(glm::cross(Front, WorldUp));
-		Up = glm::normalize(glm::cross(Right, Front));
+		m_Position = pos;
+		m_UpDirection = glm::vec3(0.0f, 1.0f, 0.0f);								// Assume the camera is straight up to +y axis
+		// m_ForwardAxis = glm::normalize(m_Position - );
+		m_LeftAxis = glm::normalize(glm::cross(m_ForwardAxis, m_UpDirection));
+		m_UpAxis = glm::cross(m_LeftAxis, m_ForwardAxis);
 	};
 
 	// Attributes
 public:
 	// camera attributes
-	glm::vec3 Position;
-	glm::vec3 Front;
-	glm::vec3 Up;
-	glm::vec3 Right;
-	glm::vec3 WorldUp;
+	glm::vec3 m_Position;
+	glm::vec3 m_ForwardAxis;
+	glm::vec3 m_UpAxis;
+	glm::vec3 m_LeftAxis;
+	glm::vec3 m_UpDirection;
 	// camera options
-	float MoveSpeed;
-	float MoveSensitivity;
-	float Zoom;
+	float m_MoveSpeed;
+	float m_MoveSensitivity;
+	float m_Zoom;
 
 	// Implementation
 public:
