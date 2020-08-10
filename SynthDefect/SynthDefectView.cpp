@@ -44,7 +44,6 @@ END_MESSAGE_MAP()
 // CSynthDefectView construction/destruction
 
 CSynthDefectView::CSynthDefectView() noexcept
-	: m_bInitGL(TRUE), m_model(nullptr)
 {
 	// TODO: add construction code here
 }
@@ -97,47 +96,18 @@ int CSynthDefectView::DrawGLScene()
 	// enable shaders
 	m_shaders.Use();
 
-	// view/projection transformations
-	CRect rect;
-	this->GetClientRect(&rect);
-	glm::mat4 projMatrix = glm::perspective(glm::radians(m_camera.Zoom), (float)rect.Width() / (float)rect.Height(), 0.1f, 100.0f);
-	glm::mat4 viewMatrix = m_camera.GetViewMatrix();
+	// view, projection transformations
+	glm::mat4 projMatrix = glm::perspective(glm::radians(m_camera.m_Zoom), m_viewWidth / m_viewHeight, 0.1f, 100.0f);
+	glm::mat4 vmMatrix = m_camera.GetViewMatrix();
 	m_shaders.SetMat4("projection", projMatrix);
-	m_shaders.SetMat4("view", viewMatrix);
+	m_shaders.SetMat4("view_model", vmMatrix);
 
 	// render the loaded model
-	glm::mat4 model = glm::mat4(1.0f);
-	model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
-	model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
-	m_shaders.SetMat4("model", model);
-	m_model->DrawModel(m_shaders);
+	if(m_model)
+		m_model->DrawModel(m_shaders);
 
 	return TRUE;
 }
-
-
-/// <summary>
-/// 
-/// </summary>
-void CSynthDefectView::SetGLBackground()
-{
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-
-	glBegin(GL_QUADS);
-	// blue color
-	glColor3f(0.04f, 0.4f, 0.6f);
-	glVertex2f(-1.0, 1.0);
-	glVertex2f(1.0, 1.0);
-	// black color
-	glColor3f(0.0f, 0.0f, 0.0f);
-	glVertex2f(1.0, -1.0);
-	glVertex2f(-1.0, -1.0);
-	glEnd();
-}
-
 
 
 void CSynthDefectView::OnUpdate(CView* /*pSender*/, LPARAM /*lHint*/, CObject* /*pHint*/)
@@ -155,10 +125,8 @@ void CSynthDefectView::OnUpdate(CView* /*pSender*/, LPARAM /*lHint*/, CObject* /
 void CSynthDefectView::InitChildView()
 {
 	m_bInitGL = FALSE;
-	// build and compile shaders
-	m_shaders = CShader(VSHADER_CODE_PATH, FSHADER_CODE_PATH);
-	// Initialize Camera
-	m_camera = CCamera(glm::vec3(3.0f, 0.0f, 0.0f));
+	m_shaders = CShader(VSHADER_CODE_PATH, FSHADER_CODE_PATH);		// build and compile shaders
+	m_camera = CCamera(glm::vec3(0.0f, 0.0f, 3.0f));				// Initialize Camera
 }
 
 
@@ -244,6 +212,11 @@ int CSynthDefectView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	// create a opengl child view to occupy the client area of the frame
 	CreateGLWindow(this, 32);
 	InitializeGLEngine();
+
+	// calculate the size of child view (width, height)
+	CRect rect;
+	this->GetClientRect(&rect);
+	ResizeGLScene((float)rect.Width(), (float)rect.Height());
 	// SetTimer - Install a system timer
 	SetTimer(ID_TIMER_PLAY, 10, NULL);
 	return 0;
@@ -258,8 +231,21 @@ int CSynthDefectView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 void CSynthDefectView::OnSize(UINT nType, int cx, int cy)
 {
 	CView::OnSize(nType, cx, cy);
-	ResizeGLScene(cx, cy);
+	ResizeGLScene((float)cx, (float)cy);
 }
+
+
+/// <summary>
+/// Set the width and the height of Child view
+/// </summary>
+/// <param name="width">: the width of child view </param>
+/// <param name="height">: the height of child view </param>
+void CSynthDefectView::ResizeGLScene(float width, float height)
+{
+	m_viewWidth = width;
+	m_viewHeight = height;
+}
+
 
 // Render loop
 void CSynthDefectView::OnTimer(UINT_PTR nIDEvent)

@@ -9,7 +9,6 @@
 
 CMesh::CMesh()
 {
-	m_VAO = m_VBO = m_EBO = 0;
 }
 
 
@@ -18,21 +17,36 @@ CMesh::CMesh()
 /// </summary>
 void CMesh::setupMesh()
 {
+	GLenum err;
 	// generate the reference of a VAO, VBO and an EBO 
 	glGenVertexArrays(1, &m_VAO);
+	if ((err = glGetError()) != GL_NO_ERROR)
+		TRACE1("ERROR: glGenVertexArrays - %d\n", err);
 	glGenBuffers(1, &m_VBO);
+	if ((err = glGetError()) != GL_NO_ERROR)
+		TRACE1("ERROR: glGenVBOBuffers - %d\n", err);
 	glGenBuffers(1, &m_EBO);
+	if ((err = glGetError()) != GL_NO_ERROR)
+		TRACE1("ERROR: glGenEBOBuffers - %d\n", err);
 
 	// Vertices
 	glBindVertexArray(m_VAO);
+	if ((err = glGetError()) != GL_NO_ERROR)
+		TRACE1("ERROR: glBindVertexArray - %d\n", err);
 	// Vertex Attributes
 	glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
-	TRACE1("Log: vertex size = %d\n", m_vertices.size());
+	if ((err = glGetError()) != GL_NO_ERROR)
+		TRACE1("ERROR: glBindVBOBuffer - %d\n", err);
 	glBufferData(GL_ARRAY_BUFFER, m_vertices.size() * sizeof(Vertex), &m_vertices[0], GL_DYNAMIC_DRAW);
+	if ((err = glGetError()) != GL_NO_ERROR)
+		TRACE1("ERROR: glVBOBufferData - %d\n", err);
 	// Vertex Array Indices
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO);
-	TRACE1("Log: indice size = %d\n", m_indices.size());
+	if ((err = glGetError()) != GL_NO_ERROR)
+		TRACE1("ERROR: glBindEBOBuffer - %d\n", err);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_indices.size() * sizeof(unsigned int), &m_indices[0], GL_DYNAMIC_DRAW);
+	if ((err = glGetError()) != GL_NO_ERROR)
+		TRACE1("ERROR: glEBOBufferData - %d\n", err);
 
 	// vertex positions - x, y, z
 	glEnableVertexAttribArray(0);
@@ -54,8 +68,8 @@ void CMesh::setupMesh()
 	glVertexAttribPointer(5, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, BiTangent));
 	// break the existing vertex array object binding
 	glBindVertexArray(0);
-	if (glGetError() != 0)
-		TRACE("ERROR: glVertexAttribPointer\n");
+	if ((err = glGetError()) != GL_NO_ERROR)
+		TRACE1("ERROR: define an array of generic vertex attribute data - %d\n", err);
 }
 
 
@@ -65,12 +79,15 @@ void CMesh::setupMesh()
 /// <param name="shaders">: liked Shader objects</param>
 void CMesh::Draw(CShader& shaders)
 {
+	GLenum err;
 	// bind appropriate textures
 	// draw mesh
 	glBindVertexArray(m_VAO);
-	glDrawElements(GL_TRIANGLES, (int)m_indices.size(), GL_UNSIGNED_INT, 0);
-	if (glGetError() != 0)
-		TRACE("ERROR: glDrawElements\n");
+	if ((err = glGetError()) != GL_NO_ERROR)
+		TRACE1("ERROR: glBindVertexArray - %d\n", err);
+	glDrawElements(GL_TRIANGLES, (GLsizei)m_indices.size(), GL_UNSIGNED_INT, 0);
+	if ((err = glGetError()) != GL_NO_ERROR)
+		TRACE1("ERROR: glDrawElements - %d\n", err);
 
 	glBindVertexArray(0);
 }

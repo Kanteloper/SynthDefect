@@ -6,16 +6,16 @@
 
 #include <string>
 
-CModel::CModel() 
+CModel::CModel(float x, float y, float z) 
 {
-	m_meshes.push_back(SetDefaultBackground());		// background
+	m_meshes.push_back(SetDefaultBackground(x, y, z));		// background
 }
 
 
-CModel::CModel(LPCTSTR filePath) 
+CModel::CModel(LPCTSTR filePath, float x, float y, float z) 
 { 
 	// add default background mesh
-	m_meshes.push_back(SetDefaultBackground());		// background
+	m_meshes.push_back(SetDefaultBackground(x, y, z));		// background
 	LoadModel(filePath);
 }
 
@@ -31,7 +31,6 @@ void CModel::LoadModel(LPCTSTR pathName)
 	const aiScene* scene = import.ReadFile(ConvertStdString(pathName),
 		aiProcess_CalcTangentSpace |
 		aiProcess_Triangulate |
-		aiProcess_RemoveComponent |
 		aiProcess_JoinIdenticalVertices |
 		aiProcess_ValidateDataStructure);
 
@@ -48,25 +47,25 @@ void CModel::LoadModel(LPCTSTR pathName)
 /// <summary>
 /// Set background mesh with the default color
 /// </summary>
-CMesh CModel::SetDefaultBackground()
+CMesh CModel::SetDefaultBackground(float x, float y, float z)
 {
 	std::vector<Vertex>			vertices;
 	std::vector<unsigned int>	indices;
 
 	Vertex top_left, top_right;
 	// top left
-	top_left.Position.x = -1.0f;
-	top_left.Position.y = 1.0f;
-	top_left.Position.z = 0.0f;
+	top_left.Position.x = -x;
+	top_left.Position.y = y;
+	top_left.Position.z = z;
 	top_left.Color.r = 0.04f;
 	top_left.Color.g = 0.4f;
 	top_left.Color.b = 0.6f;
 	top_left.Color.a = 1.0f;
 	vertices.push_back(top_left);
 	// top right
-	top_right.Position.x = 1.0f;
-	top_right.Position.y = 1.0f;
-	top_right.Position.z = 0.0f;
+	top_right.Position.x = x;
+	top_right.Position.y = y;
+	top_right.Position.z = z;
 	top_right.Color.r = 0.04f;
 	top_right.Color.g = 0.4f;
 	top_right.Color.b = 0.6f;
@@ -75,21 +74,21 @@ CMesh CModel::SetDefaultBackground()
 
 	Vertex bottom_left, bottom_right;
 	// bottom left
-	bottom_left.Position.x = -1.0f;
-	bottom_left.Position.y = -1.0f;
-	bottom_left.Position.z = 0.0f;
-	bottom_left.Color.r = 0.0f;
-	bottom_left.Color.g = 0.0f;
-	bottom_left.Color.b = 0.0f;
+	bottom_left.Position.x = -x;
+	bottom_left.Position.y = -y;
+	bottom_left.Position.z = z;
+	bottom_left.Color.r = 1.0f;
+	bottom_left.Color.g = 1.0f;
+	bottom_left.Color.b = 1.0f;
 	bottom_left.Color.a = 1.0f;
 	vertices.push_back(bottom_left);
 	// bottom right
-	bottom_right.Position.x = 1.0f;
-	bottom_right.Position.y = -1.0f;
-	bottom_right.Position.z = 0.0f;
-	bottom_right.Color.r = 0.0f;
-	bottom_right.Color.g = 0.0f;
-	bottom_right.Color.b = 0.0f;
+	bottom_right.Position.x = x;
+	bottom_right.Position.y = -y;
+	bottom_right.Position.z = z;
+	bottom_right.Color.r = 1.0f;
+	bottom_right.Color.g = 1.0f;
+	bottom_right.Color.b = 1.0f;
 	bottom_right.Color.a = 1.0f;
 	vertices.push_back(bottom_right);
 

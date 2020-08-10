@@ -11,6 +11,7 @@
 #endif
 
 #include "SynthDefectDoc.h"
+#include "SynthDefectView.h"
 #include <gl/GL.h>
 #include <gl/GLU.h>
 #include <propkey.h>
@@ -34,6 +35,7 @@ CSynthDefectDoc::CSynthDefectDoc() noexcept
 	// TODO: add one-time construction code here
 }
 
+
 CSynthDefectDoc::~CSynthDefectDoc()
 {
 	delete m_model;
@@ -54,9 +56,30 @@ BOOL CSynthDefectDoc::OnNewDocument()
 		return FALSE;
 
 	// initialization
-	m_model = new CModel();
+	CView* pView = GetChildView();
+	if (pView)
+	{
+		CSynthDefectView* childView = static_cast<CSynthDefectView*>(pView);
+		m_model = new CModel(childView->m_viewWidth, childView->m_viewHeight, 0.0f);
+	}
+	else
+		TRACE("ERROR - There is no child view.");
 
 	return TRUE;
+}
+
+
+/// <summary>
+/// Get the reference of View object
+/// </summary>
+/// <returns> the pointer of CView object </returns>
+CView* CSynthDefectDoc::GetChildView()
+{
+	CView* target = nullptr;
+	POSITION pos = GetFirstViewPosition();
+	if (pos)
+		target = GetNextView(pos);
+	return target;
 }
 
 
@@ -72,7 +95,7 @@ BOOL CSynthDefectDoc::OnOpenDocument(LPCTSTR lpszPathName)
 		return FALSE;
 
 	// load model
-	m_model = new CModel(lpszPathName);
+	//m_model = new CModel(lpszPathName);
 
 	return TRUE;
 }

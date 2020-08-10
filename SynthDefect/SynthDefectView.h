@@ -13,11 +13,14 @@ protected: // create from serialization only
 	DECLARE_DYNCREATE(CSynthDefectView)
 
 // Attributes
+public:
+	float m_viewWidth = 0.0f;
+	float m_viewHeight = 0.0f;
 private:
-	bool m_bInitGL;
+	bool m_bInitGL = TRUE;
 	CShader m_shaders;
 	CCamera m_camera;
-	CModel* m_model;
+	CModel* m_model = nullptr;
 
 public:
 	CSynthDefectDoc* GetDocument() const;
@@ -32,10 +35,11 @@ protected:
 
 // Implementation
 private:
-	void SetGLBackground();
+	int DrawGLScene();
+	void ResizeGLScene(float width, float height);
 public:
 	virtual ~CSynthDefectView();
-	int DrawGLScene();
+	
 
 #ifdef _DEBUG
 	virtual void AssertValid() const;
