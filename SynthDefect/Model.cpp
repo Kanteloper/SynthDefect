@@ -77,18 +77,18 @@ CMesh CModel::SetDefaultBackground(float x, float y, float z)
 	bottom_left.Position.x = -x;
 	bottom_left.Position.y = -y;
 	bottom_left.Position.z = z;
-	bottom_left.Color.r = 1.0f;
-	bottom_left.Color.g = 1.0f;
-	bottom_left.Color.b = 1.0f;
+	bottom_left.Color.r = 0.0f;
+	bottom_left.Color.g = 0.0f;
+	bottom_left.Color.b = 0.0f;
 	bottom_left.Color.a = 1.0f;
 	vertices.push_back(bottom_left);
 	// bottom right
 	bottom_right.Position.x = x;
 	bottom_right.Position.y = -y;
 	bottom_right.Position.z = z;
-	bottom_right.Color.r = 1.0f;
-	bottom_right.Color.g = 1.0f;
-	bottom_right.Color.b = 1.0f;
+	bottom_right.Color.r = 0.0f;
+	bottom_right.Color.g = 0.0f;
+	bottom_right.Color.b = 0.0f;
 	bottom_right.Color.a = 1.0f;
 	vertices.push_back(bottom_right);
 
