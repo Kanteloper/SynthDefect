@@ -138,7 +138,7 @@ void CModel::ProcessNode(aiNode* node, const aiScene* scene)
 
 
 /// <summary>
-/// Translate an aiMesh object to a mesh object to be albe to render using OpenGL
+/// Translate an aiMesh object of Assimp to a mesh object to be albe to render using OpenGL
 /// </summary>
 /// <param name="mesh">: The Mesh data of Assimp structure</param>
 /// <param name="scene">: The root structure of the imported data</param>
@@ -202,7 +202,6 @@ CMesh CModel::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 		vertex.BiTangent = vecForThreeComp;
 		vertices.push_back(vertex);
 	}
-
 
 	// Walk through each of the mesh's faces
 	for (unsigned int i = 0; i < mesh->mNumFaces; i++)
