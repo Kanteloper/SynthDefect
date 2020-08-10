@@ -21,6 +21,8 @@ private:
 	CShader m_shaders;
 	CCamera m_camera;
 	CModel* m_model = nullptr;
+	glm::vec3 m_cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
+	glm::vec3 m_modelCenter;								// geometry center
 
 public:
 	CSynthDefectDoc* GetDocument() const;

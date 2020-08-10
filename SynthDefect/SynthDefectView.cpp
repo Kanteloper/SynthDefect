@@ -119,6 +119,8 @@ void CSynthDefectView::OnUpdate(CView* /*pSender*/, LPARAM /*lHint*/, CObject* /
 
 	// receive data from Document
 	m_model = pDoc->m_model;
+	// get the centre of model
+	
 }
 
 
@@ -126,7 +128,7 @@ void CSynthDefectView::InitChildView()
 {
 	m_bInitGL = FALSE;
 	m_shaders = CShader(VSHADER_CODE_PATH, FSHADER_CODE_PATH);		// build and compile shaders
-	m_camera = CCamera(glm::vec3(0.0f, 0.0f, 2.0f));				// Initialize Camera
+	m_camera = CCamera(m_cameraPos);								// Initialize Camera
 
 	// get the size of child view
 	CRect rect;
