@@ -56,7 +56,14 @@ BOOL CSynthDefectDoc::OnNewDocument()
 		return FALSE;
 
 	// initialization
-	m_model = new CModel(1.0f, 1.0f, 1.0f);
+	CView* pView = GetChildView();
+	if (pView)
+	{
+		CSynthDefectView* childView = static_cast<CSynthDefectView*>(pView);
+		m_model = new CModel(childView->m_viewWidth, childView->m_viewHeight, 0.0f);
+	}
+	else
+		TRACE("ERROR - There is no child view.");
 
 	return TRUE;
 }
