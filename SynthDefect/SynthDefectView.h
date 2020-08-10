@@ -31,9 +31,12 @@ public:
 protected:
 
 // Implementation
+private:
+	int DrawGLScene();
+
 public:
 	virtual ~CSynthDefectView();
-	int DrawGLScene();
+	
 
 #ifdef _DEBUG
 	virtual void AssertValid() const;
