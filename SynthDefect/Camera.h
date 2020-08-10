@@ -20,6 +20,13 @@ public:
 	{
 		m_Position = pos;
 		m_UpDirection = glm::vec3(0.0f, 1.0f, 0.0f);								// Assume the camera is straight up to +y axis
+		m_LeftAxis = glm::normalize(glm::cross(m_ForwardAxis, m_UpDirection));
+		m_UpAxis = glm::cross(m_LeftAxis, m_ForwardAxis);
+	};
+	CCamera(glm::vec3 pos, glm::vec3 forward) : m_MoveSpeed(SPEED), m_MoveSensitivity(SENSITIVITY), m_Zoom(FOV)
+	{
+		m_Position = pos;
+		m_UpDirection = glm::vec3(0.0f, 1.0f, 0.0f);								// Assume the camera is straight up to +y axis
 		// m_ForwardAxis = glm::normalize(m_Position - );
 		m_LeftAxis = glm::normalize(glm::cross(m_ForwardAxis, m_UpDirection));
 		m_UpAxis = glm::cross(m_LeftAxis, m_ForwardAxis);
