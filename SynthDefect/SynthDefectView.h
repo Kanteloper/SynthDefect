@@ -13,13 +13,14 @@ protected: // create from serialization only
 	DECLARE_DYNCREATE(CSynthDefectView)
 
 // Attributes
+public:
+	float m_viewWidth = 0.0f;
+	float m_viewHeight = 0.0f;
 private:
 	bool m_bInitGL = TRUE;
 	CShader m_shaders;
 	CCamera m_camera;
 	CModel* m_model = nullptr;
-	float m_viewWidth = 0.0f;
-	float m_viewHeight = 0.0f;
 
 public:
 	CSynthDefectDoc* GetDocument() const;
