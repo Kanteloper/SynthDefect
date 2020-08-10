@@ -173,7 +173,6 @@ bool KillGLWindow(CWnd* pWnd)
 	return TRUE;
 }
 
-GLfloat fNearPlane = 0.1f, fFarPlane = 100.f, fViewAngle = 45.f, fAspect;
 /// <summary>
 /// Resize and Initialize the OpenGL window
 /// </summary>
@@ -191,19 +190,9 @@ GLvoid ResizeGLScene(GLsizei width, GLsizei height)
 	m_viewRect.right = width;
 	m_viewRect.bottom = height;
 
+	// make sure the viewport matches the new window dimensions
+	// note that width and height will be significantly larger than specified on displays
 	glViewport(0, 0, width, height);					// Reset The Current Viewport
-
-	// glMatrixMode - Specify which matrix is the current matrix
-	// GL_PROJECTION - Apply subsequent matrix operations to the projection matrix stack
-	glMatrixMode(GL_PROJECTION);						// Select The Projection Matrix
-	glLoadIdentity();									// Reset The Projection Matrix to Identity Matrix
-
-	// gluPerspective - Set up a Perspective Projection Matrix
-	// Specify a Viewing frustrum into the World coordinate system
-	gluPerspective(fViewAngle, (GLfloat)width / (GLfloat)height, fNearPlane, fFarPlane);  
-
-	glMatrixMode(GL_MODELVIEW);							// Select The Modelview Matrix
-	glLoadIdentity();									// Reset The Modelview Matrix
 }
 
 
