@@ -6,16 +6,16 @@
 
 #include <string>
 
-CModel::CModel(float x, float y, float z) 
+CModel::CModel(glm::vec3 vertex) 
 {
-	m_meshes.push_back(SetDefaultBackground(x, y, z));		// background
+	m_meshes.push_back(SetDefaultBackground(vertex.x, vertex.y, vertex.z));		// background
 }
 
 
-CModel::CModel(LPCTSTR filePath, float x, float y, float z) 
+CModel::CModel(LPCTSTR filePath, glm::vec3 vertex)
 { 
 	// add default background mesh
-	m_meshes.push_back(SetDefaultBackground(x, y, z));		// background
+	m_meshes.push_back(SetDefaultBackground(vertex.x, vertex.y, vertex.z));		// background
 	LoadModel(filePath);
 }
 
@@ -153,12 +153,27 @@ CMesh CModel::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 	{
 		Vertex vertex;
 		glm::vec3 vecForThreeComp;
-
 		// positions
 		vecForThreeComp.x = mesh->mVertices[i].x;
 		vecForThreeComp.y = mesh->mVertices[i].y;
 		vecForThreeComp.z = mesh->mVertices[i].z;
 		vertex.Position = vecForThreeComp;
+
+		if (vertex.Position.x > m_max.x)
+			m_max.x = vertex.Position.x;
+		else if (vertex.Position.x < m_min.x)
+			m_min.x = vertex.Position.x;
+
+		if (vertex.Position.y > m_max.y)
+			m_max.y = vertex.Position.y;
+		else if (vertex.Position.x < m_min.x)
+			m_min.y = vertex.Position.y;
+
+		if (vertex.Position.z > m_max.z)
+			m_max.z = vertex.Position.z;
+		else if (vertex.Position.z < m_min.z)
+			m_min.z = vertex.Position.z;
+
 		// normals
 		vecForThreeComp.x = mesh->mNormals[i].x;
 		vecForThreeComp.y = mesh->mNormals[i].y;
@@ -187,6 +202,7 @@ CMesh CModel::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 		vertex.BiTangent = vecForThreeComp;
 		vertices.push_back(vertex);
 	}
+
 
 	// Walk through each of the mesh's faces
 	for (unsigned int i = 0; i < mesh->mNumFaces; i++)

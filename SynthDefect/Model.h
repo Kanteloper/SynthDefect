@@ -15,11 +15,15 @@ class CModel
 {
 	// Constructor
 public:
-	CModel::CModel(float x, float y, float z);
-	CModel::CModel(LPCTSTR filePath, float x, float y, float z);
+	CModel::CModel(glm::vec3 vertex);
+	CModel::CModel(LPCTSTR filePath, glm::vec3 vertex);
 
 	// Attributes
 public:
+	glm::vec3 m_max = glm::vec3(0.0f, 0.0f, 0.0f);				// max value of coordinates
+	glm::vec3 m_min = glm::vec3(0.0f, 0.0f, 0.0f);				// min value of coordinates
+
+private:
 	// model data
 	std::vector<CMesh> m_meshes;
 
