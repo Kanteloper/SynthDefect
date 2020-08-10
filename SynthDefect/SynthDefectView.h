@@ -36,7 +36,6 @@ protected:
 // Implementation
 private:
 	int DrawGLScene();
-	void ResizeGLScene(float width, float height);
 public:
 	virtual ~CSynthDefectView();
 	
