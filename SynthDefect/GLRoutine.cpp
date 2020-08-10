@@ -180,16 +180,6 @@ bool KillGLWindow(CWnd* pWnd)
 /// <param name="height">: height of OpenGL window </param>
 GLvoid ResizeGLScene(GLsizei width, GLsizei height)
 {
-	RECT m_viewRect;
-
-	if (height == 0)									// Prevent A Divide By Zero By
-	{
-		height = 1;										// Making Height Equal One
-	}
-	m_viewRect.left = m_viewRect.top = 0;				// The coordinates of the upper-left corner are (0,0).
-	m_viewRect.right = width;
-	m_viewRect.bottom = height;
-
 	// make sure the viewport matches the new window dimensions
 	// note that width and height will be significantly larger than specified on displays
 	glViewport(0, 0, width, height);					// Reset The Current Viewport
