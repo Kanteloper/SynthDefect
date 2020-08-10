@@ -98,7 +98,10 @@ void CShader::DeleteShaders()
 /// </summary>
 void CShader::Use()
 {
+	GLenum err;
 	glUseProgram(ID);
+	if ((err = glGetError()) != GL_NO_ERROR)
+		TRACE1("ERROR: glUseProgram - %d\n", err);
 }
 
 
@@ -236,7 +239,10 @@ void CShader::SetMat3(const std::string& name, const glm::mat3& mat) const
 /// <param name="mat">: the value of uniform variable to set </param>
 void CShader::SetMat4(const std::string& name, const glm::mat4& mat) const
 {
+	GLenum err;
 	glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, &mat[0][0]);
+	if ((err = glGetError()) != GL_NO_ERROR)
+		TRACE1("ERROR: glUniformMatrix4fv - %d\n", err);
 }
 
 
