@@ -100,16 +100,12 @@ int CSynthDefectView::DrawGLScene()
 	// view/projection transformations
 	CRect rect;
 	this->GetClientRect(&rect);
-	glm::mat4 projMatrix = glm::perspective(glm::radians(m_camera.Zoom), (float)rect.Width() / (float)rect.Height(), 0.1f, 100.0f);
-	glm::mat4 viewMatrix = m_camera.GetViewMatrix();
+	glm::mat4 projMatrix = glm::perspective(glm::radians(m_camera.m_Zoom), (float)rect.Width() / (float)rect.Height(), 0.1f, 100.0f);
+	glm::mat4 vmMatrix = m_camera.GetViewMatrix();
 	m_shaders.SetMat4("projection", projMatrix);
-	m_shaders.SetMat4("view", viewMatrix);
+	m_shaders.SetMat4("view_model", vmMatrix);
 
 	// render the loaded model
-	glm::mat4 model = glm::mat4(1.0f);
-	model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
-	model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
-	m_shaders.SetMat4("model", model);
 	m_model->DrawModel(m_shaders);
 
 	return TRUE;
@@ -131,10 +127,8 @@ void CSynthDefectView::OnUpdate(CView* /*pSender*/, LPARAM /*lHint*/, CObject* /
 void CSynthDefectView::InitChildView()
 {
 	m_bInitGL = FALSE;
-	// build and compile shaders
-	m_shaders = CShader(VSHADER_CODE_PATH, FSHADER_CODE_PATH);
-	// Initialize Camera
-	m_camera = CCamera(glm::vec3(3.0f, 0.0f, 0.0f));
+	m_shaders = CShader(VSHADER_CODE_PATH, FSHADER_CODE_PATH);		// build and compile shaders
+	m_camera = CCamera(glm::vec3(0.0f, 0.0f, 3.0f));				// Initialize Camera
 }
 
 
