@@ -8,6 +8,7 @@
 #include "Model.h"
 
 
+
 class CSynthDefectDoc : public CDocument
 {
 protected: // create from serialization only
@@ -15,8 +16,11 @@ protected: // create from serialization only
 	DECLARE_DYNCREATE(CSynthDefectDoc)
 
 // Attributes
+private:
+	CView* pView = nullptr;
+
 public:
-	CModel* m_model;
+	CModel* m_model = nullptr;
 
 // Overrides
 public:
@@ -28,6 +32,8 @@ public:
 #endif // SHARED_HANDLERS
 
 // Implementation
+private:
+	CView* GetChildView();
 public:
 	virtual ~CSynthDefectDoc();
 #ifdef _DEBUG
