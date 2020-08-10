@@ -44,7 +44,6 @@ END_MESSAGE_MAP()
 // CSynthDefectView construction/destruction
 
 CSynthDefectView::CSynthDefectView() noexcept
-	: m_bInitGL(TRUE), m_model(nullptr)
 {
 	// TODO: add construction code here
 }
@@ -215,6 +214,11 @@ int CSynthDefectView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	// create a opengl child view to occupy the client area of the frame
 	CreateGLWindow(this, 32);
 	InitializeGLEngine();
+
+	// calculate the size of child view (width, height)
+	CRect rect;
+	this->GetClientRect(&rect);
+	ResizeGLScene((float)rect.Width(), (float)rect.Height());
 	// SetTimer - Install a system timer
 	SetTimer(ID_TIMER_PLAY, 10, NULL);
 	return 0;
@@ -229,8 +233,21 @@ int CSynthDefectView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 void CSynthDefectView::OnSize(UINT nType, int cx, int cy)
 {
 	CView::OnSize(nType, cx, cy);
-	ResizeGLScene(cx, cy);
+	ResizeGLScene((float)cx, (float)cy);
 }
+
+
+/// <summary>
+/// Set the width and the height of Child view
+/// </summary>
+/// <param name="width">: the width of child view </param>
+/// <param name="height">: the height of child view </param>
+void CSynthDefectView::ResizeGLScene(float width, float height)
+{
+	m_viewWidth = width;
+	m_viewHeight = height;
+}
+
 
 // Render loop
 void CSynthDefectView::OnTimer(UINT_PTR nIDEvent)
