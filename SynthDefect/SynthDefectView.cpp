@@ -106,7 +106,8 @@ int CSynthDefectView::DrawGLScene()
 	m_shaders.SetMat4("view_model", vmMatrix);
 
 	// render the loaded model
-	m_model->DrawModel(m_shaders);
+	if(m_model)
+		m_model->DrawModel(m_shaders);
 
 	return TRUE;
 }
