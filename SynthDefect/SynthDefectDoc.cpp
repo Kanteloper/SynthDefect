@@ -11,6 +11,7 @@
 #endif
 
 #include "SynthDefectDoc.h"
+#include "SynthDefectView.h"
 #include <gl/GL.h>
 #include <gl/GLU.h>
 #include <propkey.h>
@@ -33,6 +34,7 @@ CSynthDefectDoc::CSynthDefectDoc() noexcept
 {
 	// TODO: add one-time construction code here
 }
+
 
 CSynthDefectDoc::~CSynthDefectDoc()
 {
@@ -57,6 +59,20 @@ BOOL CSynthDefectDoc::OnNewDocument()
 	m_model = new CModel(1.0f, 1.0f, 1.0f);
 
 	return TRUE;
+}
+
+
+/// <summary>
+/// Get the reference of View object
+/// </summary>
+/// <returns> the pointer of CView object </returns>
+CView* CSynthDefectDoc::GetChildView()
+{
+	CView* target = nullptr;
+	POSITION pos = GetFirstViewPosition();
+	if (pos)
+		target = GetNextView(pos);
+	return target;
 }
 
 
