@@ -89,7 +89,7 @@ void CSynthDefectView::OnDraw(CDC* /*pDC*/)
 int CSynthDefectView::DrawGLScene()
 {
 	// clear buffers
-	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glClearDepth(1.0f);
 
@@ -126,7 +126,13 @@ void CSynthDefectView::InitChildView()
 {
 	m_bInitGL = FALSE;
 	m_shaders = CShader(VSHADER_CODE_PATH, FSHADER_CODE_PATH);		// build and compile shaders
-	m_camera = CCamera(glm::vec3(0.0f, 0.0f, 3.0f));				// Initialize Camera
+	m_camera = CCamera(glm::vec3(0.0f, 0.0f, 2.0f));				// Initialize Camera
+
+	// get the size of child view
+	CRect rect;
+	this->GetClientRect(&rect);
+	m_viewWidth = (float)rect.Width();
+	m_viewHeight = (float)rect.Height();
 }
 
 
@@ -228,8 +234,6 @@ void CSynthDefectView::OnSize(UINT nType, int cx, int cy)
 {
 	CView::OnSize(nType, cx, cy);
 	ResizeGLScene(cx, cy);
-	m_viewWidth = (float)cx;
-	m_viewHeight = (float)cy;
 }
 
 
