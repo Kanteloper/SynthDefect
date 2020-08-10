@@ -97,7 +97,7 @@ int CSynthDefectView::DrawGLScene()
 	m_shaders.Use();
 
 	// view, projection transformations
-	glm::mat4 projMatrix = glm::perspective(glm::radians(m_camera.m_Zoom), m_viewWidth / m_viewHeight, 0.1f, 100.0f);
+	glm::mat4 projMatrix = glm::perspective(glm::radians(m_camera.m_Zoom), m_viewWidth/m_viewHeight, 0.1f, 100.0f);
 	glm::mat4 vmMatrix = m_camera.GetViewMatrix();
 	m_shaders.SetMat4("projection", projMatrix);
 	m_shaders.SetMat4("view_model", vmMatrix);
@@ -213,10 +213,6 @@ int CSynthDefectView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	CreateGLWindow(this, 32);
 	InitializeGLEngine();
 
-	// calculate the size of child view (width, height)
-	CRect rect;
-	this->GetClientRect(&rect);
-	ResizeGLScene((float)rect.Width(), (float)rect.Height());
 	// SetTimer - Install a system timer
 	SetTimer(ID_TIMER_PLAY, 10, NULL);
 	return 0;
@@ -231,19 +227,9 @@ int CSynthDefectView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 void CSynthDefectView::OnSize(UINT nType, int cx, int cy)
 {
 	CView::OnSize(nType, cx, cy);
-	ResizeGLScene((float)cx, (float)cy);
-}
-
-
-/// <summary>
-/// Set the width and the height of Child view
-/// </summary>
-/// <param name="width">: the width of child view </param>
-/// <param name="height">: the height of child view </param>
-void CSynthDefectView::ResizeGLScene(float width, float height)
-{
-	m_viewWidth = width;
-	m_viewHeight = height;
+	ResizeGLScene(cx, cy);
+	m_viewWidth = (float)cx;
+	m_viewHeight = (float)cy;
 }
 
 
@@ -254,9 +240,7 @@ void CSynthDefectView::OnTimer(UINT_PTR nIDEvent)
 	{
 	case ID_TIMER_PLAY:
 		if (DrawGLScene())
-		{
 			SwapBuffers(wglGetCurrentDC());
-		}
 		break;
 	}
 	CView::OnTimer(nIDEvent);
