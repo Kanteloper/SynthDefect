@@ -101,17 +101,10 @@ bool CreateGLWindow(CWnd* pWnd, int bits)
 		return FALSE;									
 	}
 
-	CRect rect;
-	// GetClientRect - Retrieve the coordinates of a window's client area
-	// The client coordinates specify the upper-left and lower-right corners of the client area.
-	// The coordinates of the upper-left corner are (0,0).
-	pWnd->GetClientRect(&rect);
 	// SetForegroundWindow - Bring the thread that created the specified window into the foreground
 	//                       and activates the window
 	// The system assigns a slightly higher priority to the thread that created the foreground window
 	SetForegroundWindow(pWnd->m_hWnd);
-	ResizeGLScene(rect.Width(), rect.Height());				// Set Up Our Perspective GL Screen
-
 	return TRUE;
 }
 
@@ -171,39 +164,6 @@ bool KillGLWindow(CWnd* pWnd)
 	}
 
 	return TRUE;
-}
-
-GLfloat fNearPlane = 0.1f, fFarPlane = 100.f, fViewAngle = 45.f, fAspect;
-/// <summary>
-/// Resize and Initialize the OpenGL window
-/// </summary>
-/// <param name="width">: width of OpenGL window </param>
-/// <param name="height">: height of OpenGL window </param>
-GLvoid ResizeGLScene(GLsizei width, GLsizei height)
-{
-	RECT m_viewRect;
-
-	if (height == 0)									// Prevent A Divide By Zero By
-	{
-		height = 1;										// Making Height Equal One
-	}
-	m_viewRect.left = m_viewRect.top = 0;				// The coordinates of the upper-left corner are (0,0).
-	m_viewRect.right = width;
-	m_viewRect.bottom = height;
-
-	glViewport(0, 0, width, height);					// Reset The Current Viewport
-
-	// glMatrixMode - Specify which matrix is the current matrix
-	// GL_PROJECTION - Apply subsequent matrix operations to the projection matrix stack
-	glMatrixMode(GL_PROJECTION);						// Select The Projection Matrix
-	glLoadIdentity();									// Reset The Projection Matrix to Identity Matrix
-
-	// gluPerspective - Set up a Perspective Projection Matrix
-	// Specify a Viewing frustrum into the World coordinate system
-	gluPerspective(fViewAngle, (GLfloat)width / (GLfloat)height, fNearPlane, fFarPlane);  
-
-	glMatrixMode(GL_MODELVIEW);							// Select The Modelview Matrix
-	glLoadIdentity();									// Reset The Modelview Matrix
 }
 
 
