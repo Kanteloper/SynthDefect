@@ -96,10 +96,8 @@ int CSynthDefectView::DrawGLScene()
 	// enable shaders
 	m_shaders.Use();
 
-	// view/projection transformations
-	CRect rect;
-	this->GetClientRect(&rect);
-	glm::mat4 projMatrix = glm::perspective(glm::radians(m_camera.m_Zoom), (float)rect.Width() / (float)rect.Height(), 0.1f, 100.0f);
+	// view, projection transformations
+	glm::mat4 projMatrix = glm::perspective(glm::radians(m_camera.m_Zoom), m_viewWidth / m_viewHeight, 0.1f, 100.0f);
 	glm::mat4 vmMatrix = m_camera.GetViewMatrix();
 	m_shaders.SetMat4("projection", projMatrix);
 	m_shaders.SetMat4("view_model", vmMatrix);
