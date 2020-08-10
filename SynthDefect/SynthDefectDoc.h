@@ -18,7 +18,7 @@ protected: // create from serialization only
 // Attributes
 private:
 	CView* pView = nullptr;
-
+	glm::vec3 m_back = glm::vec3(3.0f, 1.4f, 0.0f);				// default background vertex	
 public:
 	CModel* m_model = nullptr;
 
