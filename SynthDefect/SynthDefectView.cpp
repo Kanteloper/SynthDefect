@@ -117,7 +117,12 @@ void CSynthDefectView::DrawBackground()
 	m_shaders.SetMat4("view_model", vmMatrix);
 
 	// render the default background
-	CBackground back = CBackground(glm::vec3(1.0f, 1.0f, 0.0f));
+	glm::mat4 modelMatrix = glm::mat4(1.0f);
+	modelMatrix = glm::translate(modelMatrix, glm::vec3(0.0f, 0.0f, 0.0f));					// translate to the center of the scene
+	modelMatrix = glm::scale(modelMatrix, glm::vec3(1.0f, 1.0f, 1.0f));						// original scale
+	m_shaders.SetMat4("model", modelMatrix);
+
+	CBackground back = CBackground(glm::vec3(4.8f, 1.7f, 0.0f));
 	back.Draw();
 }
 
@@ -134,18 +139,22 @@ void CSynthDefectView::DrawLoadedModel()
 	// aspect - the ratio of width to height
 	// note that the aspect ratio in glm::perspective should match the aspect ratio of the Viewport
 	glm::mat4 projMatrix = glm::perspective(glm::radians(m_camera.m_Zoom), m_viewWidth / m_viewHeight, 0.1f, 100.0f);
-	glm::mat4 vmMatrix = m_camera.GetViewMatrix();
-	// vmMatrix = glm::scale(vmMatrix, glm::vec3(1.0, 1.0, 1.0));
+	glm::mat4 viewMatrix = m_camera.GetViewMatrix();
 	m_shaders.SetMat4("projection", projMatrix);
-	m_shaders.SetMat4("view_model", vmMatrix);
+	m_shaders.SetMat4("view", viewMatrix);
 
 	// render the loaded model
+	glm::mat4 modelMatrix = glm::mat4(1.0f);
+	modelMatrix = glm::translate(modelMatrix, glm::vec3(0.0f, 0.0f, 0.0f));					// translate to the center of the scene
+	modelMatrix = glm::scale(modelMatrix, glm::vec3(0.5f, 0.5f, 0.5f));						// scale down
+	m_shaders.SetMat4("model", modelMatrix);
+
 	if (m_model)
 		m_model->DrawModel(m_shaders);
 }
+ 
 
-
-void CSynthDefectView::OnUpdate(CView* /*pSender*/, LPARAM /*lHint*/, CObject* /*pHint*/)
+void CSynthDefectView::OnUpdate(CView* /*pSender*/, LPARAM /*lHint*/, CObject* /*pHint*/)		
 {
 	CSynthDefectDoc* pDoc = GetDocument();
 	ASSERT_VALID(pDoc);
@@ -154,13 +163,17 @@ void CSynthDefectView::OnUpdate(CView* /*pSender*/, LPARAM /*lHint*/, CObject* /
 
 	
 	m_model = pDoc->m_model;										// receive data from Document
-	//if (pDoc->m_bLoad)												// check the model is loaded
-	//{
-	//	float centerX = (m_model->m_max.x - m_model->m_min.x) / 2.0f;
-	//	float centerY = (m_model->m_max.y - m_model->m_min.y) / 2.0f;
-	//	float centerZ= (m_model->m_max.z - m_model->m_min.z) / 2.0f;
-	//	m_camera = CCamera(m_cameraPos, glm::vec3(centerX, centerY, centerZ));
-	//}
+	if (pDoc->m_bLoad)												// check the model is loaded
+	{
+		TRACE3("Log: %f, %f, %f\n", m_model->m_max.x, m_model->m_max.y, m_model->m_max.z);
+		/*glm::vec3 modelCenter = GetModelCentroid();
+		glm::vec3 
+		float centerX = (m_model->m_max.x + m_model->m_min.x) / 2.0f;
+		float centerY = (m_model->m_max.y + m_model->m_min.y) / 2.0f;
+		float centerZ= (m_model->m_max.z + m_model->m_min.z) / 2.0f;*/
+
+		// m_camera = CCamera(m_cameraPos, glm::vec3(centerX, centerY, centerZ));
+	}
 }
 
 
@@ -316,7 +329,6 @@ void CSynthDefectView::OnShowWindow(BOOL bShow, UINT nStatus)
 
 BOOL CSynthDefectView::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
 {
-	TRACE1("Log: zoom - %f\n", m_camera.m_Zoom);
 	if (zDelta < 0)
 	{
 		if (m_camera.m_Zoom >= 180.0f)
