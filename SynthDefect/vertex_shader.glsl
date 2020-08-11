@@ -10,12 +10,13 @@ layout (location = 1) in vec4 aColor;
 out vec4 vertexColor;
 
 // uniform - the storage qualifier which means the value does not change accross the primitive being processed
-uniform mat4 view_model;
+uniform mat4 model;
+uniform mat4 view;
 uniform mat4 projection;
 
 void main()
 {
     // gl_Position is built-in variable in vertex language
-    gl_Position = projection * view_model * vec4(aPos, 1.0);
+    gl_Position = projection * view * model * vec4(aPos, 1.0);
     vertexColor = aColor;
 }
