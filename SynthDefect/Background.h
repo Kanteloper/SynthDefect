@@ -9,10 +9,10 @@ class CBackground : public CMesh
 	// Constructor
 public:
 	CBackground();
-	CBackground(std::vector<Vertex> vertices, std::vector<unsigned int> indices) : m_vertices(vertices), m_indices(indices)
+	CBackground(glm::vec3 points)
 	{
-		// set the vertex buffers and its attribute pointers
-		setupMesh();
+		SetDefaultBackground(points);
+		SetupMesh();
 	};
 
 	// Attributes
@@ -23,9 +23,11 @@ private:
 
 	// Implements
 private:
-	virtual void setupMesh();
+	virtual void SetupMesh();
+	void SetDefaultBackground(glm::vec3 v);
+
 public:
 	~CBackground();
-	virtual void Draw(CShader& shaders);
+	void Draw();
 };
 
