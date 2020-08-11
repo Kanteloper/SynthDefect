@@ -116,10 +116,16 @@ CMesh CModel::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 			m_min.z = vertex.Position.z;
 
 		// normals
-		vecForThreeComp.x = mesh->mNormals[i].x;
-		vecForThreeComp.y = mesh->mNormals[i].y;
-		vecForThreeComp.z = mesh->mNormals[i].z;
-		vertex.Normal = vecForThreeComp;
+		if (IsNormalsExisted(mesh))
+		{
+			vecForThreeComp.x = mesh->mNormals[i].x;
+			vecForThreeComp.y = mesh->mNormals[i].y;
+			vecForThreeComp.z = mesh->mNormals[i].z;
+			vertex.Normal = vecForThreeComp;
+		}
+		else
+			vertex.Normal = glm::vec3(0.0f, 0.0f, 0.0f);
+		
 		// texture coordinates
 		if (IsTexCoordsExisted(mesh))
 		{
@@ -131,16 +137,28 @@ CMesh CModel::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 		}
 		else
 			vertex.TexCoords = glm::vec2(0.0f, 0.0f);
+
 		// tangent
-		vecForThreeComp.x = mesh->mTangents[i].x;
-		vecForThreeComp.y = mesh->mTangents[i].y;
-		vecForThreeComp.z = mesh->mTangents[i].z;
-		vertex.Tangent = vecForThreeComp;
+		if (IsTangentsExisted(mesh))
+		{
+			vecForThreeComp.x = mesh->mTangents[i].x;
+			vecForThreeComp.y = mesh->mTangents[i].y;
+			vecForThreeComp.z = mesh->mTangents[i].z;
+			vertex.Tangent = vecForThreeComp;
+		}
+		else
+			vertex.Tangent = glm::vec3(0.0f, 0.0f, 0.0f);
+		
 		// bitangent
-		vecForThreeComp.x = mesh->mBitangents[i].x;
-		vecForThreeComp.y = mesh->mBitangents[i].y;
-		vecForThreeComp.z = mesh->mBitangents[i].z;
-		vertex.BiTangent = vecForThreeComp;
+		if (IsBiTangentsExisted(mesh))
+		{
+			vecForThreeComp.x = mesh->mBitangents[i].x;
+			vecForThreeComp.y = mesh->mBitangents[i].y;
+			vecForThreeComp.z = mesh->mBitangents[i].z;
+			vertex.BiTangent = vecForThreeComp;
+		}
+		else
+			vertex.BiTangent = glm::vec3(0.0f, 0.0f, 0.0f);
 		vertices.push_back(vertex);
 	}
 
@@ -168,6 +186,48 @@ BOOL CModel::IsTexCoordsExisted(aiMesh* mesh)
 		return TRUE;
 	else
 		return FALSE;
+}
+
+
+/// <summary>
+/// 
+/// </summary>
+/// <param name="mesh"></param>
+/// <returns></returns>
+BOOL CModel::IsNormalsExisted(aiMesh* mesh)
+{
+	if (mesh->mNormals)
+		return TRUE;
+	else
+		return FALSE;
+}
+
+
+/// <summary>
+/// 
+/// </summary>
+/// <param name="mesh"></param>
+/// <returns></returns>
+BOOL CModel::IsTangentsExisted(aiMesh* mesh)
+{
+	if (mesh->mTangents)
+		return TRUE;
+	else
+		return FALSE;
+}
+
+
+/// <summary>
+/// 
+/// </summary>
+/// <param name="mesh"></param>
+/// <returns></returns>
+BOOL CModel::IsBiTangentsExisted(aiMesh* mesh)
+{
+	if (mesh->mBitangents)
+		return TRUE;
+	else
+		return FALSE;;
 }
 
 

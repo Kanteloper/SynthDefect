@@ -37,5 +37,8 @@ private:
 	void ProcessNode(aiNode* node, const aiScene* scene);
 	CMesh ProcessMesh(aiMesh *mesh, const aiScene *scene);
 	BOOL IsTexCoordsExisted(aiMesh *mesh);
+	BOOL IsNormalsExisted(aiMesh *mesh);
+	BOOL IsTangentsExisted(aiMesh *mesh);
+	BOOL IsBiTangentsExisted(aiMesh *mesh);
 };
 
