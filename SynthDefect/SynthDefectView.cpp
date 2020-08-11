@@ -39,6 +39,8 @@ BEGIN_MESSAGE_MAP(CSynthDefectView, CView)
 	ON_WM_TIMER()
 	ON_WM_SIZE()
 //  ON_WM_UPDATEUISTATE()
+ON_WM_MOUSEWHEEL()
+ON_WM_LBUTTONDOWN()
 END_MESSAGE_MAP()
 
 // CSynthDefectView construction/destruction
@@ -78,7 +80,6 @@ void CSynthDefectView::OnDraw(CDC* /*pDC*/)
 		InitChildView();											//Initialization of the GL window if first call
 	DrawGLScene();															
 }
-
 
 
 
@@ -278,4 +279,32 @@ void CSynthDefectView::OnShowWindow(BOOL bShow, UINT nStatus)
 	CView::OnShowWindow(bShow, nStatus);
 
 	// TODO: Add your message handler code here
+}
+
+BOOL CSynthDefectView::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
+{
+	TRACE1("Log: zoom - %f\n", m_camera.m_Zoom);
+	if (zDelta < 0)
+	{
+		if (m_camera.m_Zoom >= 180.0f)
+			m_camera.m_Zoom = 180.0f;
+		else
+			m_camera.m_Zoom += 4.0f;
+	}
+	else
+	{
+		if (m_camera.m_Zoom <= 5.0f)
+			m_camera.m_Zoom = 5.0f;
+		else
+			m_camera.m_Zoom -= 4.0f;
+	}
+	return CView::OnMouseWheel(nFlags, zDelta, pt);
+}
+
+
+void CSynthDefectView::OnLButtonDown(UINT nFlags, CPoint point)
+{
+	// TODO: Add your message handler code here and/or call default
+	TRACE2("Log: x - %d, y = %d\n", point.x, point.y);
+	CView::OnLButtonDown(nFlags, point);
 }
