@@ -51,7 +51,7 @@ protected :
 	virtual void setupMesh();
 public:
 	virtual ~CMesh();
-	virtual void Draw(CShader& shaders);
+	void Draw(CShader& shaders);
 	
 };
 

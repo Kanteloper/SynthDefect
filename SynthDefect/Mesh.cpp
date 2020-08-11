@@ -74,7 +74,7 @@ void CMesh::setupMesh()
 
 
 /// <summary>
-/// Render the Mesh
+/// Render the Model Mesh
 /// </summary>
 /// <param name="shaders">: liked Shader objects</param>
 void CMesh::Draw(CShader& shaders)

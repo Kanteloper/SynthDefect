@@ -6,17 +6,14 @@
 
 #include <string>
 
-CModel::CModel(glm::vec3 vertex) 
+CModel::CModel() 
 {
-	m_meshes.push_back(SetDefaultBackground(vertex.x, vertex.y, vertex.z));		// background
 }
 
 
-CModel::CModel(LPCTSTR filePath, glm::vec3 vertex)
+CModel::CModel(LPCTSTR filePath)
 { 
-	// add default background mesh
-	m_meshes.push_back(SetDefaultBackground(vertex.x, vertex.y, vertex.z));		// background
-	LoadModel(filePath);
+    	LoadModel(filePath);
 }
 
 
@@ -43,62 +40,6 @@ void CModel::LoadModel(LPCTSTR pathName)
   	CModel::ProcessNode(scene->mRootNode, scene);
 }
 
-
-/// <summary>
-/// Set background mesh with the default color
-/// </summary>
-CMesh CModel::SetDefaultBackground(float x, float y, float z)
-{
-	std::vector<Vertex>			vertices;
-	std::vector<unsigned int>	indices;
-
-	Vertex top_left, top_right;
-	// top left
-	top_left.Position.x = -x;
-	top_left.Position.y = y;
-	top_left.Position.z = z;
-	top_left.Color.r = 0.04f;
-	top_left.Color.g = 0.4f;
-	top_left.Color.b = 0.6f;
-	top_left.Color.a = 1.0f;
-	vertices.push_back(top_left);
-	// top right
-	top_right.Position.x = x;
-	top_right.Position.y = y;
-	top_right.Position.z = z;
-	top_right.Color.r = 0.04f;
-	top_right.Color.g = 0.4f;
-	top_right.Color.b = 0.6f;
-	top_right.Color.a = 1.0f;
-	vertices.push_back(top_right);
-
-	Vertex bottom_left, bottom_right;
-	// bottom left
-	bottom_left.Position.x = -x;
-	bottom_left.Position.y = -y;
-	bottom_left.Position.z = z;
-	bottom_left.Color.r = 0.0f;
-	bottom_left.Color.g = 0.0f;
-	bottom_left.Color.b = 0.0f;
-	bottom_left.Color.a = 1.0f;
-	vertices.push_back(bottom_left);
-	// bottom right
-	bottom_right.Position.x = x;
-	bottom_right.Position.y = -y;
-	bottom_right.Position.z = z;
-	bottom_right.Color.r = 0.0f;
-	bottom_right.Color.g = 0.0f;
-	bottom_right.Color.b = 0.0f;
-	bottom_right.Color.a = 1.0f;
-	vertices.push_back(bottom_right);
-
-	indices = {
-		0, 3, 1,
-		2, 3, 0
-	};
-
-	return CMesh(vertices, indices);
-}
 
 
 /// <summary>
