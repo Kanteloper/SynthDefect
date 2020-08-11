@@ -100,20 +100,13 @@ CMesh CModel::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 		vecForThreeComp.z = mesh->mVertices[i].z;
 		vertex.Position = vecForThreeComp;
 
-		if (vertex.Position.x > m_max.x)
-			m_max.x = vertex.Position.x;
-		else if (vertex.Position.x < m_min.x)
-			m_min.x = vertex.Position.x;
-
-		if (vertex.Position.y > m_max.y)
-			m_max.y = vertex.Position.y;
-		else if (vertex.Position.x < m_min.x)
-			m_min.y = vertex.Position.y;
-
-		if (vertex.Position.z > m_max.z)
-			m_max.z = vertex.Position.z;
-		else if (vertex.Position.z < m_min.z)
-			m_min.z = vertex.Position.z;
+		// find the max, min value of x, y, z
+		m_max.x = glm::max(m_max.x, vertex.Position.x);
+		m_min.x = glm::min(m_min.x, vertex.Position.x);
+		m_max.y = glm::max(m_max.y, vertex.Position.y);
+		m_min.y = glm::min(m_min.y, vertex.Position.y);
+		m_max.z = glm::max(m_max.z, vertex.Position.z);
+		m_min.z = glm::min(m_min.z, vertex.Position.z);
 
 		// normals
 		if (IsNormalsExisted(mesh))
