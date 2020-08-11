@@ -37,7 +37,9 @@ protected:
 
 // Implementation
 private:
-	int DrawGLScene();
+	BOOL DrawGLScene();
+	void DrawBackground();
+	void DrawLoadedModel();
 public:
 	virtual ~CSynthDefectView();
 	

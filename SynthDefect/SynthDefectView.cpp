@@ -15,6 +15,7 @@
 #include <gl/GLU.h>
 #include "SynthDefectDoc.h"
 #include "SynthDefectView.h"
+#include "Background.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -82,35 +83,65 @@ void CSynthDefectView::OnDraw(CDC* /*pDC*/)
 }
 
 
-
 /// <summary>
-/// Render the OpenGL scene
+/// Render the whole OpenGL scene
 /// </summary>
 /// <returns> TRUE if rendering is successful, FALSE on failure </returns>
-int CSynthDefectView::DrawGLScene()
+BOOL CSynthDefectView::DrawGLScene()
 {
 	// clear buffers
 	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glClearDepth(1.0f);
 
+	DrawBackground();
+	DrawLoadedModel();
+	return TRUE;
+}
+
+
+/// <summary>
+/// Render the default background mesh
+/// </summary>
+void CSynthDefectView::DrawBackground()
+{
 	// enable shaders
 	m_shaders.Use();
 
 	// view, projection transformations
 	// aspect - the ratio of width to height
 	// note that the aspect ratio in glm::perspective should match the aspect ratio of the Viewport
-	glm::mat4 projMatrix = glm::perspective(glm::radians(m_camera.m_Zoom), m_viewWidth/m_viewHeight, 0.1f, 100.0f);
+	glm::mat4 projMatrix = glm::perspective(glm::radians(45.0f), m_viewWidth / m_viewHeight, 0.1f, 100.0f);
+	glm::mat4 vmMatrix = m_camera.GetViewMatrix();
+	m_shaders.SetMat4("projection", projMatrix);
+	m_shaders.SetMat4("view_model", vmMatrix);
+
+	// render the default background
+	CBackground back = CBackground(glm::vec3(1.0f, 1.0f, 0.0f));
+	back.Draw();
+}
+
+
+/// <summary>
+/// Render the loaded model mesh from Document
+/// </summary>
+void CSynthDefectView::DrawLoadedModel()
+{
+	// enable shaders
+	m_shaders.Use();
+
+	// view, projection transformations
+	// aspect - the ratio of width to height
+	// note that the aspect ratio in glm::perspective should match the aspect ratio of the Viewport
+	glm::mat4 projMatrix = glm::perspective(glm::radians(m_camera.m_Zoom), m_viewWidth / m_viewHeight, 0.1f, 100.0f);
 	glm::mat4 vmMatrix = m_camera.GetViewMatrix();
 	// vmMatrix = glm::scale(vmMatrix, glm::vec3(1.0, 1.0, 1.0));
 	m_shaders.SetMat4("projection", projMatrix);
 	m_shaders.SetMat4("view_model", vmMatrix);
 
 	// render the loaded model
-	if(m_model)
+	if (m_model)
 		m_model->DrawModel(m_shaders);
-
-	return TRUE;
 }
 
 
@@ -138,6 +169,8 @@ void CSynthDefectView::InitChildView()
 	m_bInitGL = FALSE;
 	m_shaders = CShader(VSHADER_CODE_PATH, FSHADER_CODE_PATH);		// build and compile shaders
 	m_camera = CCamera(m_cameraPos);								// Initialize Camera
+
+	
 }
 
 
