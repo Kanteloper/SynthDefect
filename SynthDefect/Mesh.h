@@ -42,18 +42,16 @@ private:
 	// render data
 	// VAO - Vertex Array Object, VBO - Vertex Buffer Object, EBO - Element Buffer Object
 	unsigned int m_VAO, m_VBO, m_EBO = 0;
-
-public:
 	// mesh data
 	std::vector<Vertex>			m_vertices;
 	std::vector<unsigned int>	 m_indices;
 
 // Implementation
-private:
-	void setupMesh();
+protected :
+	virtual void setupMesh();
 public:
 	virtual ~CMesh();
-	void Draw(CShader& shaders);
+	virtual void Draw(CShader& shaders);
 	
 };
 
