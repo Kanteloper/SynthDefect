@@ -15,8 +15,8 @@ class CModel
 {
 	// Constructor
 public:
-	CModel::CModel(glm::vec3 vertex);
-	CModel::CModel(LPCTSTR filePath, glm::vec3 vertex);
+	CModel::CModel();
+	CModel::CModel(LPCTSTR filePath);
 
 	// Attributes
 public:
@@ -34,9 +34,11 @@ public:
 
 private:
 	void LoadModel(LPCTSTR pathName);
-	CMesh SetDefaultBackground(float x, float y, float z);
 	void ProcessNode(aiNode* node, const aiScene* scene);
 	CMesh ProcessMesh(aiMesh *mesh, const aiScene *scene);
 	BOOL IsTexCoordsExisted(aiMesh *mesh);
+	BOOL IsNormalsExisted(aiMesh *mesh);
+	BOOL IsTangentsExisted(aiMesh *mesh);
+	BOOL IsBiTangentsExisted(aiMesh *mesh);
 };
 

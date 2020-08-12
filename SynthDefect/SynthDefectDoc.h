@@ -8,7 +8,6 @@
 #include "Model.h"
 
 
-
 class CSynthDefectDoc : public CDocument
 {
 protected: // create from serialization only
@@ -18,10 +17,8 @@ protected: // create from serialization only
 // Attributes
 private:
 	CView* pView = nullptr;
-	glm::vec3 m_back = glm::vec3(2.25f, 1.7f, 0.0f);				// default background vertex	
 public:
 	CModel* m_model = nullptr;
-	BOOL m_bLoad = FALSE;
 
 // Overrides
 public:
