@@ -129,30 +129,30 @@ void CSynthDefectView::DrawBackground()
 void CSynthDefectView::DrawLoadedModel()
 {
 	// enable shaders
-	m_backgroundShader.Use();
+	m_modelShader.Use();
 
 	// view, projection transformations
 	// aspect - the ratio of width to height
 	// note that the aspect ratio in glm::perspective should match the aspect ratio of the Viewport
 	glm::mat4 projMatrix = glm::perspective(glm::radians(m_camera.m_Zoom), m_viewWidth / m_viewHeight, 0.1f, 100.0f);
 	glm::mat4 viewMatrix = m_camera.GetViewMatrix();
-	m_backgroundShader.SetMat4("projection", projMatrix);
-	m_backgroundShader.SetMat4("view", viewMatrix);
+	m_modelShader.SetMat4("projection", projMatrix);
+	m_modelShader.SetMat4("view", viewMatrix);
 
 	// model transformation
 	glm::mat4 modelMatrix = glm::mat4(1.0f);
 	modelMatrix = glm::translate(modelMatrix, glm::vec3(0.0f, 0.0f, 0.0f));								// translate to the center of the scene
 	modelMatrix = glm::scale(modelMatrix, glm::vec3(m_scaleFactor, m_scaleFactor, m_scaleFactor));		// control the scale of the model
-	m_backgroundShader.SetMat4("model", modelMatrix);
+	m_modelShader.SetMat4("model", modelMatrix);
 
 	// set light source
 	glm::vec3 lightColor = glm::vec3(1.0f, 1.0f, 1.0f);
-	m_backgroundShader.SetVec3("lightColor", lightColor);
+	m_modelShader.SetVec3("lightColor", lightColor);
 	glm::vec3 lightPosition = glm::vec3(LIGHT_X, LIGHT_Y, LIGHT_Z);
-	m_backgroundShader.SetVec3("lightPos", lightPosition);
+	m_modelShader.SetVec3("lightPos", lightPosition);
 
 	if (m_model)
-		m_model->DrawModel(m_backgroundShader);
+		m_model->DrawModel(m_modelShader);
 }
 
 
