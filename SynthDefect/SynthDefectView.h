@@ -19,10 +19,11 @@ public:
 private:
 	bool m_bInitGL = TRUE;
 	float m_scaleFactor = 0.0f;
-	CShader m_shaders;
+	CShader m_backgroundShader;
+	CShader m_modelShader;
 	CCamera m_camera;
 	CModel* m_model = nullptr;
-	glm::vec3 m_cameraPos = glm::vec3(0.0f, 0.0f, 4.0f);
+	glm::vec3 m_cameraPos;
 	glm::vec3 m_modelCenter;								// geometry center
 
 public:
