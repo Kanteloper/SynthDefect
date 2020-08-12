@@ -91,7 +91,8 @@ BOOL CSynthDefectView::DrawGLScene()
 	glClearDepth(1.0f);
 
 	DrawBackground();
-	DrawLoadedModel();
+	if (m_model)
+		DrawLoadedModel();
 	return TRUE;
 }
 
@@ -113,11 +114,6 @@ void CSynthDefectView::DrawBackground()
 	m_backgroundShader.SetMat4("view_model", vmMatrix);
 
 	// render the default background
-	glm::mat4 modelMatrix = glm::mat4(1.0f);
-	modelMatrix = glm::translate(modelMatrix, glm::vec3(0.0f, 0.0f, 0.0f));					// translate to the center of the scene
-	modelMatrix = glm::scale(modelMatrix, glm::vec3(1.0f, 1.0f, 1.0f));						// original scale - no need scale factor
-	m_backgroundShader.SetMat4("model", modelMatrix);
-
 	CBackground back = CBackground(glm::vec3(WORKSPACE_X, WORKSPACE_Y, WORKSPACE_Z));
 	back.Draw();
 }
@@ -151,8 +147,7 @@ void CSynthDefectView::DrawLoadedModel()
 	glm::vec3 lightPosition = glm::vec3(LIGHT_X, LIGHT_Y, LIGHT_Z);
 	m_modelShader.SetVec3("lightPos", lightPosition);
 
-	if (m_model)
-		m_model->DrawModel(m_modelShader);
+	m_model->DrawModel(m_modelShader);
 }
 
 
