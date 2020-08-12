@@ -19,7 +19,6 @@ private:
 	CView* pView = nullptr;
 public:
 	CModel* m_model = nullptr;
-	BOOL m_bLoad = FALSE;
 
 // Overrides
 public:
