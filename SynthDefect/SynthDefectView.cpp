@@ -115,7 +115,6 @@ void CSynthDefectView::DrawBackground()
 
 	// render the default background
 	float aspect = m_viewWidth / m_viewHeight;
-	TRACE1("Log: aspect - %f\n", aspect);
 	CBackground back = CBackground(glm::vec3(WORKSPACE_X * aspect, WORKSPACE_Y * aspect, WORKSPACE_Z * aspect));
 	back.Draw();
 }
