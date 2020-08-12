@@ -35,13 +35,14 @@ public:
 	};
 
 	// Attributes
-public:
+private:
 	// camera attributes
 	glm::vec3 m_Position;
 	glm::vec3 m_ForwardAxis;
 	glm::vec3 m_UpAxis;
 	glm::vec3 m_LeftAxis;
 	glm::vec3 m_UpDirection;
+public:
 	// camera options
 	float m_MoveSpeed;
 	float m_MoveSensitivity;
@@ -50,6 +51,7 @@ public:
 	// Implementation
 public:
 	glm::mat4 GetViewMatrix();
+	const float GetFOV();
 	~CCamera();
 };
 
