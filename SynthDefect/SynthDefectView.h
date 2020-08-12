@@ -17,7 +17,8 @@ public:
 	float m_viewWidth = 0.0f;
 	float m_viewHeight = 0.0f;
 private:
-	bool m_bInitGL = TRUE;
+	BOOL m_bInitGL = TRUE;
+	UINT m_btnFlag = 0;
 	float m_scaleFactor = 0.0f;
 	CShader m_backgroundShader;
 	CShader m_modelShader;
@@ -74,6 +75,7 @@ public:
 	virtual void OnUpdate(CView* /*pSender*/, LPARAM /*lHint*/, CObject* /*pHint*/);
 	afx_msg BOOL OnMouseWheel(UINT nFlags, short zDelta, CPoint pt);
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
+	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
 };
 
 #ifndef _DEBUG  // debug version in SynthDefectView.cpp

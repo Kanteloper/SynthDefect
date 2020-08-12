@@ -34,9 +34,9 @@ BEGIN_MESSAGE_MAP(CSynthDefectView, CView)
 	ON_WM_SHOWWINDOW()
 	ON_WM_TIMER()
 	ON_WM_SIZE()
-//  ON_WM_UPDATEUISTATE()
-ON_WM_MOUSEWHEEL()
-ON_WM_LBUTTONDOWN()
+	ON_WM_MOUSEWHEEL()
+	ON_WM_LBUTTONDOWN()
+	ON_WM_MOUSEMOVE()
 END_MESSAGE_MAP()
 
 // CSynthDefectView construction/destruction
@@ -132,6 +132,9 @@ void CSynthDefectView::DrawLoadedModel()
 	// note that the aspect ratio in glm::perspective should match the aspect ratio of the Viewport
 	glm::mat4 projMatrix = glm::perspective(glm::radians(m_camera.m_Zoom), m_viewWidth / m_viewHeight, 0.1f, 100.0f);
 	glm::mat4 viewMatrix = m_camera.GetViewMatrix();
+	// rotateX
+	viewMatrix = glm::rotate(viewMatrix, 20.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+	// rotateY
 	m_modelShader.SetMat4("projection", projMatrix);
 	m_modelShader.SetMat4("view", viewMatrix);
 
@@ -161,12 +164,7 @@ void CSynthDefectView::OnUpdate(CView* /*pSender*/, LPARAM /*lHint*/, CObject* /
 	m_camera.m_Zoom = 45.0f;														// init camera zoom
 	m_model = pDoc->m_model;														// receive data from Document
 	if (m_model)																	// check the model is loaded
-	{
 		m_scaleFactor = GetScaleFactor(m_model->m_max, m_model->m_min);				// calculate scale factor
-		// m_camera = CCamera(m_cameraPos, glm::vec3(centerX, centerY, centerZ));
-	}
-	
-	
 }
 
 
@@ -362,6 +360,7 @@ void CSynthDefectView::OnShowWindow(BOOL bShow, UINT nStatus)
 	// TODO: Add your message handler code here
 }
 
+
 BOOL CSynthDefectView::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
 {
 	if (zDelta < 0)
@@ -379,6 +378,17 @@ BOOL CSynthDefectView::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
 			m_camera.m_Zoom -= 4.0f;
 	}
 	return CView::OnMouseWheel(nFlags, zDelta, pt);
+}
+
+
+void CSynthDefectView::OnMouseMove(UINT nFlags, CPoint point)
+{
+	m_btnFlag = nFlags;
+	if (m_btnFlag == MK_MBUTTON)
+	{
+		TRACE2("Log: x - %d, y = %d\n", point.x, point.y);
+	}
+	CView::OnMouseMove(nFlags, point);
 }
 
 
