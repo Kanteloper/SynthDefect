@@ -155,7 +155,9 @@
     <None Include="res\SynthDefect.rc2">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="fragment_shader.glsl" />
-    <None Include="vertex_shader.glsl" />
+    <None Include="background_fs.glsl" />
+    <None Include="background_vs.glsl" />
+    <None Include="model_fs.glsl" />
+    <None Include="model_vs.glsl" />
   </ItemGroup>
 </Project>

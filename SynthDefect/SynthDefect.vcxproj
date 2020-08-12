@@ -253,9 +253,11 @@
     <Image Include="res\userimages.bmp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="fragment_shader.glsl" />
+    <None Include="background_fs.glsl" />
+    <None Include="model_fs.glsl" />
+    <None Include="model_vs.glsl" />
     <None Include="res\SynthDefect.rc2" />
-    <None Include="vertex_shader.glsl" />
+    <None Include="background_vs.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
