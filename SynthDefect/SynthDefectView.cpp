@@ -114,7 +114,9 @@ void CSynthDefectView::DrawBackground()
 	m_backgroundShader.SetMat4("view_model", vmMatrix);
 
 	// render the default background
-	CBackground back = CBackground(glm::vec3(WORKSPACE_X, WORKSPACE_Y, WORKSPACE_Z));
+	float aspect = m_viewWidth / m_viewHeight;
+	TRACE1("Log: aspect - %f\n", aspect);
+	CBackground back = CBackground(glm::vec3(WORKSPACE_X * aspect, WORKSPACE_Y * aspect, WORKSPACE_Z * aspect));
 	back.Draw();
 }
 
@@ -164,7 +166,7 @@ void CSynthDefectView::OnUpdate(CView* /*pSender*/, LPARAM /*lHint*/, CObject* /
 	m_camera.m_Zoom = 45.0f;														// init camera zoom
 	m_model = pDoc->m_model;														// receive data from Document
 	if (m_model)																	// check the model is loaded
-		m_scaleFactor = GetScaleFactor(m_model->m_max, m_model->m_min);				// calculate scale factor
+		m_scaleFactor = GetScaleFactor(m_model->m_max, m_model->m_min);		// calculate scale factor
 }
 
 
@@ -320,6 +322,7 @@ void CSynthDefectView::OnSize(UINT nType, int cx, int cy)
 	ResizeGLScene(cx, cy);
 	m_viewWidth = (float)cx;
 	m_viewHeight = (float)cy;
+	TRACE2("Log: width - %f, height = %f\n", m_viewWidth, m_viewHeight);
 }
 
 
