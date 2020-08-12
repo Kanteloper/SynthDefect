@@ -33,6 +33,7 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWndEx)
 	ON_WM_DESTROY()
 	ON_WM_NCDESTROY()
 	ON_WM_SHOWWINDOW()
+	ON_WM_GETMINMAXINFO()
 END_MESSAGE_MAP()
 
 static UINT indicators[] =
@@ -447,4 +448,12 @@ void CMainFrame::OnShowWindow(BOOL bShow, UINT nStatus)
 	CFrameWndEx::OnShowWindow(bShow, nStatus);
 
 	// TODO: Add your message handler code here
+}
+
+
+void CMainFrame::OnGetMinMaxInfo(MINMAXINFO* lpMMI)
+{
+	lpMMI->ptMinTrackSize.x = 620;
+	lpMMI->ptMinTrackSize.y = 500;
+	CFrameWndEx::OnGetMinMaxInfo(lpMMI);
 }
