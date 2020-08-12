@@ -55,6 +55,7 @@ BOOL CSynthDefectDoc::OnNewDocument()
 	if (!CDocument::OnNewDocument())
 		return FALSE;
 
+	m_bLoad = FALSE;
 	m_model = nullptr;
 
 	return TRUE;
