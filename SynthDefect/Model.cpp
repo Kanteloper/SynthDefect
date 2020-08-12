@@ -108,6 +108,9 @@ CMesh CModel::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 		m_max.z = glm::max(m_max.z, vertex.Position.z);
 		m_min.z = glm::min(m_min.z, vertex.Position.z);
 
+		// colors
+		vertex.Color = glm::vec4(0.5f, 0.5f, 0.5f, 1.0f);
+
 		// normals
 		if (IsNormalsExisted(mesh))
 		{
