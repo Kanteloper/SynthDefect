@@ -25,8 +25,11 @@
 #define VSHADER_CODE_PATH "./vertex_shader.glsl"		// The current path of vertex shader code file
 #define FSHADER_CODE_PATH "./fragment_shader.glsl"		// The current path of fragment shader code file
 
-const float workspace_width = 16.0f;						// the width of workspace screen
-const float workspace_height = 2.0f;					// the height of workspace screen
+const float WORKSPACE_WIDTH = 16.0f;					// the width of workspace screen
+const float WORKSPACE_HEIGHT = 2.0f;					// the height of workspace screen
+const float WORKSPACE_X = 4.8f;							// the x value for workspace	
+const float WORKSPACE_Y = 1.7f;							// the y value for workspace
+const float WORKSPACE_Z = 0.0f;							// the z value for workspace
 
 
 // CSynthDefectView
@@ -125,7 +128,7 @@ void CSynthDefectView::DrawBackground()
 	modelMatrix = glm::scale(modelMatrix, glm::vec3(1.0f, 1.0f, 1.0f));						// original scale - no need scale factor
 	m_shaders.SetMat4("model", modelMatrix);
 
-	CBackground back = CBackground(glm::vec3(4.8f, 1.7f, 0.0f));
+	CBackground back = CBackground(glm::vec3(WORKSPACE_X, WORKSPACE_Y, WORKSPACE_Z));
 	back.Draw();
 }
 
@@ -211,10 +214,10 @@ float CSynthDefectView::GetScaleFactor(glm::vec3 max, glm::vec3 min)
 
 	scale = r_max / r;
 	// consider the size of workspace to scale factor
-	if ((workspace_width / width_range) < 1.0)
-		scale *= (workspace_width / width_range);
-	else if ((workspace_height / height_range) < 1.0)
-		scale *= (workspace_height / height_range);
+	if ((WORKSPACE_WIDTH / width_range) < 1.0)
+		scale *= (WORKSPACE_WIDTH / width_range);
+	else if ((WORKSPACE_HEIGHT / height_range) < 1.0)
+		scale *= (WORKSPACE_HEIGHT / height_range);
 
 	return scale;
 }
