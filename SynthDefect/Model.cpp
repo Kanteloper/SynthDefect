@@ -6,17 +6,14 @@
 
 #include <string>
 
-CModel::CModel(glm::vec3 vertex) 
+CModel::CModel() 
 {
-	m_meshes.push_back(SetDefaultBackground(vertex.x, vertex.y, vertex.z));		// background
 }
 
 
-CModel::CModel(LPCTSTR filePath, glm::vec3 vertex)
+CModel::CModel(LPCTSTR filePath)
 { 
-	// add default background mesh
-	m_meshes.push_back(SetDefaultBackground(vertex.x, vertex.y, vertex.z));		// background
-	LoadModel(filePath);
+    	LoadModel(filePath);
 }
 
 
@@ -43,62 +40,6 @@ void CModel::LoadModel(LPCTSTR pathName)
   	CModel::ProcessNode(scene->mRootNode, scene);
 }
 
-
-/// <summary>
-/// Set background mesh with the default color
-/// </summary>
-CMesh CModel::SetDefaultBackground(float x, float y, float z)
-{
-	std::vector<Vertex>			vertices;
-	std::vector<unsigned int>	indices;
-
-	Vertex top_left, top_right;
-	// top left
-	top_left.Position.x = -x;
-	top_left.Position.y = y;
-	top_left.Position.z = z;
-	top_left.Color.r = 0.04f;
-	top_left.Color.g = 0.4f;
-	top_left.Color.b = 0.6f;
-	top_left.Color.a = 1.0f;
-	vertices.push_back(top_left);
-	// top right
-	top_right.Position.x = x;
-	top_right.Position.y = y;
-	top_right.Position.z = z;
-	top_right.Color.r = 0.04f;
-	top_right.Color.g = 0.4f;
-	top_right.Color.b = 0.6f;
-	top_right.Color.a = 1.0f;
-	vertices.push_back(top_right);
-
-	Vertex bottom_left, bottom_right;
-	// bottom left
-	bottom_left.Position.x = -x;
-	bottom_left.Position.y = -y;
-	bottom_left.Position.z = z;
-	bottom_left.Color.r = 0.0f;
-	bottom_left.Color.g = 0.0f;
-	bottom_left.Color.b = 0.0f;
-	bottom_left.Color.a = 1.0f;
-	vertices.push_back(bottom_left);
-	// bottom right
-	bottom_right.Position.x = x;
-	bottom_right.Position.y = -y;
-	bottom_right.Position.z = z;
-	bottom_right.Color.r = 0.0f;
-	bottom_right.Color.g = 0.0f;
-	bottom_right.Color.b = 0.0f;
-	bottom_right.Color.a = 1.0f;
-	vertices.push_back(bottom_right);
-
-	indices = {
-		0, 3, 1,
-		2, 3, 0
-	};
-
-	return CMesh(vertices, indices);
-}
 
 
 /// <summary>
@@ -159,26 +100,28 @@ CMesh CModel::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 		vecForThreeComp.z = mesh->mVertices[i].z;
 		vertex.Position = vecForThreeComp;
 
-		if (vertex.Position.x > m_max.x)
-			m_max.x = vertex.Position.x;
-		else if (vertex.Position.x < m_min.x)
-			m_min.x = vertex.Position.x;
+		// find the max, min value of x, y, z
+		m_max.x = glm::max(m_max.x, vertex.Position.x);
+		m_min.x = glm::min(m_min.x, vertex.Position.x);
+		m_max.y = glm::max(m_max.y, vertex.Position.y);
+		m_min.y = glm::min(m_min.y, vertex.Position.y);
+		m_max.z = glm::max(m_max.z, vertex.Position.z);
+		m_min.z = glm::min(m_min.z, vertex.Position.z);
 
-		if (vertex.Position.y > m_max.y)
-			m_max.y = vertex.Position.y;
-		else if (vertex.Position.x < m_min.x)
-			m_min.y = vertex.Position.y;
-
-		if (vertex.Position.z > m_max.z)
-			m_max.z = vertex.Position.z;
-		else if (vertex.Position.z < m_min.z)
-			m_min.z = vertex.Position.z;
+		// colors
+		vertex.Color = glm::vec4(0.5f, 0.5f, 0.5f, 1.0f);
 
 		// normals
-		vecForThreeComp.x = mesh->mNormals[i].x;
-		vecForThreeComp.y = mesh->mNormals[i].y;
-		vecForThreeComp.z = mesh->mNormals[i].z;
-		vertex.Normal = vecForThreeComp;
+		if (IsNormalsExisted(mesh))
+		{
+			vecForThreeComp.x = mesh->mNormals[i].x;
+			vecForThreeComp.y = mesh->mNormals[i].y;
+			vecForThreeComp.z = mesh->mNormals[i].z;
+			vertex.Normal = vecForThreeComp;
+		}
+		else
+			vertex.Normal = glm::vec3(0.0f, 0.0f, 0.0f);
+		
 		// texture coordinates
 		if (IsTexCoordsExisted(mesh))
 		{
@@ -190,16 +133,28 @@ CMesh CModel::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 		}
 		else
 			vertex.TexCoords = glm::vec2(0.0f, 0.0f);
+
 		// tangent
-		vecForThreeComp.x = mesh->mTangents[i].x;
-		vecForThreeComp.y = mesh->mTangents[i].y;
-		vecForThreeComp.z = mesh->mTangents[i].z;
-		vertex.Tangent = vecForThreeComp;
+		if (IsTangentsExisted(mesh))
+		{
+			vecForThreeComp.x = mesh->mTangents[i].x;
+			vecForThreeComp.y = mesh->mTangents[i].y;
+			vecForThreeComp.z = mesh->mTangents[i].z;
+			vertex.Tangent = vecForThreeComp;
+		}
+		else
+			vertex.Tangent = glm::vec3(0.0f, 0.0f, 0.0f);
+		
 		// bitangent
-		vecForThreeComp.x = mesh->mBitangents[i].x;
-		vecForThreeComp.y = mesh->mBitangents[i].y;
-		vecForThreeComp.z = mesh->mBitangents[i].z;
-		vertex.BiTangent = vecForThreeComp;
+		if (IsBiTangentsExisted(mesh))
+		{
+			vecForThreeComp.x = mesh->mBitangents[i].x;
+			vecForThreeComp.y = mesh->mBitangents[i].y;
+			vecForThreeComp.z = mesh->mBitangents[i].z;
+			vertex.BiTangent = vecForThreeComp;
+		}
+		else
+			vertex.BiTangent = glm::vec3(0.0f, 0.0f, 0.0f);
 		vertices.push_back(vertex);
 	}
 
@@ -227,6 +182,48 @@ BOOL CModel::IsTexCoordsExisted(aiMesh* mesh)
 		return TRUE;
 	else
 		return FALSE;
+}
+
+
+/// <summary>
+/// 
+/// </summary>
+/// <param name="mesh"></param>
+/// <returns></returns>
+BOOL CModel::IsNormalsExisted(aiMesh* mesh)
+{
+	if (mesh->mNormals)
+		return TRUE;
+	else
+		return FALSE;
+}
+
+
+/// <summary>
+/// 
+/// </summary>
+/// <param name="mesh"></param>
+/// <returns></returns>
+BOOL CModel::IsTangentsExisted(aiMesh* mesh)
+{
+	if (mesh->mTangents)
+		return TRUE;
+	else
+		return FALSE;
+}
+
+
+/// <summary>
+/// 
+/// </summary>
+/// <param name="mesh"></param>
+/// <returns></returns>
+BOOL CModel::IsBiTangentsExisted(aiMesh* mesh)
+{
+	if (mesh->mBitangents)
+		return TRUE;
+	else
+		return FALSE;;
 }
 
 

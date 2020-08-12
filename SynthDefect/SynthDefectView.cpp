@@ -15,15 +15,11 @@
 #include <gl/GLU.h>
 #include "SynthDefectDoc.h"
 #include "SynthDefectView.h"
+#include "Background.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
-
-#define ID_TIMER_PLAY 100							// Unique ID of system timer for a specific window
-#define VSHADER_CODE_PATH "./vertex_shader.glsl"		// The current path of vertex shader code file
-#define FSHADER_CODE_PATH "./fragment_shader.glsl"	// The current path of fragment shader code file
-
 
 // CSynthDefectView
 
@@ -38,7 +34,9 @@ BEGIN_MESSAGE_MAP(CSynthDefectView, CView)
 	ON_WM_SHOWWINDOW()
 	ON_WM_TIMER()
 	ON_WM_SIZE()
-//  ON_WM_UPDATEUISTATE()
+	ON_WM_MOUSEWHEEL()
+	ON_WM_LBUTTONDOWN()
+	ON_WM_MOUSEMOVE()
 END_MESSAGE_MAP()
 
 // CSynthDefectView construction/destruction
@@ -46,6 +44,7 @@ END_MESSAGE_MAP()
 CSynthDefectView::CSynthDefectView() noexcept
 {
 	// TODO: add construction code here
+	m_cameraPos = glm::vec3(0.0f, 0.0f, 4.0f);
 }
 
 
@@ -80,63 +79,144 @@ void CSynthDefectView::OnDraw(CDC* /*pDC*/)
 }
 
 
-
-
 /// <summary>
-/// Render the OpenGL scene
+/// Render the whole OpenGL scene
 /// </summary>
 /// <returns> TRUE if rendering is successful, FALSE on failure </returns>
-int CSynthDefectView::DrawGLScene()
+BOOL CSynthDefectView::DrawGLScene()
 {
 	// clear buffers
 	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glClearDepth(1.0f);
 
-	// enable shaders
-	m_shaders.Use();
-
-	// view, projection transformations
-	// aspect - the ratio of width to height
-	// note that the aspect ratio in glm::perspective should match the aspect ratio of the Viewport
-	glm::mat4 projMatrix = glm::perspective(glm::radians(m_camera.m_Zoom), m_viewWidth/m_viewHeight, 0.1f, 100.0f);
-	glm::mat4 vmMatrix = m_camera.GetViewMatrix();
-	// vmMatrix = glm::scale(vmMatrix, glm::vec3(1.0, 1.0, 1.0));
-	m_shaders.SetMat4("projection", projMatrix);
-	m_shaders.SetMat4("view_model", vmMatrix);
-
-	// render the loaded model
-	if(m_model)
-		m_model->DrawModel(m_shaders);
-
+	DrawBackground();
+	if (m_model)
+		DrawLoadedModel();
 	return TRUE;
 }
 
 
-void CSynthDefectView::OnUpdate(CView* /*pSender*/, LPARAM /*lHint*/, CObject* /*pHint*/)
+/// <summary>
+/// Render the default background mesh
+/// </summary>
+void CSynthDefectView::DrawBackground()
+{
+	// enable shaders
+	m_backgroundShader.Use();
+
+	// view, projection transformations
+	// aspect - the ratio of width to height
+	// note that the aspect ratio in glm::perspective should match the aspect ratio of the Viewport
+	glm::mat4 projMatrix = glm::perspective(glm::radians(45.0f), m_viewWidth / m_viewHeight, 0.1f, 100.0f);
+	glm::mat4 vmMatrix = m_camera.GetViewMatrix();
+	m_backgroundShader.SetMat4("projection", projMatrix);
+	m_backgroundShader.SetMat4("view_model", vmMatrix);
+
+	// render the default background
+	CBackground back = CBackground(glm::vec3(WORKSPACE_X, WORKSPACE_Y, WORKSPACE_Z));
+	back.Draw();
+}
+
+
+/// <summary>
+/// Render the loaded model mesh from Document
+/// </summary>
+void CSynthDefectView::DrawLoadedModel()
+{
+	// enable shaders
+	m_modelShader.Use();
+
+	// view, projection transformations
+	// aspect - the ratio of width to height
+	// note that the aspect ratio in glm::perspective should match the aspect ratio of the Viewport
+	glm::mat4 projMatrix = glm::perspective(glm::radians(m_camera.m_Zoom), m_viewWidth / m_viewHeight, 0.1f, 100.0f);
+	glm::mat4 viewMatrix = m_camera.GetViewMatrix();
+	// rotateX
+	viewMatrix = glm::rotate(viewMatrix, 20.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+	// rotateY
+	m_modelShader.SetMat4("projection", projMatrix);
+	m_modelShader.SetMat4("view", viewMatrix);
+
+	// model transformation
+	glm::mat4 modelMatrix = glm::mat4(1.0f);
+	modelMatrix = glm::translate(modelMatrix, glm::vec3(0.0f, 0.0f, 0.0f));								// translate to the center of the scene
+	modelMatrix = glm::scale(modelMatrix, glm::vec3(m_scaleFactor, m_scaleFactor, m_scaleFactor));		// control the scale of the model
+	m_modelShader.SetMat4("model", modelMatrix);
+
+	// set light source
+	glm::vec3 lightColor = glm::vec3(1.0f, 1.0f, 1.0f);
+	m_modelShader.SetVec3("lightColor", lightColor);
+	glm::vec3 lightPosition = glm::vec3(LIGHT_X, LIGHT_Y, LIGHT_Z);
+	m_modelShader.SetVec3("lightPos", lightPosition);
+
+	m_model->DrawModel(m_modelShader);
+}
+
+
+void CSynthDefectView::OnUpdate(CView* /*pSender*/, LPARAM /*lHint*/, CObject* /*pHint*/)		
 {
 	CSynthDefectDoc* pDoc = GetDocument();
 	ASSERT_VALID(pDoc);
 	if (!pDoc)
 		return;
 
-	
-	m_model = pDoc->m_model;										// receive data from Document
-	//if (pDoc->m_bLoad)												// check the model is loaded
-	//{
-	//	float centerX = (m_model->m_max.x - m_model->m_min.x) / 2.0f;
-	//	float centerY = (m_model->m_max.y - m_model->m_min.y) / 2.0f;
-	//	float centerZ= (m_model->m_max.z - m_model->m_min.z) / 2.0f;
-	//	m_camera = CCamera(m_cameraPos, glm::vec3(centerX, centerY, centerZ));
-	//}
+	m_camera.m_Zoom = 45.0f;														// init camera zoom
+	m_model = pDoc->m_model;														// receive data from Document
+	if (m_model)																	// check the model is loaded
+		m_scaleFactor = GetScaleFactor(m_model->m_max, m_model->m_min);				// calculate scale factor
+}
+
+
+/// <summary>
+/// Calculate the geometry centroid of loaded model mesh
+/// </summary>
+/// <param name="max">: the max value of x, y, z </param>
+/// <param name="min">: the min value of x, y, z </param>
+/// <returns> the geometry centroid </returns>
+glm::vec3 CSynthDefectView::GetModelCentroid(glm::vec3 max, glm::vec3 min)
+{
+	float centerX = (max.x + min.x) / 2.0f;
+	float centerY = (max.y + min.y) / 2.0f;
+	float centerZ = (max.z + min.z) / 2.0f;
+	return glm::vec3(centerX, centerY, centerZ);
+}
+
+
+/// <summary>
+/// Calculate the scale factor for fitting model into viewport
+/// </summary>
+/// <param name="max">: the max value of x, y, z </param>
+/// <param name="min">: the min value of x, y, z </param>
+/// <returns> the scale factor for loaded model </returns>
+float CSynthDefectView::GetScaleFactor(glm::vec3 max, glm::vec3 min)
+{
+	float scale = 0.0f;
+	float width_range = max.x - min.x;
+	float height_range = max.y - min.y;
+
+	glm::vec3 modelCenter = GetModelCentroid(max, min);
+	float r = glm::distance(modelCenter, max);									// the radius of bounding sphere
+	float z = glm::distance(modelCenter, m_cameraPos);							// the distance from model to camera
+	float r_max = z * glm::sin(glm::radians(m_camera.GetFOV())/2.0f);			// the maximum radius of bounding sphere
+
+	scale = r_max / r;
+	// consider the size of workspace to scale factor
+	if ((WORKSPACE_WIDTH / width_range) < 1.0)
+		scale *= (WORKSPACE_WIDTH / width_range);
+	else if ((WORKSPACE_HEIGHT / height_range) < 1.0)
+		scale *= (WORKSPACE_HEIGHT / height_range);
+
+	return scale;
 }
 
 
 void CSynthDefectView::InitChildView()
 {
 	m_bInitGL = FALSE;
-	m_shaders = CShader(VSHADER_CODE_PATH, FSHADER_CODE_PATH);		// build and compile shaders
-	m_camera = CCamera(m_cameraPos);								// Initialize Camera
+	m_backgroundShader = CShader(VS_BACKGROUND_PATH, FS_BACKGROUND_PATH);		// build and compile shaders for backgroun mesh
+	m_modelShader = CShader(VS_MODEL_PATH, FS_MODEL_PATH);						// build and compile shaders for model mesh
+	m_camera = CCamera(m_cameraPos);											// Initialize Camera
 }
 
 
@@ -278,4 +358,43 @@ void CSynthDefectView::OnShowWindow(BOOL bShow, UINT nStatus)
 	CView::OnShowWindow(bShow, nStatus);
 
 	// TODO: Add your message handler code here
+}
+
+
+BOOL CSynthDefectView::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
+{
+	if (zDelta < 0)
+	{
+		if (m_camera.m_Zoom >= 180.0f)
+			m_camera.m_Zoom = 180.0f;
+		else
+			m_camera.m_Zoom += 4.0f;
+	}
+	else
+	{
+		if (m_camera.m_Zoom <= 5.0f)
+			m_camera.m_Zoom = 5.0f;
+		else
+			m_camera.m_Zoom -= 4.0f;
+	}
+	return CView::OnMouseWheel(nFlags, zDelta, pt);
+}
+
+
+void CSynthDefectView::OnMouseMove(UINT nFlags, CPoint point)
+{
+	m_btnFlag = nFlags;
+	if (m_btnFlag == MK_MBUTTON)
+	{
+		TRACE2("Log: x - %d, y = %d\n", point.x, point.y);
+	}
+	CView::OnMouseMove(nFlags, point);
+}
+
+
+void CSynthDefectView::OnLButtonDown(UINT nFlags, CPoint point)
+{
+	// TODO: Add your message handler code here and/or call default
+	TRACE2("Log: x - %d, y = %d\n", point.x, point.y);
+	CView::OnLButtonDown(nFlags, point);
 }

@@ -55,7 +55,7 @@ BOOL CSynthDefectDoc::OnNewDocument()
 	if (!CDocument::OnNewDocument())
 		return FALSE;
 
-		m_model = new CModel(m_back);
+	m_model = nullptr;
 
 	return TRUE;
 }
@@ -87,10 +87,7 @@ BOOL CSynthDefectDoc::OnOpenDocument(LPCTSTR lpszPathName)
 		return FALSE;
 
 	// load model
-	m_model = new CModel(lpszPathName, m_back);
-	m_bLoad = TRUE;
-	TRACE3("Log: maxX - %f, maxY - %f, maxZ - %f\n", m_model->m_max.x, m_model->m_max.y, m_model->m_max.z);
-	TRACE3("Log: minX - %f, minY - %f, minZ - %f\n", m_model->m_min.x, m_model->m_min.y, m_model->m_min.z);
+	m_model = new CModel(lpszPathName);
 
 	return TRUE;
 }

@@ -17,11 +17,14 @@ public:
 	float m_viewWidth = 0.0f;
 	float m_viewHeight = 0.0f;
 private:
-	bool m_bInitGL = TRUE;
-	CShader m_shaders;
+	BOOL m_bInitGL = TRUE;
+	UINT m_btnFlag = 0;
+	float m_scaleFactor = 0.0f;
+	CShader m_backgroundShader;
+	CShader m_modelShader;
 	CCamera m_camera;
 	CModel* m_model = nullptr;
-	glm::vec3 m_cameraPos = glm::vec3(0.0f, 0.0f, 4.0f);
+	glm::vec3 m_cameraPos;
 	glm::vec3 m_modelCenter;								// geometry center
 
 public:
@@ -37,7 +40,11 @@ protected:
 
 // Implementation
 private:
-	int DrawGLScene();
+	BOOL DrawGLScene();
+	void DrawBackground();
+	void DrawLoadedModel();
+	glm::vec3 GetModelCentroid(glm::vec3 max, glm::vec3 min);
+	float GetScaleFactor(glm::vec3 max, glm::vec3 min);
 public:
 	virtual ~CSynthDefectView();
 	
@@ -66,6 +73,9 @@ public:
 	afx_msg void OnTimer(UINT_PTR nIDEvent);
 	afx_msg void OnSize(UINT nType, int cx, int cy);
 	virtual void OnUpdate(CView* /*pSender*/, LPARAM /*lHint*/, CObject* /*pHint*/);
+	afx_msg BOOL OnMouseWheel(UINT nFlags, short zDelta, CPoint pt);
+	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
+	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
 };
 
 #ifndef _DEBUG  // debug version in SynthDefectView.cpp

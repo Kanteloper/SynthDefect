@@ -1,13 +1,10 @@
 
-// Mesh.cpp for Mesh data as parts of 3D model
+// Background.cpp for the default background Mesh
 
 #include "pch.h"
-#include <gl/glew.h>
-#include <gl/GLU.h>
-#include "Mesh.h"
+#include "Background.h"
 
-
-CMesh::CMesh()
+CBackground::CBackground()
 {
 }
 
@@ -15,7 +12,7 @@ CMesh::CMesh()
 /// <summary>
 /// Initialize all the buffer objects / arrays
 /// </summary>
-void CMesh::setupMesh()
+void CBackground::SetupMesh()
 {
 	GLenum err;
 	// generate the reference of a VAO, VBO and an EBO 
@@ -54,19 +51,6 @@ void CMesh::setupMesh()
 	// vertex color - r, g, b, a
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Color));
-	// vertex normals - nor_x, nor_y, nor_z
-	glEnableVertexAttribArray(2);
-	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Normal));
-	// vertex texture coordinates - tex_x, tex_y
-	glEnableVertexAttribArray(3);
-	glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, TexCoords));
-	// tangent - tan_x, tan_y, tan_z
-	glEnableVertexAttribArray(4);
-	glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Tangent));
-	// bitangent - btan_x, btan_y, btan_z
-	glEnableVertexAttribArray(5);
-	glVertexAttribPointer(5, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, BiTangent));
-	// break the existing vertex array object binding
 	glBindVertexArray(0);
 	if ((err = glGetError()) != GL_NO_ERROR)
 		TRACE1("ERROR: define an array of generic vertex attribute data - %d\n", err);
@@ -74,10 +58,63 @@ void CMesh::setupMesh()
 
 
 /// <summary>
-/// Render the Model Mesh
+/// Set background mesh with the default color
 /// </summary>
-/// <param name="shaders">: liked Shader objects</param>
-void CMesh::Draw(CShader& shaders)
+/// <param name="v">: vertices for background </param>
+/// <returns> </returns>
+void CBackground::SetDefaultBackground(glm::vec3 v)
+{
+	Vertex top_left, top_right;
+	// top left
+	top_left.Position.x = -v.x;
+	top_left.Position.y = v.y;
+	top_left.Position.z = v.z;
+	top_left.Color.r = 0.04f;
+	top_left.Color.g = 0.4f;
+	top_left.Color.b = 0.6f;
+	top_left.Color.a = 1.0f;
+	m_vertices.push_back(top_left);
+	// top right
+	top_right.Position.x = v.x;
+	top_right.Position.y = v.y;
+	top_right.Position.z = v.z;
+	top_right.Color.r = 0.04f;
+	top_right.Color.g = 0.4f;
+	top_right.Color.b = 0.6f;
+	top_right.Color.a = 1.0f;
+	m_vertices.push_back(top_right);
+
+	Vertex bottom_left, bottom_right;
+	// bottom left
+	bottom_left.Position.x = -v.x;
+	bottom_left.Position.y = -v.y;
+	bottom_left.Position.z = v.z;
+	bottom_left.Color.r = 0.0f;
+	bottom_left.Color.g = 0.0f;
+	bottom_left.Color.b = 0.0f;
+	bottom_left.Color.a = 1.0f;
+	m_vertices.push_back(bottom_left);
+	// bottom right
+	bottom_right.Position.x = v.x;
+	bottom_right.Position.y = -v.y;
+	bottom_right.Position.z = v.z;
+	bottom_right.Color.r = 0.0f;
+	bottom_right.Color.g = 0.0f;
+	bottom_right.Color.b = 0.0f;
+	bottom_right.Color.a = 1.0f;
+	m_vertices.push_back(bottom_right);
+
+	m_indices = {
+		0, 3, 1,
+		2, 3, 0
+	};
+}
+
+
+/// <summary>
+/// Render the default background Mesh
+/// </summary>
+void CBackground::Draw()
 {
 	GLenum err;
 	// bind appropriate textures
@@ -93,6 +130,6 @@ void CMesh::Draw(CShader& shaders)
 }
 
 
-CMesh::~CMesh()
+CBackground::~CBackground()
 {
 }
