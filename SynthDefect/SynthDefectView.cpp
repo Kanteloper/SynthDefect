@@ -152,7 +152,7 @@ void CSynthDefectView::DrawLoadedModel()
 	if (m_model)
 		m_model->DrawModel(m_shaders);
 }
- 
+
 
 void CSynthDefectView::OnUpdate(CView* /*pSender*/, LPARAM /*lHint*/, CObject* /*pHint*/)		
 {
@@ -160,20 +160,31 @@ void CSynthDefectView::OnUpdate(CView* /*pSender*/, LPARAM /*lHint*/, CObject* /
 	ASSERT_VALID(pDoc);
 	if (!pDoc)
 		return;
-
 	
-	m_model = pDoc->m_model;										// receive data from Document
-	if (pDoc->m_bLoad)												// check the model is loaded
+	m_model = pDoc->m_model;												// receive data from Document
+	if (m_model)												// check the model is loaded
 	{
-		TRACE3("Log: %f, %f, %f\n", m_model->m_max.x, m_model->m_max.y, m_model->m_max.z);
-		/*glm::vec3 modelCenter = GetModelCentroid();
-		glm::vec3 
-		float centerX = (m_model->m_max.x + m_model->m_min.x) / 2.0f;
-		float centerY = (m_model->m_max.y + m_model->m_min.y) / 2.0f;
-		float centerZ= (m_model->m_max.z + m_model->m_min.z) / 2.0f;*/
+		// TRACE3("Log: %f, %f, %f\n", m_model->m_max.x, m_model->m_max.y, m_model->m_max.z);
+		glm::vec3 modelCenter = GetModelCentroid(m_model->m_max, m_model->m_min);
+		
 
 		// m_camera = CCamera(m_cameraPos, glm::vec3(centerX, centerY, centerZ));
 	}
+}
+
+
+/// <summary>
+/// Calculate the geometry centroid of loaded model mesh
+/// </summary>
+/// <param name="max">: the max value of x, y, z </param>
+/// <param name="min">: the min value of x, y, z </param>
+/// <returns> the geometry centroid </returns>
+glm::vec3 CSynthDefectView::GetModelCentroid(glm::vec3 max, glm::vec3 min)
+{
+	float centerX = (max.x + min.x) / 2.0f;
+	float centerY = (max.y + min.y) / 2.0f;
+	float centerZ = (max.z + min.z) / 2.0f;
+	return glm::vec3(centerX, centerY, centerZ);
 }
 
 
@@ -182,8 +193,6 @@ void CSynthDefectView::InitChildView()
 	m_bInitGL = FALSE;
 	m_shaders = CShader(VSHADER_CODE_PATH, FSHADER_CODE_PATH);		// build and compile shaders
 	m_camera = CCamera(m_cameraPos);								// Initialize Camera
-
-	
 }
 
 

@@ -40,6 +40,7 @@ private:
 	BOOL DrawGLScene();
 	void DrawBackground();
 	void DrawLoadedModel();
+	glm::vec3 GetModelCentroid(glm::vec3 max, glm::vec3 min);
 public:
 	virtual ~CSynthDefectView();
 	
