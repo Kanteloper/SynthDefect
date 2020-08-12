@@ -18,6 +18,7 @@ public:
 	float m_viewHeight = 0.0f;
 private:
 	bool m_bInitGL = TRUE;
+	float m_scaleFactor = 0.0f;
 	CShader m_shaders;
 	CCamera m_camera;
 	CModel* m_model = nullptr;
@@ -41,6 +42,7 @@ private:
 	void DrawBackground();
 	void DrawLoadedModel();
 	glm::vec3 GetModelCentroid(glm::vec3 max, glm::vec3 min);
+	float GetScaleFactor(glm::vec3 max, glm::vec3 min);
 public:
 	virtual ~CSynthDefectView();
 	
