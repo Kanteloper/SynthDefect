@@ -17,9 +17,9 @@
 
 const float WORKSPACE_WIDTH = 16.0f;					// the width of workspace screen
 const float WORKSPACE_HEIGHT = 2.0f;					// the height of workspace screen
-const float WORKSPACE_X = 1.0f;							// the x value for workspace	
-const float WORKSPACE_Y = 1.0f;							// the y value for workspace
-const float WORKSPACE_Z = 0.0f;							// the z value for workspace
+const float WORKSPACE_X = 5.0f;							// the x value for workspace	
+const float WORKSPACE_Y = 1.2f;							// the y value for workspace
+const float WORKSPACE_Z = -1.0f;							// the z value for workspace
 
 /******************* Constants for Light Source *******************/
 
