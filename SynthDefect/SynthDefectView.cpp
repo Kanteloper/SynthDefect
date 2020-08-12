@@ -119,7 +119,7 @@ void CSynthDefectView::DrawBackground()
 	// render the default background
 	glm::mat4 modelMatrix = glm::mat4(1.0f);
 	modelMatrix = glm::translate(modelMatrix, glm::vec3(0.0f, 0.0f, 0.0f));					// translate to the center of the scene
-	modelMatrix = glm::scale(modelMatrix, glm::vec3(1.0f, 1.0f, 1.0f));						// original scale
+	modelMatrix = glm::scale(modelMatrix, glm::vec3(1.0f, 1.0f, 1.0f));						// original scale - no need scale factor
 	m_shaders.SetMat4("model", modelMatrix);
 
 	CBackground back = CBackground(glm::vec3(4.8f, 1.7f, 0.0f));
@@ -146,7 +146,7 @@ void CSynthDefectView::DrawLoadedModel()
 	// render the loaded model
 	glm::mat4 modelMatrix = glm::mat4(1.0f);
 	modelMatrix = glm::translate(modelMatrix, glm::vec3(0.0f, 0.0f, 0.0f));					// translate to the center of the scene
-	modelMatrix = glm::scale(modelMatrix, glm::vec3(0.5f, 0.5f, 0.5f));						// scale down
+	modelMatrix = glm::scale(modelMatrix, glm::vec3(0.5f, 0.5f, 0.5f));						// scale down - need scale factor
 	m_shaders.SetMat4("model", modelMatrix);
 
 	if (m_model)
@@ -161,13 +161,10 @@ void CSynthDefectView::OnUpdate(CView* /*pSender*/, LPARAM /*lHint*/, CObject* /
 	if (!pDoc)
 		return;
 	
-	m_model = pDoc->m_model;												// receive data from Document
-	if (m_model)												// check the model is loaded
+	m_model = pDoc->m_model;														// receive data from Document
+	if (m_model)																	// check the model is loaded
 	{
-		// TRACE3("Log: %f, %f, %f\n", m_model->m_max.x, m_model->m_max.y, m_model->m_max.z);
-		glm::vec3 modelCenter = GetModelCentroid(m_model->m_max, m_model->m_min);
-		
-
+		m_scaleFactor = GetScaleFactor(m_model->m_max, m_model->m_min);				// calculate scale factor
 		// m_camera = CCamera(m_cameraPos, glm::vec3(centerX, centerY, centerZ));
 	}
 }
@@ -185,6 +182,22 @@ glm::vec3 CSynthDefectView::GetModelCentroid(glm::vec3 max, glm::vec3 min)
 	float centerY = (max.y + min.y) / 2.0f;
 	float centerZ = (max.z + min.z) / 2.0f;
 	return glm::vec3(centerX, centerY, centerZ);
+}
+
+
+/// <summary>
+/// Calculate the scale factor for fitting model into viewport
+/// </summary>
+/// <param name="max">: the max value of x, y, z </param>
+/// <param name="min">: the min value of x, y, z </param>
+/// <returns> the scale factor for loaded model </returns>
+float CSynthDefectView::GetScaleFactor(glm::vec3 max, glm::vec3 min)
+{
+	glm::vec3 modelCenter = GetModelCentroid(max, min);
+	float r = glm::distance(modelCenter, max);									// the radius of bounding sphere
+	float z = glm::distance(modelCenter, m_cameraPos);							// the distance from model to camera
+	float r_max = z * glm::sin(m_camera.GetFOV() * (glm::pi<float>()/180));		// the maximum radius of bounding sphere
+	return r_max / r;
 }
 
 
