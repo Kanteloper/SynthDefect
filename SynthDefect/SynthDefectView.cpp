@@ -21,17 +21,6 @@
 #define new DEBUG_NEW
 #endif
 
-#define ID_TIMER_PLAY 100								// Unique ID of system timer for a specific window
-#define VSHADER_CODE_PATH "./vertex_shader.glsl"		// The current path of vertex shader code file
-#define FSHADER_CODE_PATH "./fragment_shader.glsl"		// The current path of fragment shader code file
-
-const float WORKSPACE_WIDTH = 16.0f;					// the width of workspace screen
-const float WORKSPACE_HEIGHT = 2.0f;					// the height of workspace screen
-const float WORKSPACE_X = 4.8f;							// the x value for workspace	
-const float WORKSPACE_Y = 1.7f;							// the y value for workspace
-const float WORKSPACE_Z = 0.0f;							// the z value for workspace
-
-
 // CSynthDefectView
 
 IMPLEMENT_DYNCREATE(CSynthDefectView, CView)
@@ -55,6 +44,7 @@ END_MESSAGE_MAP()
 CSynthDefectView::CSynthDefectView() noexcept
 {
 	// TODO: add construction code here
+	m_cameraPos = glm::vec3(0.0f, 0.0f, 4.0f);
 }
 
 
@@ -112,21 +102,21 @@ BOOL CSynthDefectView::DrawGLScene()
 void CSynthDefectView::DrawBackground()
 {
 	// enable shaders
-	m_shaders.Use();
+	m_backgroundShader.Use();
 
 	// view, projection transformations
 	// aspect - the ratio of width to height
 	// note that the aspect ratio in glm::perspective should match the aspect ratio of the Viewport
 	glm::mat4 projMatrix = glm::perspective(glm::radians(45.0f), m_viewWidth / m_viewHeight, 0.1f, 100.0f);
 	glm::mat4 vmMatrix = m_camera.GetViewMatrix();
-	m_shaders.SetMat4("projection", projMatrix);
-	m_shaders.SetMat4("view_model", vmMatrix);
+	m_backgroundShader.SetMat4("projection", projMatrix);
+	m_backgroundShader.SetMat4("view_model", vmMatrix);
 
 	// render the default background
 	glm::mat4 modelMatrix = glm::mat4(1.0f);
 	modelMatrix = glm::translate(modelMatrix, glm::vec3(0.0f, 0.0f, 0.0f));					// translate to the center of the scene
 	modelMatrix = glm::scale(modelMatrix, glm::vec3(1.0f, 1.0f, 1.0f));						// original scale - no need scale factor
-	m_shaders.SetMat4("model", modelMatrix);
+	m_backgroundShader.SetMat4("model", modelMatrix);
 
 	CBackground back = CBackground(glm::vec3(WORKSPACE_X, WORKSPACE_Y, WORKSPACE_Z));
 	back.Draw();
@@ -139,24 +129,30 @@ void CSynthDefectView::DrawBackground()
 void CSynthDefectView::DrawLoadedModel()
 {
 	// enable shaders
-	m_shaders.Use();
+	m_backgroundShader.Use();
 
 	// view, projection transformations
 	// aspect - the ratio of width to height
 	// note that the aspect ratio in glm::perspective should match the aspect ratio of the Viewport
 	glm::mat4 projMatrix = glm::perspective(glm::radians(m_camera.m_Zoom), m_viewWidth / m_viewHeight, 0.1f, 100.0f);
 	glm::mat4 viewMatrix = m_camera.GetViewMatrix();
-	m_shaders.SetMat4("projection", projMatrix);
-	m_shaders.SetMat4("view", viewMatrix);
+	m_backgroundShader.SetMat4("projection", projMatrix);
+	m_backgroundShader.SetMat4("view", viewMatrix);
 
-	// render the loaded model
+	// model transformation
 	glm::mat4 modelMatrix = glm::mat4(1.0f);
 	modelMatrix = glm::translate(modelMatrix, glm::vec3(0.0f, 0.0f, 0.0f));								// translate to the center of the scene
 	modelMatrix = glm::scale(modelMatrix, glm::vec3(m_scaleFactor, m_scaleFactor, m_scaleFactor));		// control the scale of the model
-	m_shaders.SetMat4("model", modelMatrix);
+	m_backgroundShader.SetMat4("model", modelMatrix);
+
+	// set light source
+	glm::vec3 lightColor = glm::vec3(1.0f, 1.0f, 1.0f);
+	m_backgroundShader.SetVec3("lightColor", lightColor);
+	glm::vec3 lightPosition = glm::vec3(LIGHT_X, LIGHT_Y, LIGHT_Z);
+	m_backgroundShader.SetVec3("lightPos", lightPosition);
 
 	if (m_model)
-		m_model->DrawModel(m_shaders);
+		m_model->DrawModel(m_backgroundShader);
 }
 
 
@@ -172,7 +168,6 @@ void CSynthDefectView::OnUpdate(CView* /*pSender*/, LPARAM /*lHint*/, CObject* /
 	if (m_model)																	// check the model is loaded
 	{
 		m_scaleFactor = GetScaleFactor(m_model->m_max, m_model->m_min);				// calculate scale factor
-		TRACE1("Log: scale factor - %f\n", m_scaleFactor);
 		// m_camera = CCamera(m_cameraPos, glm::vec3(centerX, centerY, centerZ));
 	}
 	
@@ -226,8 +221,9 @@ float CSynthDefectView::GetScaleFactor(glm::vec3 max, glm::vec3 min)
 void CSynthDefectView::InitChildView()
 {
 	m_bInitGL = FALSE;
-	m_shaders = CShader(VSHADER_CODE_PATH, FSHADER_CODE_PATH);		// build and compile shaders
-	m_camera = CCamera(m_cameraPos);								// Initialize Camera
+	m_backgroundShader = CShader(VS_BACKGROUND_PATH, FS_BACKGROUND_PATH);		// build and compile shaders for backgroun mesh
+	m_modelShader = CShader(VS_MODEL_PATH, FS_MODEL_PATH);						// build and compile shaders for model mesh
+	m_camera = CCamera(m_cameraPos);											// Initialize Camera
 }
 
 
