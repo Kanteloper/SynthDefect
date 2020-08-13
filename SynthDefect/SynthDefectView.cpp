@@ -43,8 +43,7 @@ END_MESSAGE_MAP()
 
 CSynthDefectView::CSynthDefectView() noexcept
 {
-	// TODO: add construction code here
-	m_cameraPos = glm::vec3(0.0f, 0.0f, 4.0f);
+	m_cameraPos = glm::vec3(0.0f, 0.0f, 40.0f);
 }
 
 
@@ -124,10 +123,10 @@ void CSynthDefectView::DrawLoadedModel()
 	// view, projection transformations
 	// aspect - the ratio of width to height
 	// note that the aspect ratio in glm::perspective should match the aspect ratio of the Viewport
-	glm::mat4 projMatrix = glm::perspective(glm::radians(m_camera.m_Zoom), m_viewWidth / m_viewHeight, 0.1f, 100.0f);
-	glm::mat4 viewMatrix = m_camera.GetViewMatrix();
+	glm::mat4 projMatrix = glm::perspective(glm::radians(m_camera->m_Zoom), m_viewWidth / m_viewHeight, 0.1f, 100.0f);
+	glm::mat4 viewMatrix = m_camera->GetViewMatrix();
 	// rotateX
-	viewMatrix = glm::rotate(viewMatrix, 20.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+	 //viewMatrix = glm::rotate(viewMatrix, 90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
 	// rotateY
 	m_modelShader.SetMat4("projection", projMatrix);
 	m_modelShader.SetMat4("view", viewMatrix);
@@ -154,11 +153,19 @@ void CSynthDefectView::OnUpdate(CView* /*pSender*/, LPARAM /*lHint*/, CObject* /
 	ASSERT_VALID(pDoc);
 	if (!pDoc)
 		return;
-
-	m_camera.m_Zoom = 45.0f;														// init camera zoom
-	m_model = pDoc->m_model;														// receive data from Document
-	if (m_model)																	// check the model is loaded
-		m_scaleFactor = GetScaleFactor(m_model->m_max, m_model->m_min);				// calculate scale factor
+	
+	m_model = pDoc->m_model;															// receive data from Document
+	if (m_model)																		// check the model is loaded
+	{
+		glm::vec3 modelCenter = GetModelCentroid(m_model->m_max, m_model->m_min);
+		m_cameraPos += modelCenter;
+		m_camera = new CCamera(m_cameraPos, modelCenter);								// Initialize Camera
+		m_camera->m_Zoom = 45.0f;														// init camera zoom
+		m_scaleFactor = GetScaleFactor(m_model->m_max, m_model->m_min, modelCenter);	// calculate scale factor
+	}
+	else
+		delete m_camera;
+		
 }
 
 
@@ -183,25 +190,12 @@ glm::vec3 CSynthDefectView::GetModelCentroid(glm::vec3 max, glm::vec3 min)
 /// <param name="max">: the max value of x, y, z </param>
 /// <param name="min">: the min value of x, y, z </param>
 /// <returns> the scale factor for loaded model </returns>
-float CSynthDefectView::GetScaleFactor(glm::vec3 max, glm::vec3 min)
+float CSynthDefectView::GetScaleFactor(glm::vec3 max, glm::vec3 min, glm::vec3 center)
 {
-	float scale = 0.0f;
-	float width_range = max.x - min.x;
-	float height_range = max.y - min.y;
-
-	glm::vec3 modelCenter = GetModelCentroid(max, min);
-	float r = glm::distance(modelCenter, max);									// the radius of bounding sphere
-	float z = glm::distance(modelCenter, m_cameraPos);							// the distance from model to camera
-	float r_max = z * glm::sin(glm::radians(m_camera.GetFOV())/2.0f);			// the maximum radius of bounding sphere
-
-	scale = r_max / r;
-	// consider the size of workspace to scale factor
-	if ((WORKSPACE_WIDTH / width_range) < 1.0)
-		scale *= (WORKSPACE_WIDTH / width_range);
-	else if ((WORKSPACE_HEIGHT / height_range) < 1.0)
-		scale *= (WORKSPACE_HEIGHT / height_range);
-
-	return scale;
+	float r = glm::distance(center, max);									// the radius of bounding sphere
+	float z = glm::distance(center, m_cameraPos);							// the distance from model to camera
+	float r_max = z * glm::sin(glm::radians(m_camera->GetFOV())/2.0f);		// the maximum radius of bounding sphere
+	return r_max / r;
 }
 
 
@@ -210,7 +204,6 @@ void CSynthDefectView::InitChildView()
 	m_bInitGL = FALSE;
 	m_backgroundShader = CShader(VS_BACKGROUND_PATH, FS_BACKGROUND_PATH);		// build and compile shaders for backgroun mesh
 	m_modelShader = CShader(VS_MODEL_PATH, FS_MODEL_PATH);						// build and compile shaders for model mesh
-	m_camera = CCamera(m_cameraPos);											// Initialize Camera
 }
 
 
@@ -230,6 +223,7 @@ void CSynthDefectView::OnContextMenu(CWnd* /* pWnd */, CPoint point)
 
 CSynthDefectView::~CSynthDefectView()
 {
+	delete m_camera;
 }
 
 // CSynthDefectView diagnostics
@@ -359,17 +353,17 @@ BOOL CSynthDefectView::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
 {
 	if (zDelta < 0)
 	{
-		if (m_camera.m_Zoom >= 180.0f)
-			m_camera.m_Zoom = 180.0f;
+		if (m_camera->m_Zoom >= 180.0f)
+			m_camera->m_Zoom = 180.0f;
 		else
-			m_camera.m_Zoom += 4.0f;
+			m_camera->m_Zoom += 4.0f;
 	}
 	else
 	{
-		if (m_camera.m_Zoom <= 5.0f)
-			m_camera.m_Zoom = 5.0f;
+		if (m_camera->m_Zoom <= 5.0f)
+			m_camera->m_Zoom = 5.0f;
 		else
-			m_camera.m_Zoom -= 4.0f;
+			m_camera->m_Zoom -= 4.0f;
 	}
 	return CView::OnMouseWheel(nFlags, zDelta, pt);
 }
