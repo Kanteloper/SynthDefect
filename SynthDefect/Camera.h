@@ -8,7 +8,7 @@
 
 // Default Camera Values
 const float SPEED			= 2.5f;
-const float SENSITIVITY		= 6.0f;
+const float SENSITIVITY		= 5.0f;
 const float FOV				= 45.0f;
 
 class CCamera
