@@ -8,7 +8,7 @@
 
 // Default Camera Values
 const float SPEED			= 2.5f;
-const float SENSITIVITY		= 0.1f;
+const float SENSITIVITY		= 6.0f;
 const float FOV				= 45.0f;
 
 class CCamera
@@ -16,15 +16,6 @@ class CCamera
 	// Constructor
 public:
 	CCamera();
-	// When there is no loaded object
-	CCamera(glm::vec3 pos) : m_ForwardAxis(glm::vec3(0.0f, 0.0f, -1.0f)), m_MoveSpeed(SPEED), m_MoveSensitivity(SENSITIVITY), m_Zoom(FOV) 
-	{
-		m_Position = pos;
-		m_UpDirection = glm::vec3(0.0f, 1.0f, 0.0f);								// Assume the camera is straight up to +y axis
-		m_LeftAxis = glm::normalize(glm::cross(m_ForwardAxis, m_UpDirection));
-		m_UpAxis = glm::cross(m_LeftAxis, m_ForwardAxis);
-	};
-	// When there is an loaded object
 	CCamera(glm::vec3 eye, glm::vec3 target) : m_MoveSpeed(SPEED), m_MoveSensitivity(SENSITIVITY), m_Zoom(FOV)
 	{
 		m_Position = eye;
@@ -51,7 +42,9 @@ public:
 	// Implementation
 public:
 	glm::mat4 GetViewMatrix();
+	void SetPosition(glm::vec3 pos);
 	const float GetFOV();
+	const float GetSensitivity();
 	~CCamera();
 };
 
