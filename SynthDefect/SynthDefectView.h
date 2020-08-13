@@ -19,20 +19,28 @@ public:
 private:
 	BOOL m_bInitGL = TRUE;
 	UINT m_btnFlag = 0;
+
+	/* Model */
 	float m_scaleFactor = 0.0f;
-	CShader m_backgroundShader;
-	CShader m_modelShader;
-	CCamera* m_camera = nullptr;;
+	CShader m_backgroundShader, m_modelShader;
 	CModel* m_model = nullptr;
+	glm::vec3 modelCenter;
+
+	/* Camera */
+	CCamera* m_camera = nullptr;
 	glm::vec3 m_cameraPos;
-	glm::vec3 m_modelCenter;								// geometry center
+	glm::vec3 m_modelCenter; // geometry center
+	float m_angleX = 0.0f;
+	float m_angleY = 0.0f;
+	float m_currentX = 0.0f;
+	float m_currentY = 0.0f;
 
 public:
 	CSynthDefectDoc* GetDocument() const;
 
 // Overrides
 public:
-	virtual void OnDraw(CDC* pDC);  // overridden to draw this view
+	virtual void OnDraw(CDC* pDC); // overridden to draw this view
 	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
 	void InitChildView();
 
@@ -76,6 +84,7 @@ public:
 	afx_msg BOOL OnMouseWheel(UINT nFlags, short zDelta, CPoint pt);
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
+	afx_msg void OnMButtonDown(UINT nFlags, CPoint point);
 };
 
 #ifndef _DEBUG  // debug version in SynthDefectView.cpp
