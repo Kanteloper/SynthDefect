@@ -25,6 +25,11 @@ void CCamera::SetPosition(glm::vec3 pos)
 	m_Position = pos;
 }
 
+glm::vec3 CCamera::GetPosition()
+{
+	return m_Position;
+}
+
 
 /// <summary>
 /// Return the constant value of Field of View

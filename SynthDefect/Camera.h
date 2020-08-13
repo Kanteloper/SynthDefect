@@ -41,6 +41,7 @@ public:
 public:
 	glm::mat4 GetViewMatrix();
 	void SetPosition(glm::vec3 pos);
+	glm::vec3 GetPosition();
 	const float GetFOV();
 	const float GetSensitivity();
 	~CCamera();
