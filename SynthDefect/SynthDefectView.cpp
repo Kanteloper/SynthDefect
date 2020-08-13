@@ -102,20 +102,9 @@ BOOL CSynthDefectView::DrawGLScene()
 /// </summary>
 void CSynthDefectView::DrawBackground()
 {
-	// enable shaders
+	glDisable(GL_DEPTH_TEST);										// disables Depth Testing
 	m_backgroundShader.Use();
-
-	// view, projection transformations
-	// aspect - the ratio of width to height
-	// note that the aspect ratio in glm::perspective should match the aspect ratio of the Viewport
-	glm::mat4 projMatrix = glm::perspective(glm::radians(45.0f), m_viewWidth / m_viewHeight, 0.1f, 100.0f);
-	glm::mat4 vmMatrix = m_camera.GetViewMatrix();
-	m_backgroundShader.SetMat4("projection", projMatrix);
-	m_backgroundShader.SetMat4("view_model", vmMatrix);
-
-	// render the default background
-	float aspect = m_viewWidth / m_viewHeight;
-	CBackground back = CBackground(glm::vec3(WORKSPACE_X * aspect, WORKSPACE_Y * aspect, WORKSPACE_Z * aspect));
+	CBackground back = CBackground(glm::vec3(1.0f , 1.0f, 0.0f));
 	back.Draw();
 }
 
@@ -125,6 +114,10 @@ void CSynthDefectView::DrawBackground()
 /// </summary>
 void CSynthDefectView::DrawLoadedModel()
 {
+	glEnable(GL_DEPTH_TEST);										// enables Depth Testing
+	// The Type Of Depth Testing To Do
+	// GL_LEQUAL : Passes if the incoming depth value is less than or equal to the stored depth value.
+	glDepthFunc(GL_LEQUAL);
 	// enable shaders
 	m_modelShader.Use();
 
@@ -165,7 +158,7 @@ void CSynthDefectView::OnUpdate(CView* /*pSender*/, LPARAM /*lHint*/, CObject* /
 	m_camera.m_Zoom = 45.0f;														// init camera zoom
 	m_model = pDoc->m_model;														// receive data from Document
 	if (m_model)																	// check the model is loaded
-		m_scaleFactor = GetScaleFactor(m_model->m_max, m_model->m_min);		// calculate scale factor
+		m_scaleFactor = GetScaleFactor(m_model->m_max, m_model->m_min);				// calculate scale factor
 }
 
 
@@ -321,7 +314,6 @@ void CSynthDefectView::OnSize(UINT nType, int cx, int cy)
 	ResizeGLScene(cx, cy);
 	m_viewWidth = (float)cx;
 	m_viewHeight = (float)cy;
-	TRACE2("Log: width - %f, height = %f\n", m_viewWidth, m_viewHeight);
 }
 
 
