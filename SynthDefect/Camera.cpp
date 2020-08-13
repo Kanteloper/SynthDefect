@@ -19,6 +19,11 @@ glm::mat4 CCamera::GetViewMatrix()
 	return glm::lookAt(m_Position, m_ForwardAxis, m_UpAxis);
 }
 
+void CCamera::SetPosition(glm::vec3 pos)
+{
+	m_Position = pos;
+}
+
 
 /// <summary>
 /// Return the constant value of Field of View
@@ -27,6 +32,11 @@ glm::mat4 CCamera::GetViewMatrix()
 const float CCamera::GetFOV()
 {
 	return FOV;
+}
+
+const float CCamera::GetSensitivity()
+{
+	return SENSITIVITY;
 }
 
 CCamera::~CCamera()
