@@ -201,8 +201,4 @@ void InitializeGLEngine()
 	}
 
 	glShadeModel(GL_SMOOTH);							// Enable Smooth Shading
-	glEnable(GL_DEPTH_TEST);							// Enables Depth Testing
-	// The Type Of Depth Testing To Do
-	// GL_LEQUAL : Passes if the incoming depth value is less than or equal to the stored depth value.
-	glDepthFunc(GL_LEQUAL);
 }
