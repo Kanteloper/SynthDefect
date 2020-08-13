@@ -19,6 +19,7 @@ glm::mat4 CCamera::GetViewMatrix()
 	return glm::lookAt(m_Position, m_ForwardAxis, m_UpAxis);
 }
 
+
 void CCamera::SetPosition(glm::vec3 pos)
 {
 	m_Position = pos;

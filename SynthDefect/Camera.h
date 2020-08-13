@@ -7,8 +7,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 // Default Camera Values
-const float SPEED			= 2.5f;
-const float SENSITIVITY		= 5.0f;
+const float SENSITIVITY		= 4.5f;
 const float FOV				= 45.0f;
 
 class CCamera
@@ -16,7 +15,7 @@ class CCamera
 	// Constructor
 public:
 	CCamera();
-	CCamera(glm::vec3 eye, glm::vec3 target) : m_MoveSpeed(SPEED), m_MoveSensitivity(SENSITIVITY), m_Zoom(FOV)
+	CCamera(glm::vec3 eye, glm::vec3 target) : m_MoveSensitivity(SENSITIVITY), m_Zoom(FOV)
 	{
 		m_Position = eye;
 		m_UpDirection = glm::vec3(0.0f, 1.0f, 0.0f);								// Assume the camera is straight up to +y axis
@@ -35,7 +34,6 @@ private:
 	glm::vec3 m_UpDirection;
 public:
 	// camera options
-	float m_MoveSpeed;
 	float m_MoveSensitivity;
 	float m_Zoom;
 
