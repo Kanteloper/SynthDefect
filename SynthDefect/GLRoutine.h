@@ -13,10 +13,6 @@
 #define VS_MODEL_PATH		"./model_vs.glsl"			// The current path of fragment shader code file for background mesh
 #define FS_MODEL_PATH		"./model_fs.glsl"			// The current path of fragment shader code file for background mesh
 
-/******************* Constants for Workspace *******************/
-
-const float WORKSPACE_WIDTH = 16.0f;					// the width of workspace screen
-const float WORKSPACE_HEIGHT = 2.0f;					// the height of workspace screen
 
 /******************* Constants for Light Source *******************/
 
