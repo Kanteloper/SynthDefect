@@ -37,6 +37,7 @@ BEGIN_MESSAGE_MAP(CSynthDefectView, CView)
 	ON_WM_MOUSEWHEEL()
 	ON_WM_LBUTTONDOWN()
 	ON_WM_MOUSEMOVE()
+	ON_WM_MBUTTONDOWN()
 END_MESSAGE_MAP()
 
 // CSynthDefectView construction/destruction
@@ -125,17 +126,17 @@ void CSynthDefectView::DrawLoadedModel()
 	// note that the aspect ratio in glm::perspective should match the aspect ratio of the Viewport
 	glm::mat4 projMatrix = glm::perspective(glm::radians(m_camera->m_Zoom), m_viewWidth / m_viewHeight, 0.1f, 100.0f);
 	glm::mat4 viewMatrix = m_camera->GetViewMatrix();
-	// rotateX
-	 //viewMatrix = glm::rotate(viewMatrix, 90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
-	// rotateY
+	viewMatrix = glm::rotate(viewMatrix, m_angleX, glm::vec3(1.0f, 0.0f, 0.0f));							// X-axis rotation
+	viewMatrix = glm::rotate(viewMatrix, m_angleY, glm::vec3(0.0f, 1.0f, 0.0f));							// Y-axis rotation
 	m_modelShader.SetMat4("projection", projMatrix);
 	m_modelShader.SetMat4("view", viewMatrix);
 
 	// model transformation
 	glm::mat4 modelMatrix = glm::mat4(1.0f);
-	modelMatrix = glm::translate(modelMatrix, glm::vec3(0.0f, 0.0f, 0.0f));								// translate to the center of the scene
+	modelMatrix = glm::translate(modelMatrix, -1.0f * modelCenter);
 	modelMatrix = glm::scale(modelMatrix, glm::vec3(m_scaleFactor, m_scaleFactor, m_scaleFactor));		// control the scale of the model
 	m_modelShader.SetMat4("model", modelMatrix);
+
 
 	// set light source
 	glm::vec3 lightColor = glm::vec3(1.0f, 1.0f, 1.0f);
@@ -157,10 +158,14 @@ void CSynthDefectView::OnUpdate(CView* /*pSender*/, LPARAM /*lHint*/, CObject* /
 	m_model = pDoc->m_model;															// receive data from Document
 	if (m_model)																		// check the model is loaded
 	{
-		glm::vec3 modelCenter = GetModelCentroid(m_model->m_max, m_model->m_min);
+		modelCenter = GetModelCentroid(m_model->m_max, m_model->m_min);
+		// Initialize Camera
+		m_cameraPos = glm::vec3(0.0f, 0.0f, 40.0f);
+		m_angleX = 0.0f;
+		m_angleY = 0.0f;
+		m_camera = new CCamera(m_cameraPos, modelCenter);								
+		m_camera->m_Zoom = 45.0f;
 		m_cameraPos += modelCenter;
-		m_camera = new CCamera(m_cameraPos, modelCenter);								// Initialize Camera
-		m_camera->m_Zoom = 45.0f;														// init camera zoom
 		m_scaleFactor = GetScaleFactor(m_model->m_max, m_model->m_min, modelCenter);	// calculate scale factor
 	}
 	else
@@ -351,19 +356,25 @@ void CSynthDefectView::OnShowWindow(BOOL bShow, UINT nStatus)
 
 BOOL CSynthDefectView::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
 {
-	if (zDelta < 0)
+	if (nFlags != MK_MBUTTON) 
 	{
-		if (m_camera->m_Zoom >= 180.0f)
-			m_camera->m_Zoom = 180.0f;
-		else
-			m_camera->m_Zoom += 4.0f;
-	}
-	else
-	{
-		if (m_camera->m_Zoom <= 5.0f)
-			m_camera->m_Zoom = 5.0f;
-		else
-			m_camera->m_Zoom -= 4.0f;
+		if (m_camera)
+		{
+			if (zDelta < 0)
+			{
+				if (m_camera->m_Zoom >= 180.0f)
+					m_camera->m_Zoom = 180.0f;
+				else
+					m_camera->m_Zoom += 4.0f;
+			}
+			else
+			{
+				if (m_camera->m_Zoom <= 5.0f)
+					m_camera->m_Zoom = 5.0f;
+				else
+					m_camera->m_Zoom -= 4.0f;
+			}
+		}
 	}
 	return CView::OnMouseWheel(nFlags, zDelta, pt);
 }
@@ -371,10 +382,27 @@ BOOL CSynthDefectView::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
 
 void CSynthDefectView::OnMouseMove(UINT nFlags, CPoint point)
 {
-	m_btnFlag = nFlags;
-	if (m_btnFlag == MK_MBUTTON)
+	if (nFlags == MK_MBUTTON)
 	{
-		TRACE2("Log: x - %d, y = %d\n", point.x, point.y);
+		if (m_camera)
+		{
+			float laterX = (float)point.x;
+			float laterY = (float)point.y;
+			float deltaX = (laterX - m_currentX);
+			float deltaY = (m_currentY - laterY);
+
+			if (deltaX > m_camera->GetSensitivity())
+				m_angleY += 0.06f;
+			else if (deltaX < -m_camera->GetSensitivity())
+				m_angleY -= 0.06f;
+			m_currentX = laterX;
+
+			if (deltaY > m_camera->GetSensitivity())
+				m_angleX -= 0.05f;
+			else if (deltaY < -m_camera->GetSensitivity())
+				m_angleX += 0.05f;
+			m_currentY = laterY;
+		}
 	}
 	CView::OnMouseMove(nFlags, point);
 }
@@ -385,4 +413,15 @@ void CSynthDefectView::OnLButtonDown(UINT nFlags, CPoint point)
 	// TODO: Add your message handler code here and/or call default
 	TRACE2("Log: x - %d, y = %d\n", point.x, point.y);
 	CView::OnLButtonDown(nFlags, point);
+}
+
+void CSynthDefectView::OnMButtonDown(UINT nFlags, CPoint point)
+{
+	if (m_camera)
+	{
+		m_currentX = (float)point.x;
+		m_currentY = (float)point.y;
+	}
+	
+	CView::OnMButtonDown(nFlags, point);
 }
