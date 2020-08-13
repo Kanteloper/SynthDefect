@@ -114,6 +114,7 @@ void CSynthDefectView::DrawBackground()
 /// </summary>
 void CSynthDefectView::DrawLoadedModel()
 {
+	// reset camera
 	glEnable(GL_DEPTH_TEST);										// enables Depth Testing
 	// The Type Of Depth Testing To Do
 	// GL_LEQUAL : Passes if the incoming depth value is less than or equal to the stored depth value.
@@ -127,7 +128,6 @@ void CSynthDefectView::DrawLoadedModel()
 	glm::mat4 projMatrix = glm::perspective(glm::radians(m_camera->m_Zoom), m_viewWidth / m_viewHeight, 0.1f, 100.0f);
 	glm::mat4 viewMatrix = m_camera->GetViewMatrix();
 	viewMatrix = glm::rotate(viewMatrix, m_angleX, glm::vec3(1.0f, 0.0f, 0.0f));							// X-axis rotation
-	TRACE2("Log: cos: %f, sin: %f\n", glm::cos(m_angleX), glm::sin(m_angleX));
 	viewMatrix = glm::rotate(viewMatrix, m_angleY, glm::vec3(0.0f, 1.0f, 0.0f));							// Y-axis rotation
 	m_modelShader.SetMat4("projection", projMatrix);
 	m_modelShader.SetMat4("view", viewMatrix);
@@ -138,12 +138,12 @@ void CSynthDefectView::DrawLoadedModel()
 	modelMatrix = glm::scale(modelMatrix, glm::vec3(m_scaleFactor, m_scaleFactor, m_scaleFactor));		// control the scale of the model
 	m_modelShader.SetMat4("model", modelMatrix);
 
-
-	// set light source
+	// for lightning
 	glm::vec3 lightColor = glm::vec3(1.0f, 1.0f, 1.0f);
 	m_modelShader.SetVec3("lightColor", lightColor);
 	glm::vec3 lightPosition = glm::vec3(LIGHT_X, LIGHT_Y, LIGHT_Z);
 	m_modelShader.SetVec3("lightPos", lightPosition);
+	m_modelShader.SetVec3("viewPos", m_camera->GetPosition());
 
 	m_model->DrawModel(m_modelShader);
 }
