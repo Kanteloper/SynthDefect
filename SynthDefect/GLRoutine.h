@@ -17,7 +17,7 @@
 /******************* Constants for Light Source *******************/
 
 const float LIGHT_X = 0.0f;
-const float LIGHT_Y = 1.0f;
+const float LIGHT_Y = 20.0f;
 const float LIGHT_Z = 0.0f;
 
 bool CreateGLWindow(CWnd* pWnd, int bits);
