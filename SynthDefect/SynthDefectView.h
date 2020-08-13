@@ -22,7 +22,7 @@ private:
 	float m_scaleFactor = 0.0f;
 	CShader m_backgroundShader;
 	CShader m_modelShader;
-	CCamera m_camera;
+	CCamera* m_camera = nullptr;;
 	CModel* m_model = nullptr;
 	glm::vec3 m_cameraPos;
 	glm::vec3 m_modelCenter;								// geometry center
@@ -44,7 +44,7 @@ private:
 	void DrawBackground();
 	void DrawLoadedModel();
 	glm::vec3 GetModelCentroid(glm::vec3 max, glm::vec3 min);
-	float GetScaleFactor(glm::vec3 max, glm::vec3 min);
+	float GetScaleFactor(glm::vec3 max, glm::vec3 min, glm::vec3 center);
 public:
 	virtual ~CSynthDefectView();
 	
