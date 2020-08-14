@@ -27,7 +27,6 @@ IMPLEMENT_DYNCREATE(CSynthDefectView, CView)
 
 BEGIN_MESSAGE_MAP(CSynthDefectView, CView)
 	ON_WM_CONTEXTMENU()
-	ON_WM_RBUTTONUP()
 	ON_WM_CREATE()
 	ON_WM_CLOSE()
 	ON_WM_DESTROY()
@@ -127,8 +126,8 @@ void CSynthDefectView::DrawLoadedModel()
 	// note that the aspect ratio in glm::perspective should match the aspect ratio of the Viewport
 	glm::mat4 projMatrix = glm::perspective(glm::radians(m_camera->m_Zoom), m_viewWidth / m_viewHeight, 0.1f, 100.0f);
 	glm::mat4 viewMatrix = m_camera->GetViewMatrix();
-	viewMatrix = glm::rotate(viewMatrix, m_angleX, glm::vec3(1.0f, 0.0f, 0.0f));							// X-axis rotation
-	viewMatrix = glm::rotate(viewMatrix, m_angleY, glm::vec3(0.0f, 1.0f, 0.0f));							// Y-axis rotation
+	//viewMatrix = glm::rotate(viewMatrix, m_angleX, glm::vec3(1.0f, 0.0f, 0.0f));							// X-axis rotation
+	//viewMatrix = glm::rotate(viewMatrix, m_angleY, glm::vec3(0.0f, 1.0f, 0.0f));							// Y-axis rotation
 	m_modelShader.SetMat4("projection", projMatrix);
 	m_modelShader.SetMat4("view", viewMatrix);
 
@@ -212,12 +211,6 @@ void CSynthDefectView::InitChildView()
 	m_modelShader = CShader(VS_MODEL_PATH, FS_MODEL_PATH);						// build and compile shaders for model mesh
 }
 
-
-void CSynthDefectView::OnRButtonUp(UINT /* nFlags */, CPoint point)
-{
-	ClientToScreen(&point);
-	OnContextMenu(this, point);
-}
 
 void CSynthDefectView::OnContextMenu(CWnd* /* pWnd */, CPoint point)
 {
@@ -389,20 +382,13 @@ void CSynthDefectView::OnMouseMove(UINT nFlags, CPoint point)
 		{
 			float laterX = (float)point.x;
 			float laterY = (float)point.y;
-			float deltaX = (laterX - m_currentX);
-			float deltaY = (m_currentY - laterY);
+			float xoffset = (laterX - m_currentX);
+			float yoffset = (m_currentY - laterY);				// reversed since y-coordinates go from bottom to top
 
-			if (deltaX > m_camera->GetSensitivity())
-				m_angleY += 0.06f;
-			else if (deltaX < -m_camera->GetSensitivity())
-				m_angleY -= 0.06f;
 			m_currentX = laterX;
-
-			if (deltaY > m_camera->GetSensitivity())
-				m_angleX -= 0.05f;
-			else if (deltaY < -m_camera->GetSensitivity())
-				m_angleX += 0.05f;
 			m_currentY = laterY;
+
+			m_camera->ProcessMouseMovement(xoffset, yoffset);
 		}
 	}
 	CView::OnMouseMove(nFlags, point);
