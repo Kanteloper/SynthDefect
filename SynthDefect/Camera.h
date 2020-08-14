@@ -7,7 +7,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 // Default Camera Values
-const float SENSITIVITY		= 4.5f;
+const float SENSITIVITY		= 4.0f;
 const float FOV				= 45.0f;
 
 class CCamera
