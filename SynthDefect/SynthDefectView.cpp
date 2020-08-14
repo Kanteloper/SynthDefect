@@ -44,7 +44,6 @@ END_MESSAGE_MAP()
 
 CSynthDefectView::CSynthDefectView() noexcept
 {
-	m_cameraPos = glm::vec3(0.0f, 0.0f, 40.0f);
 }
 
 
@@ -142,8 +141,13 @@ void CSynthDefectView::DrawLoadedModel()
 	glm::vec3 lightColor = glm::vec3(1.0f, 1.0f, 1.0f);
 	m_modelShader.SetVec3("lightColor", lightColor);
 	glm::vec3 lightPosition = glm::vec3(LIGHT_X, LIGHT_Y, LIGHT_Z);
-	m_modelShader.SetVec3("lightPos", lightPosition);
+	m_modelShader.SetVec3("light_Pos", lightPosition);
 	m_modelShader.SetVec3("viewPos", m_camera->GetPosition());
+
+	glm::mat4 lightmodelMatrix = glm::mat4(1.0f);
+	lightmodelMatrix = glm::rotate(lightmodelMatrix, -m_angleX, glm::vec3(1.0f, 0.0f, 0.0f));							// X-axis rotation
+	lightmodelMatrix = glm::rotate(lightmodelMatrix, -m_angleY, glm::vec3(0.0f, 1.0f, 0.0f));							// Y-axis rotation
+	m_modelShader.SetMat4("light_model", lightmodelMatrix);
 
 	m_model->DrawModel(m_modelShader);
 }
@@ -160,6 +164,7 @@ void CSynthDefectView::OnUpdate(CView* /*pSender*/, LPARAM /*lHint*/, CObject* /
 	if (m_model)																		// check the model is loaded
 	{
 		modelCenter = GetModelCentroid(m_model->m_max, m_model->m_min);
+		TRACE3("Log: center x: %f, center y: %f, center z: %f\n", modelCenter.x, modelCenter.y, modelCenter.z);
 		// Initialize Camera
 		m_cameraPos = glm::vec3(0.0f, 0.0f, 40.0f);
 		m_angleX = 0.0f;
@@ -212,12 +217,6 @@ void CSynthDefectView::InitChildView()
 	m_modelShader = CShader(VS_MODEL_PATH, FS_MODEL_PATH);						// build and compile shaders for model mesh
 }
 
-
-void CSynthDefectView::OnRButtonUp(UINT /* nFlags */, CPoint point)
-{
-	ClientToScreen(&point);
-	OnContextMenu(this, point);
-}
 
 void CSynthDefectView::OnContextMenu(CWnd* /* pWnd */, CPoint point)
 {
@@ -392,17 +391,17 @@ void CSynthDefectView::OnMouseMove(UINT nFlags, CPoint point)
 			float deltaX = (laterX - m_currentX);
 			float deltaY = (m_currentY - laterY);
 
-			if (deltaX > m_camera->GetSensitivity())
-				m_angleY += 0.06f;
-			else if (deltaX < -m_camera->GetSensitivity())
-				m_angleY -= 0.06f;
-			m_currentX = laterX;
-
 			if (deltaY > m_camera->GetSensitivity())
 				m_angleX -= 0.05f;
 			else if (deltaY < -m_camera->GetSensitivity())
 				m_angleX += 0.05f;
 			m_currentY = laterY;
+
+			if (deltaX > m_camera->GetSensitivity())
+				m_angleY += 0.06f;
+			else if (deltaX < -m_camera->GetSensitivity())
+				m_angleY -= 0.06f;
+			m_currentX = laterX;
 		}
 	}
 	CView::OnMouseMove(nFlags, point);
