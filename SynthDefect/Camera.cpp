@@ -10,47 +10,6 @@ CCamera::CCamera()
 
 
 /// <summary>
-/// Calculate the forward vector(direction vector) from the Camera's (updated) Euler Angles
-/// </summary>
-void CCamera::UpdateCameraVectors()
-{
-	// calculate the new Forward vector
-	glm::vec3 forward;
-	forward.x = cos(glm::radians(YAW)) * cos(glm::radians(PITCH));
-	forward.y = sin(glm::radians(PITCH));
-	forward.z = sin(glm::radians(YAW)) * cos(glm::radians(PITCH));
-	m_ForwardAxis = glm::normalize(forward);
-	// re-calculate the Left and Up vector
-	m_LeftAxis = glm::normalize(glm::cross(m_ForwardAxis, m_UpDirection));
-	m_UpAxis = glm::cross(m_LeftAxis, m_ForwardAxis);
-}
-
-
-/// <summary>
-/// Process input received from a mouse
-/// </summary>
-/// <param name="xoffset"> the offset value in the x direction </param>
-/// <param name="yoffset"> the offset value in the y direction </param>
-void CCamera::ProcessMouseMovement(float xoffset, float yoffset)
-{
-	xoffset *= SENSITIVITY;
-	yoffset *= SENSITIVITY;
-
-	m_Yaw += xoffset;
-	m_Pitch += yoffset;
-
-	// make sure that when Pitch is out of bounds.
-	if (m_Pitch > 89.0f)
-		m_Pitch = 89.0f;
-	if (m_Pitch < -89.0f)
-		m_Pitch = -89.0f;
-
-	// update Forward, Left and Up vectors using the updated Euler angles
-	UpdateCameraVectors();
-}
-
-
-/// <summary>
 /// Return the Model-View Matrix calculated using the LookAt Matrix
 /// </summary>
 /// <returns> 4 x 4 Model-View Matrix </returns>
