@@ -7,6 +7,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 // Default Camera Values
+const float YAW				= -90.0f;	// y-axis rotation
+const float PITCH			= 0.0f;		// x-axis rotation
 const float SENSITIVITY		= 4.5f;
 const float FOV				= 45.0f;
 
@@ -38,6 +40,8 @@ public:
 	float m_Zoom;
 
 	// Implementation
+private:
+	void UpdateCameraVectors();
 public:
 	glm::mat4 GetViewMatrix();
 	void SetPosition(glm::vec3 pos);
