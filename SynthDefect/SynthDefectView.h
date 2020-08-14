@@ -32,8 +32,10 @@ private:
 	glm::vec3 m_modelCenter; // geometry center
 	float m_angleX = 0.0f;
 	float m_angleY = 0.0f;
+	float m_angleZ = 0.0f;
 	float m_currentX = 0.0f;
 	float m_currentY = 0.0f;
+	float m_num = 0.0f;
 
 public:
 	CSynthDefectDoc* GetDocument() const;
@@ -66,7 +68,6 @@ protected:
 
 // Generated message map functions
 protected:
-	afx_msg void OnRButtonUp(UINT nFlags, CPoint point);
 	afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
 	DECLARE_MESSAGE_MAP()
 public:
