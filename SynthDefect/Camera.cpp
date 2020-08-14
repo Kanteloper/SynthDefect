@@ -25,6 +25,31 @@ void CCamera::UpdateCameraVectors()
 	m_UpAxis = glm::cross(m_LeftAxis, m_ForwardAxis);
 }
 
+
+/// <summary>
+/// Process input received from a mouse
+/// </summary>
+/// <param name="xoffset"> the offset value in the x direction </param>
+/// <param name="yoffset"> the offset value in the y direction </param>
+void CCamera::ProcessMouseMovement(float xoffset, float yoffset)
+{
+	xoffset *= SENSITIVITY;
+	yoffset *= SENSITIVITY;
+
+	m_Yaw += xoffset;
+	m_Pitch += yoffset;
+
+	// make sure that when Pitch is out of bounds.
+	if (m_Pitch > 89.0f)
+		m_Pitch = 89.0f;
+	if (m_Pitch < -89.0f)
+		m_Pitch = -89.0f;
+
+	// update Forward, Left and Up vectors using the updated Euler angles
+	UpdateCameraVectors();
+}
+
+
 /// <summary>
 /// Return the Model-View Matrix calculated using the LookAt Matrix
 /// </summary>
