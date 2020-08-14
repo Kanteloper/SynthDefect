@@ -27,7 +27,6 @@ IMPLEMENT_DYNCREATE(CSynthDefectView, CView)
 
 BEGIN_MESSAGE_MAP(CSynthDefectView, CView)
 	ON_WM_CONTEXTMENU()
-	ON_WM_RBUTTONUP()
 	ON_WM_CREATE()
 	ON_WM_CLOSE()
 	ON_WM_DESTROY()
@@ -126,8 +125,8 @@ void CSynthDefectView::DrawLoadedModel()
 	// note that the aspect ratio in glm::perspective should match the aspect ratio of the Viewport
 	glm::mat4 projMatrix = glm::perspective(glm::radians(m_camera->m_Zoom), m_viewWidth / m_viewHeight, 0.1f, 100.0f);
 	glm::mat4 viewMatrix = m_camera->GetViewMatrix();
-	viewMatrix = glm::rotate(viewMatrix, m_angleX, glm::vec3(1.0f, 0.0f, 0.0f));							// X-axis rotation
-	viewMatrix = glm::rotate(viewMatrix, m_angleY, glm::vec3(0.0f, 1.0f, 0.0f));							// Y-axis rotation
+	//viewMatrix = glm::rotate(viewMatrix, m_angleX, glm::vec3(1.0f, 0.0f, 0.0f));							// X-axis rotation
+	//viewMatrix = glm::rotate(viewMatrix, m_angleY, glm::vec3(0.0f, 1.0f, 0.0f));							// Y-axis rotation
 	m_modelShader.SetMat4("projection", projMatrix);
 	m_modelShader.SetMat4("view", viewMatrix);
 
@@ -389,7 +388,7 @@ void CSynthDefectView::OnMouseMove(UINT nFlags, CPoint point)
 			float laterX = (float)point.x;
 			float laterY = (float)point.y;
 			float deltaX = (laterX - m_currentX);
-			float deltaY = (m_currentY - laterY);
+			float deltaY = (m_currentY - laterY);				// reversed since y-coordinates go from bottom to top
 
 			if (deltaY > m_camera->GetSensitivity())
 				m_angleX -= 0.05f;
