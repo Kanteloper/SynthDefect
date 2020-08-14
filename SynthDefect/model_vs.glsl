@@ -11,17 +11,23 @@ layout (location = 2) in vec3 aNormal;
 out vec4 vertexColor;
 out vec3 Normal;
 out vec3 FragPos;
+out vec3 lightPos;
 
 // uniform - the storage qualifier which means the value does not change accross the primitive being processed
 uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
+uniform mat4 light_view;
+uniform mat4 light_model;
+uniform vec3 light_Pos;
+
 
 void main()
 {
     // gl_Position is built-in variable in vertex language
     gl_Position = projection * view * model * vec4(aPos, 1.0);
     FragPos = vec3(model * vec4(aPos, 1.0));
+    lightPos = vec3(light_model * vec4(light_Pos, 1.0));
     vertexColor = aColor;
     Normal = mat3(transpose(inverse(model))) * aNormal;
 }
