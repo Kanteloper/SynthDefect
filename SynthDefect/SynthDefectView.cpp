@@ -134,7 +134,7 @@ void CSynthDefectView::DrawLoadedModel()
 
 	// model transformation
 	glm::mat4 modelMatrix = glm::mat4(1.0f);
-	modelMatrix = glm::translate(modelMatrix, -1.0f * modelCenter);											// translate to the origin
+	modelMatrix = glm::translate(modelMatrix, glm::vec3(0.0f, 0.0f, 0.0f));									// translate to the origin
 	modelMatrix = glm::scale(modelMatrix, glm::vec3(m_scaleFactor, m_scaleFactor, m_scaleFactor));			// control the scale of the model
 	m_modelShader.SetMat4("model", modelMatrix);
 
