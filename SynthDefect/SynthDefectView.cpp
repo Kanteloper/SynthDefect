@@ -164,10 +164,9 @@ void CSynthDefectView::OnUpdate(CView* /*pSender*/, LPARAM /*lHint*/, CObject* /
 		TRACE3("Log: center x: %f, center y: %f, center z: %f\n", modelCenter.x, modelCenter.y, modelCenter.z);
 		// Initialize Camera
 		m_cameraPos = glm::vec3(0.0f, 0.0f, 40.0f);
-		orient = glm::angleAxis(0.0f, glm::vec3(0.0f, 0.0f, 1.0f));
 		m_angleX = 0.0f;
 		m_angleY = 0.0f;
-		m_camera = new CCamera(m_cameraPos, glm::vec3(0.0f, 0.0f, 0.0f));								
+		m_camera = new CCamera(m_cameraPos, modelCenter);								
 		m_camera->m_Zoom = 45.0f;
 		m_cameraPos += modelCenter;
 		m_scaleFactor = GetScaleFactor(m_model->m_max, m_model->m_min, modelCenter);	// calculate scale factor
@@ -390,9 +389,9 @@ void CSynthDefectView::OnMouseMove(UINT nFlags, CPoint point)
 			float deltaY = (m_currentY - laterY);				// reversed since y-coordinates go from bottom to top
 
 			if (deltaY > m_camera->GetSensitivity())
-				m_angleX -= 0.05f;
+				m_angleX -= 0.06f;
 			else if (deltaY < -m_camera->GetSensitivity())
-				m_angleX += 0.05f;
+				m_angleX += 0.06f;
 			m_currentY = laterY;
 
 			if (deltaX > m_camera->GetSensitivity())
