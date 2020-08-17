@@ -21,15 +21,6 @@ glm::mat4 CCamera::GetViewMatrix()
 }
 
 
-/// <summary>
-/// Set camera position
-/// </summary>
-/// <param name="pos">: camera position that want to set </param>
-void CCamera::SetPosition(glm::vec3 pos)
-{
-	m_Position = pos;
-}
-
 
 /// <summary>
 /// Retrieve camera position
