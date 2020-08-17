@@ -17,7 +17,7 @@
 
 const float LIGHT_X = 0.0f;
 const float LIGHT_Y = 0.0f;
-const float LIGHT_Z = 30.0f;
+const float LIGHT_Z = 40.0f;
 
 bool CreateGLWindow(CWnd* pWnd, int bits);
 bool KillGLWindow(CWnd* pWnd);
