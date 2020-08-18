@@ -31,6 +31,21 @@ glm::vec3 CCamera::GetPosition()
 	return m_Position;
 }
 
+glm::vec3 CCamera::GetForwardAxis()
+{
+	return m_ForwardAxis;
+}
+
+glm::vec3 CCamera::GetUpAxis()
+{
+	return m_UpAxis;
+}
+
+glm::vec3 CCamera::GetLeftAxis()
+{
+	return m_LeftAxis;
+}
+
 
 /// <summary>
 /// Retrieve the constant value of Field of View

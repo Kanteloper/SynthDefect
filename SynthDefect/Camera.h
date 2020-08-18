@@ -42,6 +42,9 @@ public:
 public:
 	glm::mat4 GetViewMatrix();
 	glm::vec3 GetPosition();
+	glm::vec3 GetForwardAxis();
+	glm::vec3 GetUpAxis();
+	glm::vec3 GetLeftAxis();
 	const float GetFOV();
 	const float GetSensitivity();
 	const float GetSpeed();
