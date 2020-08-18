@@ -35,7 +35,8 @@ BEGIN_MESSAGE_MAP(CSynthDefectView, CView)
 	ON_WM_MOUSEWHEEL()
 	ON_WM_LBUTTONDOWN()
 	ON_WM_MOUSEMOVE()
-ON_WM_RBUTTONDOWN()
+	ON_WM_RBUTTONDOWN()
+	ON_WM_KEYDOWN()
 END_MESSAGE_MAP()
 
 // CSynthDefectView construction/destruction
@@ -100,6 +101,7 @@ BOOL CSynthDefectView::DrawGLScene()
 void CSynthDefectView::DrawBackground()
 {
 	glDisable(GL_DEPTH_TEST);										// disables Depth Testing
+	glPolygonMode(GL_FRONT, GL_FILL);
 	m_backgroundShader.Use();
 	CBackground back = CBackground(glm::vec3(1.0f , 1.0f, 0.0f));
 	back.Draw();
@@ -116,6 +118,7 @@ void CSynthDefectView::DrawLoadedModel()
 	// The Type Of Depth Testing To Do
 	// GL_LEQUAL : Passes if the incoming depth value is less than or equal to the stored depth value.
 	glDepthFunc(GL_LEQUAL);
+	SetWireFrameMode(m_bWireframe);
 	// enable shaders
 	m_modelShader.Use();
 
@@ -164,25 +167,28 @@ void CSynthDefectView::OnUpdate(CView* /*pSender*/, LPARAM /*lHint*/, CObject* /
 	if (m_model)																		// check the model is loaded
 	{
 		m_modelCenter = GetModelCentroid(m_model->m_max, m_model->m_min);
-		InitializeCamera();
+		InitSettings();
 		m_scaleFactor = GetScaleFactor(m_model->m_max, m_model->m_min, m_modelCenter);	// calculate scale factor
 	}
 	else
 		delete m_camera;
-		
 }
 
 
 /// <summary>
 /// Reset the settings of Camera
 /// </summary>
-void CSynthDefectView::InitializeCamera()
+void CSynthDefectView::InitSettings()
 {
+	// Camera
 	m_cameraPos = glm::vec3(0.0f, 0.0f, 40.0f);
 	m_angleX = 0.0f;
 	m_angleY = 0.0f;
 	m_camera = new CCamera(m_cameraPos, m_modelCenter);
 	m_camera->m_Zoom = 45.0f;
+
+	// model
+	m_bWireframe = FALSE;
 }
 
 
@@ -425,4 +431,22 @@ void CSynthDefectView::OnRButtonDown(UINT nFlags, CPoint point)
 		m_currentY = (float)point.y;
 	}
 	CView::OnRButtonDown(nFlags, point);
+}
+
+
+void CSynthDefectView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
+{
+	if (m_model)
+	{
+		// press Tab key
+		if (nFlags == 15)
+		{
+			if (m_bWireframe)
+				m_bWireframe = FALSE;
+			else
+				m_bWireframe = TRUE;
+		}
+	}
+	
+	CView::OnKeyDown(nChar, nRepCnt, nFlags);
 }
