@@ -18,6 +18,8 @@ public:
 	float m_viewHeight = 0.0f;
 private:
 	BOOL m_bInitGL = TRUE;
+	BOOL m_bWireframe = FALSE;
+
 
 	/* Model */
 	float m_scaleFactor = 0.0f;
@@ -51,7 +53,7 @@ private:
 	void DrawLoadedModel();
 	glm::vec3 GetModelCentroid(glm::vec3 max, glm::vec3 min);
 	float GetScaleFactor(glm::vec3 max, glm::vec3 min, glm::vec3 center);
-	void InitializeCamera();
+	void InitSettings();
 public:
 	virtual ~CSynthDefectView();
 	
@@ -82,6 +84,7 @@ public:
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
 	afx_msg void OnRButtonDown(UINT nFlags, CPoint point);
+	afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
 };
 
 #ifndef _DEBUG  // debug version in SynthDefectView.cpp
