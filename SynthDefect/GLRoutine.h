@@ -15,9 +15,15 @@
 
 /******************* Constants for Light Source *******************/
 
+// light position
 const float LIGHT_X = 0.0f;
 const float LIGHT_Y = 0.0f;
 const float LIGHT_Z = 40.0f;
+
+// light color
+const float LIGHT_R = 1.0f;
+const float LIGHT_G = 1.0f;
+const float LIGHT_B = 1.0f;
 
 /******************* Constants for Camera *******************/
 
