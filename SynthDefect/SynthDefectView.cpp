@@ -37,6 +37,7 @@ BEGIN_MESSAGE_MAP(CSynthDefectView, CView)
 	ON_WM_LBUTTONDOWN()
 	ON_WM_MOUSEMOVE()
 	ON_WM_MBUTTONDOWN()
+	ON_WM_RBUTTONUP()
 END_MESSAGE_MAP()
 
 // CSynthDefectView construction/destruction
@@ -136,7 +137,7 @@ void CSynthDefectView::DrawLoadedModel()
 	// Rotation order is Y-axis => X-axis => Z-axis for minimize Gimble Lock
 	modelMatrix = glm::rotate(modelMatrix, m_angleY, glm::vec3(0.0f, 1.0f, 0.0f));							// Y-axis rotation
 	modelMatrix = glm::rotate(modelMatrix, m_angleX, glm::vec3(1.0f, 0.0f, 0.0f));							// X-axis rotation
-	modelMatrix = glm::translate(modelMatrix, -modelCenter);									// translate to the origin
+	modelMatrix = glm::translate(modelMatrix, -modelCenter);												// translate to the origin
 	m_modelShader.SetMat4("model", modelMatrix);
 
 	// for lightning
@@ -359,17 +360,17 @@ BOOL CSynthDefectView::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
 		{
 			if (zDelta < 0)
 			{
-				if (m_camera->m_Zoom >= 180.0f)
-					m_camera->m_Zoom = 180.0f;
+				if (m_camera->m_Zoom >= MAX_ZOOM)
+					m_camera->m_Zoom = MAX_ZOOM;
 				else
-					m_camera->m_Zoom += 4.0f;
+					m_camera->m_Zoom += ZOOM_OFFSET;
 			}
 			else
 			{
-				if (m_camera->m_Zoom <= 5.0f)
-					m_camera->m_Zoom = 5.0f;
+				if (m_camera->m_Zoom <= MIN_ZOOM)
+					m_camera->m_Zoom = MIN_ZOOM;
 				else
-					m_camera->m_Zoom -= 4.0f;
+					m_camera->m_Zoom -= ZOOM_OFFSET;
 			}
 		}
 	}
@@ -389,15 +390,15 @@ void CSynthDefectView::OnMouseMove(UINT nFlags, CPoint point)
 			float deltaY = (m_currentY - laterY);				// reversed since y-coordinates go from bottom to top
 
 			if (deltaY > m_camera->GetSensitivity())
-				m_angleX -= 0.06f;
+				m_angleX -= ROTATION_OFFSET;
 			else if (deltaY < -m_camera->GetSensitivity())
-				m_angleX += 0.06f;
+				m_angleX += ROTATION_OFFSET;
 			m_currentY = laterY;
 
 			if (deltaX > m_camera->GetSensitivity())
-				m_angleY += 0.06f;
+				m_angleY += ROTATION_OFFSET;
 			else if (deltaX < -m_camera->GetSensitivity())
-				m_angleY -= 0.06f;
+				m_angleY -= ROTATION_OFFSET;
 			m_currentX = laterX;
 		}
 	}
@@ -421,4 +422,12 @@ void CSynthDefectView::OnMButtonDown(UINT nFlags, CPoint point)
 	}
 	
 	CView::OnMButtonDown(nFlags, point);
+}
+
+
+void CSynthDefectView::OnRButtonUp(UINT nFlags, CPoint point)
+{
+	// TODO: Add your message handler code here and/or call default
+
+	CView::OnRButtonUp(nFlags, point);
 }
