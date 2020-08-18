@@ -118,17 +118,17 @@ void CSynthDefectView::DrawLoadedModel()
 	// The Type Of Depth Testing To Do
 	// GL_LEQUAL : Passes if the incoming depth value is less than or equal to the stored depth value.
 	glDepthFunc(GL_LEQUAL);
-	SetWireFrameMode(m_bWireframe);
+	SetWireFrameMode(m_bWireframe);	
 	// enable shaders
 	m_modelShader.Use();
 
 	// view, projection transformations
 	// aspect - the ratio of width to height
 	// note that the aspect ratio in glm::perspective should match the aspect ratio of the Viewport
-	glm::mat4 projMatrix = glm::perspective(glm::radians(m_camera->m_Zoom), m_viewWidth / m_viewHeight, 0.1f, 100.0f);
-	glm::mat4 viewMatrix = m_camera->GetViewMatrix();
-	m_modelShader.SetMat4("projection", projMatrix);
-	m_modelShader.SetMat4("view", viewMatrix);
+	m_projMatrix = glm::perspective(glm::radians(m_camera->m_Zoom), m_viewWidth / m_viewHeight, 0.1f, 100.0f);
+	m_viewMatrix = m_camera->GetViewMatrix();
+	m_modelShader.SetMat4("projection", m_projMatrix);
+	m_modelShader.SetMat4("view", m_viewMatrix);
 
 	// model transformation: Scale -> Rotation -> Translation
 	glm::mat4 modelMatrix = glm::mat4(1.0f);
@@ -417,8 +417,43 @@ void CSynthDefectView::OnMouseMove(UINT nFlags, CPoint point)
 
 void CSynthDefectView::OnLButtonDown(UINT nFlags, CPoint point)
 {
-	// TODO: Add your message handler code here and/or call default
-	TRACE2("Log: x - %d, y = %d\n", point.x, point.y);
+	if (m_camera)
+	{
+		glm::vec3 forward = m_camera->GetForwardAxis();
+		glm::vec3 left = m_camera->GetLeftAxis();
+		glm::vec3 up = m_camera->GetUpAxis();
+
+		// viewport coordinates
+		TRACE2("Log: viweport x = %d, screen y = %d\n", point.x, point.y);
+
+		// NDC coordinates
+		float x = (2.0f * (float)point.x) / m_viewWidth - 1.0f;
+		float y = 1.0f - (2.0f * (float)point.y) / m_viewHeight;
+		float z = -1.0f;
+		glm::vec3 ray_nds = glm::vec3(x, y, z);
+		TRACE3("Log: ndc x = %f, y = %f, z = %f\n", ray_nds.x, ray_nds.y, ray_nds.z);
+
+		// Clip coordinates
+		glm::vec4 ray_clip = glm::vec4(ray_nds, 1.0f);
+		TRACE3("Log: clip x = %f, y = %f, z = %f\n", ray_clip.x, ray_clip.y, ray_clip.z);
+
+		// Eye coordinates
+		glm::vec4 ray_eye = glm::inverse(m_projMatrix) * ray_clip;
+		ray_eye = glm::vec4(ray_eye.x, ray_eye.y, -1.0, 1.0);			// unproject only x, y part
+		TRACE3("Log: eye x = %f, y = %f, z = %f\n", ray_eye.x, ray_eye.y, ray_eye.z);
+
+		// 4d World coordinates
+		glm::vec3 ray_world = glm::vec3(glm::inverse(m_viewMatrix) * ray_eye);
+		ray_world = glm::normalize(ray_world);
+		TRACE3("Log: world x = %f, y = %f, z = %f\n", ray_world.x, ray_world.y, ray_world.z);
+
+
+
+
+
+
+
+	}
 	CView::OnLButtonDown(nFlags, point);
 }
 
