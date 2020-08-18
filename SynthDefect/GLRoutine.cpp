@@ -202,3 +202,11 @@ void InitializeGLEngine()
 
 	glShadeModel(GL_SMOOTH);							// Enable Smooth Shading
 }
+
+void SetWireFrameMode(BOOL set)
+{
+	if(set)
+		glPolygonMode(GL_FRONT, GL_LINE);
+	else
+		glPolygonMode(GL_FRONT, GL_FILL);
+}
