@@ -18,24 +18,20 @@ public:
 	float m_viewHeight = 0.0f;
 private:
 	BOOL m_bInitGL = TRUE;
-	UINT m_btnFlag = 0;
 
 	/* Model */
 	float m_scaleFactor = 0.0f;
 	CShader m_backgroundShader, m_modelShader;
 	CModel* m_model = nullptr;
-	glm::vec3 modelCenter;
+	glm::vec3 m_modelCenter;
 
 	/* Camera */
 	CCamera* m_camera = nullptr;
 	glm::vec3 m_cameraPos;
-	glm::vec3 m_modelCenter; // geometry center
 	float m_angleX = 0.0f;
 	float m_angleY = 0.0f;
-	float m_angleZ = 0.0f;
 	float m_currentX = 0.0f;
 	float m_currentY = 0.0f;
-	float m_num = 0.0f;
 
 public:
 	CSynthDefectDoc* GetDocument() const;
