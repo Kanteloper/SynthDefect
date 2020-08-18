@@ -51,6 +51,7 @@ private:
 	void DrawLoadedModel();
 	glm::vec3 GetModelCentroid(glm::vec3 max, glm::vec3 min);
 	float GetScaleFactor(glm::vec3 max, glm::vec3 min, glm::vec3 center);
+	void InitializeCamera();
 public:
 	virtual ~CSynthDefectView();
 	

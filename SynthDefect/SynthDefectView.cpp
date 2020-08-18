@@ -131,17 +131,23 @@ void CSynthDefectView::DrawLoadedModel()
 
 	// model transformation: Scale -> Rotation -> Translation
 	glm::mat4 modelMatrix = glm::mat4(1.0f);
+
+	// Scale the model
 	modelMatrix = glm::scale(modelMatrix, glm::vec3(m_scaleFactor, m_scaleFactor, m_scaleFactor));			// control the scale of the model
 	
-	// Rotation using Euler's Angles
+	// Rotate the model using Euler's Angles
 	// Rotation order is Y-axis => X-axis => Z-axis for minimize Gimble Lock
 	modelMatrix = glm::rotate(modelMatrix, m_angleY, glm::vec3(0.0f, 1.0f, 0.0f));							// Y-axis rotation
 	modelMatrix = glm::rotate(modelMatrix, m_angleX, glm::vec3(1.0f, 0.0f, 0.0f));							// X-axis rotation
-	modelMatrix = glm::translate(modelMatrix, -modelCenter);												// translate to the origin
+
+	// Translate the model
+	modelMatrix = glm::translate(modelMatrix, -m_modelCenter);												// translate to the origin
+	// translate by x-axis
+	// translate by y-axis
 	m_modelShader.SetMat4("model", modelMatrix);
 
 	// for lightning
-	glm::vec3 lightColor = glm::vec3(1.0f, 1.0f, 1.0f);
+	glm::vec3 lightColor = glm::vec3(LIGHT_R, LIGHT_G, LIGHT_B);
 	m_modelShader.SetVec3("lightColor", lightColor);
 	glm::vec3 lightPosition = glm::vec3(LIGHT_X, LIGHT_Y, LIGHT_Z);
 	m_modelShader.SetVec3("lightPos", lightPosition);
@@ -161,20 +167,26 @@ void CSynthDefectView::OnUpdate(CView* /*pSender*/, LPARAM /*lHint*/, CObject* /
 	m_model = pDoc->m_model;															// receive data from Document
 	if (m_model)																		// check the model is loaded
 	{
-		modelCenter = GetModelCentroid(m_model->m_max, m_model->m_min);
-		TRACE3("Log: center x: %f, center y: %f, center z: %f\n", modelCenter.x, modelCenter.y, modelCenter.z);
-		// Initialize Camera
-		m_cameraPos = glm::vec3(0.0f, 0.0f, 40.0f);
-		m_angleX = 0.0f;
-		m_angleY = 0.0f;
-		m_camera = new CCamera(m_cameraPos, modelCenter);								
-		m_camera->m_Zoom = 45.0f;
-		m_cameraPos += modelCenter;
-		m_scaleFactor = GetScaleFactor(m_model->m_max, m_model->m_min, modelCenter);	// calculate scale factor
+		m_modelCenter = GetModelCentroid(m_model->m_max, m_model->m_min);
+		InitializeCamera();
+		m_scaleFactor = GetScaleFactor(m_model->m_max, m_model->m_min, m_modelCenter);	// calculate scale factor
 	}
 	else
 		delete m_camera;
 		
+}
+
+
+/// <summary>
+/// Reset the settings of Camera
+/// </summary>
+void CSynthDefectView::InitializeCamera()
+{
+	m_cameraPos = glm::vec3(0.0f, 0.0f, 40.0f);
+	m_angleX = 0.0f;
+	m_angleY = 0.0f;
+	m_camera = new CCamera(m_cameraPos, m_modelCenter);
+	m_camera->m_Zoom = 45.0f;
 }
 
 
@@ -206,6 +218,7 @@ float CSynthDefectView::GetScaleFactor(glm::vec3 max, glm::vec3 min, glm::vec3 c
 	float r_max = z * glm::sin(glm::radians(m_camera->GetFOV())/2.0f);		// the maximum radius of bounding sphere
 	return r_max / r;
 }
+
 
 
 void CSynthDefectView::InitChildView()
@@ -402,6 +415,13 @@ void CSynthDefectView::OnMouseMove(UINT nFlags, CPoint point)
 			m_currentX = laterX;
 		}
 	}
+	else if (nFlags == MK_RBUTTON)
+	{
+		if (m_camera)
+		{
+
+		}
+	}
 	CView::OnMouseMove(nFlags, point);
 }
 
@@ -427,7 +447,9 @@ void CSynthDefectView::OnMButtonDown(UINT nFlags, CPoint point)
 
 void CSynthDefectView::OnRButtonUp(UINT nFlags, CPoint point)
 {
-	// TODO: Add your message handler code here and/or call default
+	if (m_camera)
+	{
 
+	}
 	CView::OnRButtonUp(nFlags, point);
 }
