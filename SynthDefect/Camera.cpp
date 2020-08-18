@@ -51,6 +51,16 @@ const float CCamera::GetSensitivity()
 	return SENSITIVITY;
 }
 
+
+/// <summary>
+/// Retrieve the constant value of Speed of Camera
+/// </summary>
+/// <returns> the value of SPEED </returns>
+const float CCamera::GetSpeed()
+{
+	return SPEED;
+}
+
 CCamera::~CCamera()
 {
 }
