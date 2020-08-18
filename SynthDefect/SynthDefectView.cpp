@@ -26,7 +26,6 @@
 IMPLEMENT_DYNCREATE(CSynthDefectView, CView)
 
 BEGIN_MESSAGE_MAP(CSynthDefectView, CView)
-	ON_WM_CONTEXTMENU()
 	ON_WM_CREATE()
 	ON_WM_CLOSE()
 	ON_WM_DESTROY()
@@ -229,13 +228,6 @@ void CSynthDefectView::InitChildView()
 }
 
 
-void CSynthDefectView::OnContextMenu(CWnd* /* pWnd */, CPoint point)
-{
-#ifndef SHARED_HANDLERS
-	theApp.GetContextMenuManager()->ShowPopupMenu(IDR_POPUP_EDIT, point.x, point.y, this, TRUE);
-#endif
-}
-
 
 CSynthDefectView::~CSynthDefectView()
 {
@@ -393,9 +385,9 @@ BOOL CSynthDefectView::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
 
 void CSynthDefectView::OnMouseMove(UINT nFlags, CPoint point)
 {
-	if (nFlags == MK_MBUTTON)
+	if (m_camera)
 	{
-		if (m_camera)
+		if (nFlags == MK_MBUTTON)
 		{
 			float laterX = (float)point.x;
 			float laterY = (float)point.y;
@@ -414,14 +406,27 @@ void CSynthDefectView::OnMouseMove(UINT nFlags, CPoint point)
 				m_angleY -= ROTATION_OFFSET;
 			m_currentX = laterX;
 		}
-	}
-	else if (nFlags == MK_RBUTTON)
-	{
-		if (m_camera)
+		else if (nFlags == MK_RBUTTON)
 		{
+			float laterX = (float)point.x;
+			float laterY = (float)point.y;
+			float deltaX = (laterX - m_currentX);
+			float deltaY = (m_currentY - laterY);
 
+			if (deltaY > m_camera->GetSensitivity())
+				m_angleX -= ROTATION_OFFSET;
+			else if (deltaY < -m_camera->GetSensitivity())
+				m_angleX += ROTATION_OFFSET;
+			m_currentY = laterY;
+
+			if (deltaX > m_camera->GetSensitivity())
+				m_angleY += ROTATION_OFFSET;
+			else if (deltaX < -m_camera->GetSensitivity())
+				m_angleY -= ROTATION_OFFSET;
+			m_currentX = laterX;
 		}
 	}
+	
 	CView::OnMouseMove(nFlags, point);
 }
 
@@ -449,7 +454,8 @@ void CSynthDefectView::OnRButtonUp(UINT nFlags, CPoint point)
 {
 	if (m_camera)
 	{
-
+		m_currentX = (float)point.x;
+		m_currentY = (float)point.y;
 	}
 	CView::OnRButtonUp(nFlags, point);
 }
