@@ -35,8 +35,7 @@ BEGIN_MESSAGE_MAP(CSynthDefectView, CView)
 	ON_WM_MOUSEWHEEL()
 	ON_WM_LBUTTONDOWN()
 	ON_WM_MOUSEMOVE()
-	ON_WM_MBUTTONDOWN()
-	ON_WM_RBUTTONUP()
+ON_WM_RBUTTONDOWN()
 END_MESSAGE_MAP()
 
 // CSynthDefectView construction/destruction
@@ -141,8 +140,6 @@ void CSynthDefectView::DrawLoadedModel()
 
 	// Translate the model
 	modelMatrix = glm::translate(modelMatrix, -m_modelCenter);												// translate to the origin
-	// translate by x-axis
-	// translate by y-axis
 	m_modelShader.SetMat4("model", modelMatrix);
 
 	// for lightning
@@ -387,31 +384,12 @@ void CSynthDefectView::OnMouseMove(UINT nFlags, CPoint point)
 {
 	if (m_camera)
 	{
-		if (nFlags == MK_MBUTTON)
+		if (nFlags == MK_RBUTTON)
 		{
 			float laterX = (float)point.x;
 			float laterY = (float)point.y;
 			float deltaX = (laterX - m_currentX);
 			float deltaY = (m_currentY - laterY);				// reversed since y-coordinates go from bottom to top
-
-			if (deltaY > m_camera->GetSensitivity())
-				m_angleX -= ROTATION_OFFSET;
-			else if (deltaY < -m_camera->GetSensitivity())
-				m_angleX += ROTATION_OFFSET;
-			m_currentY = laterY;
-
-			if (deltaX > m_camera->GetSensitivity())
-				m_angleY += ROTATION_OFFSET;
-			else if (deltaX < -m_camera->GetSensitivity())
-				m_angleY -= ROTATION_OFFSET;
-			m_currentX = laterX;
-		}
-		else if (nFlags == MK_RBUTTON)
-		{
-			float laterX = (float)point.x;
-			float laterY = (float)point.y;
-			float deltaX = (laterX - m_currentX);
-			float deltaY = (m_currentY - laterY);
 
 			if (deltaY > m_camera->GetSensitivity())
 				m_angleX -= ROTATION_OFFSET;
@@ -438,24 +416,13 @@ void CSynthDefectView::OnLButtonDown(UINT nFlags, CPoint point)
 	CView::OnLButtonDown(nFlags, point);
 }
 
-void CSynthDefectView::OnMButtonDown(UINT nFlags, CPoint point)
+
+void CSynthDefectView::OnRButtonDown(UINT nFlags, CPoint point)
 {
 	if (m_camera)
 	{
 		m_currentX = (float)point.x;
 		m_currentY = (float)point.y;
 	}
-	
-	CView::OnMButtonDown(nFlags, point);
-}
-
-
-void CSynthDefectView::OnRButtonUp(UINT nFlags, CPoint point)
-{
-	if (m_camera)
-	{
-		m_currentX = (float)point.x;
-		m_currentY = (float)point.y;
-	}
-	CView::OnRButtonUp(nFlags, point);
+	CView::OnRButtonDown(nFlags, point);
 }
