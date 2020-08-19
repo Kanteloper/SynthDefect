@@ -128,7 +128,7 @@ void CSynthDefectView::DrawLoadedModel()
 	// view, projection transformations
 	// aspect - the ratio of width to height
 	// note that the aspect ratio in glm::perspective should match the aspect ratio of the Viewport
-	m_projMatrix = glm::perspective(glm::radians(m_camera->m_Zoom), m_viewWidth / m_viewHeight, 0.1f, 100.0f);
+	m_projMatrix = glm::perspective(glm::radians(m_camera->GetZoom()), m_viewWidth / m_viewHeight, 0.1f, 100.0f);
 	m_viewMatrix = m_camera->GetViewMatrix();
 	m_modelShader.SetMat4("projection", m_projMatrix);
 	m_modelShader.SetMat4("view", m_viewMatrix);
@@ -183,7 +183,7 @@ void CSynthDefectView::InitSettings()
 	m_angleX = 0.0f;
 	m_angleY = 0.0f;
 	m_camera = new CCamera(m_cameraPos, m_modelCenter);
-	m_camera->m_Zoom = 45.0f;
+	m_camera->SetZoom(45.0f);
 
 	// Flag
 	m_bWireframe = FALSE;
@@ -363,22 +363,7 @@ BOOL CSynthDefectView::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
 	if (nFlags != MK_MBUTTON) 
 	{
 		if (m_camera)
-		{
-			if (zDelta < 0)
-			{
-				if (m_camera->m_Zoom >= MAX_ZOOM)
-					m_camera->m_Zoom = MAX_ZOOM;
-				else
-					m_camera->m_Zoom += ZOOM_OFFSET;
-			}
-			else
-			{
-				if (m_camera->m_Zoom <= MIN_ZOOM)
-					m_camera->m_Zoom = MIN_ZOOM;
-				else
-					m_camera->m_Zoom -= ZOOM_OFFSET;
-			}
-		}
+			m_camera->CalculateZoom(zDelta);
 	}
 	return CView::OnMouseWheel(nFlags, zDelta, pt);
 }
@@ -396,15 +381,15 @@ void CSynthDefectView::OnMouseMove(UINT nFlags, CPoint point)
 			float deltaY = (m_currentY - laterY);				// reversed since y-coordinates go from bottom to top
 
 			if (deltaY > m_camera->GetSensitivity())
-				m_angleX -= ROTATION_OFFSET;
+				m_camera->SetPitch(m_camera->GetPitch() - ROTATION_OFFSET);
 			else if (deltaY < -m_camera->GetSensitivity())
-				m_angleX += ROTATION_OFFSET;
+				m_camera->SetPitch(m_camera->GetPitch() + ROTATION_OFFSET);
 			m_currentY = laterY;
 
 			if (deltaX > m_camera->GetSensitivity())
-				m_angleY += ROTATION_OFFSET;
+				m_camera->SetYaw(m_camera->GetYaw() + ROTATION_OFFSET);
 			else if (deltaX < -m_camera->GetSensitivity())
-				m_angleY -= ROTATION_OFFSET;
+				m_camera->SetYaw(m_camera->GetYaw() - ROTATION_OFFSET);
 			m_currentX = laterX;
 		}
 	}
@@ -418,20 +403,17 @@ void CSynthDefectView::OnLButtonDown(UINT nFlags, CPoint point)
 	if (m_camera)
 	{
 		float x = 2.0f * (float)point.x / m_viewWidth - 1.0f;
-		float y = 1.0f - (2.0f * (float)point.y) / m_viewHeight;
+		float y = 1.0f - (2.0f * (float)point.y) / m_viewHeight ;
 
-		glm::vec4 ray = glm::vec4(x, y, 1, 1);
+		glm::vec4 clip = glm::vec4(x, y, -1.0f, 1.0f);
 
+		glm::vec4 eye = glm::inverse(m_projMatrix) * clip;
+		eye = glm::vec4(eye.x, eye.y, -1.0f, 1.0f);
 
-		glm::mat4 trans = m_viewMatrix * m_projMatrix;
-		trans = glm::inverse(trans);
-		glm::vec3 ray_dir = glm::normalize(trans * ray);
-		
-
-		glm::vec3 ray_start = m_camera->GetPosition();
-		TRACE3("Log: ray_start x = %f, y = %f, z = %f\n", ray_start.x, ray_start.y, ray_start.z);
-		glm::vec3 ray_end = ray_start + ray_dir * 10.0f;
-		TRACE3("Log: ray_end x = %f, y = %f, z = %f\n", ray_end.x, ray_end.y, ray_end.z);
+		glm::vec4 temp = glm::inverse(m_viewMatrix) * eye;
+		glm::vec3 world = glm::vec3(temp.x, temp.y, temp.z);
+		world = glm::normalize(world);
+		TRACE3("Log: world x = %f, y = %f, z = %f\n", world.x, world.y, world.z);
 
 		
 		// Normals Test
