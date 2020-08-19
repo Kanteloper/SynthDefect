@@ -56,6 +56,16 @@ const float CCamera::GetFOV()
 	return FOV;
 }
 
+void CCamera::SetZoom(float value)
+{
+	m_Zoom = value;
+}
+
+float CCamera::GetZoom()
+{
+	return m_Zoom;
+}
+
 
 /// <summary>
 /// Retrieve the constant value of Sensitivity of Camera

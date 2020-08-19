@@ -8,6 +8,8 @@
 
 // Default Camera Values
 const float SPEED			= 2.5f;
+const float PITCH			= 20.0f;
+const float YAW				= 0.0f;
 const float SENSITIVITY		= 4.0f;
 const float FOV				= 45.0f;
 
@@ -16,7 +18,7 @@ class CCamera
 	// Constructor
 public:
 	CCamera();
-	CCamera(glm::vec3 eye, glm::vec3 target) : m_MoveSensitivity(SENSITIVITY), m_Zoom(FOV)
+	CCamera(glm::vec3 eye, glm::vec3 target) : m_Pitch(PITCH), m_Yaw(YAW), m_MoveSensitivity(SENSITIVITY), m_Zoom(FOV)
 	{
 		m_Position = eye;
 		m_UpDirection = glm::vec3(0.0f, 1.0f, 0.0f);								// Assume the camera is straight up to +y axis
@@ -33,10 +35,14 @@ private:
 	glm::vec3 m_UpAxis;
 	glm::vec3 m_LeftAxis;
 	glm::vec3 m_UpDirection;
+	float m_Pitch;
+	float m_Yaw;
+	float m_Roll;
+	float m_Zoom;
 public:
 	// camera options
 	float m_MoveSensitivity;
-	float m_Zoom;
+
 
 	// Implementation
 public:
@@ -46,6 +52,8 @@ public:
 	glm::vec3 GetUpAxis();
 	glm::vec3 GetLeftAxis();
 	const float GetFOV();
+	void SetZoom(float value);
+	float GetZoom();
 	const float GetSensitivity();
 	const float GetSpeed();
 	~CCamera();
