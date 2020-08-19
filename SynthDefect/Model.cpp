@@ -13,7 +13,7 @@ CModel::CModel()
 
 CModel::CModel(LPCTSTR filePath)
 { 
-    	LoadModel(filePath);
+	LoadModel(filePath);
 }
 
 
@@ -37,7 +37,7 @@ void CModel::LoadModel(LPCTSTR pathName)
 		return;
 	}
 
-  	CModel::ProcessNode(scene->mRootNode, scene);
+  	ProcessNode(scene->mRootNode, scene);
 }
 
 
@@ -88,6 +88,8 @@ CMesh CModel::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 {
 	std::vector<Vertex>			vertices;
 	std::vector<unsigned int>	indices;
+	std::vector<aiFace>			faces;
+
 	// Iterate each of the mesh's vertices
 	for (unsigned int i = 0; i < mesh->mNumVertices; i++)
 	{
@@ -161,19 +163,20 @@ CMesh CModel::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 	for (unsigned int i = 0; i < mesh->mNumFaces; i++)
 	{
 		aiFace face = mesh->mFaces[i];
+		faces.push_back(face);
 		for (unsigned int j = 0; j < face.mNumIndices; j++)
 			indices.push_back(face.mIndices[j]);
 	}
 
 	// process indieces
-	return CMesh(vertices, indices);
+	return CMesh(faces, vertices, indices);
 }
 
 
 /// <summary>
 /// Check whether the texture coordinates is existed or not in aiMesh structure
 /// </summary>
-/// <param name="mesh">: Meshes in loaded Model </param>
+/// <param name="mesh">: Meshes in loaded model </param>
 /// <returns> TRUE if existed, otherwise FALSE </returns>
 BOOL CModel::IsTexCoordsExisted(aiMesh* mesh)
 {
@@ -185,10 +188,10 @@ BOOL CModel::IsTexCoordsExisted(aiMesh* mesh)
 
 
 /// <summary>
-/// 
+/// Check normal vectors are existed
 /// </summary>
-/// <param name="mesh"></param>
-/// <returns></returns>
+/// <param name="mesh">: Meshes in loaded model </param>
+/// <returns> TRUE if existed, otherwise FALSE </returns>
 BOOL CModel::IsNormalsExisted(aiMesh* mesh)
 {
 	if (mesh->mNormals)
@@ -199,10 +202,10 @@ BOOL CModel::IsNormalsExisted(aiMesh* mesh)
 
 
 /// <summary>
-/// 
+/// Check Tangent vectors are existed
 /// </summary>
-/// <param name="mesh"></param>
-/// <returns></returns>
+/// <param name="mesh">: Meshes in loaded model </param>
+/// <returns> TRUE if existed, otherwise FALSE </returns>
 BOOL CModel::IsTangentsExisted(aiMesh* mesh)
 {
 	if (mesh->mTangents)
@@ -213,10 +216,10 @@ BOOL CModel::IsTangentsExisted(aiMesh* mesh)
 
 
 /// <summary>
-/// 
+/// Check BiTangent vectors are existed
 /// </summary>
-/// <param name="mesh"></param>
-/// <returns></returns>
+/// <param name="mesh">: Meshdes in loaded model </param>
+/// <returns> TRUE if existed, otherwise FALSE </returns>
 BOOL CModel::IsBiTangentsExisted(aiMesh* mesh)
 {
 	if (mesh->mBitangents)
@@ -227,12 +230,22 @@ BOOL CModel::IsBiTangentsExisted(aiMesh* mesh)
 
 
 /// <summary>
-///	Save the world coordinates of the position which users click in the screen
+/// Retrieve faces of a model
 /// </summary>
-/// <param name="point"> the position that users click </param>
-void CModel::SetRayPoint(glm::vec3 point)
+/// <returns> a vector for aiFace </returns>
+std::vector<aiFace> CModel::GetFacesFromModel()
 {
-	m_rayPoint = point;
+	return m_meshes.at(0).GetFaces();
+}
+
+
+/// <summary>
+/// Retrieve vertices of a model
+/// </summary>
+/// <returns> the vector for Vertex </returns>
+std::vector<Vertex> CModel::GetVerticesFromModel()
+{
+	return  m_meshes.at(0).GetVertices();
 }
 
 
