@@ -59,6 +59,7 @@ private:
 	glm::vec3 GetModelCentroid(glm::vec3 max, glm::vec3 min);
 	float GetScaleFactor(glm::vec3 max, glm::vec3 min, glm::vec3 center);
 	void InitSettings();
+	glm::vec3 GetPickedPoint(CPoint p);
 public:
 	virtual ~CSynthDefectView();
 	

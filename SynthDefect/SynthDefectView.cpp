@@ -16,6 +16,9 @@
 #include "SynthDefectDoc.h"
 #include "SynthDefectView.h"
 #include "Background.h"
+#include "assimp/Importer.hpp"
+#include "assimp/scene.h"
+#include "assimp/postprocess.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -414,22 +417,51 @@ void CSynthDefectView::OnLButtonDown(UINT nFlags, CPoint point)
 {
 	if (m_camera)
 	{
-		// Viewport coordinates -> NDC coordinates
-		glm::vec3 ray_nds = glm::vec3((2.0f * (float)point.x) / m_viewWidth - 1.0f, 1.0f - (2.0f * (float)point.y) / m_viewHeight, -1.0f);
-		// NDC coordinates -> Clip coordinates
-		glm::vec4 ray_clip = glm::vec4(ray_nds, 1.0f);
-		// Clip coordinates -> Eye coordinates
-		glm::vec4 ray_eye = glm::inverse(m_projMatrix) * ray_clip;
-		ray_eye = glm::vec4(ray_eye.x, ray_eye.y, -1.0, 1.0);											// unproject only x, y part
-		// Eye coordinates -> World coordinates
-		glm::vec3 ray_world = glm::vec3(glm::inverse(m_viewMatrix) * ray_eye);
-		ray_world = glm::normalize(ray_world);
-
+		glm::vec3 ray_world = GetPickedPoint(point);
 		TRACE3("Log: world x = %f, y = %f, z = %f\n", ray_world.x, ray_world.y, ray_world.z);
+
+		// Normals Test
 		if (m_model)
-			m_model->SetRayPoint(ray_world);
+		{
+			std::vector<aiFace> faces = m_model->GetFacesFromModel();
+			// iterate all faces(triangles)
+			for (unsigned int i = 0; i < faces.size(); i++)
+			{
+				aiFace face = faces[i];
+				// iterate all vertices in face
+				for (unsigned int j = 0; j < face.mNumIndices; j++)
+				{
+					std::vector<Vertex> vertices = m_model->GetVerticesFromModel();
+					unsigned int index = face.mIndices[j];
+					// get three points of a face
+					// check whether the ray point is in the face
+
+				}
+			}
+		}
+			
 	}
 	CView::OnLButtonDown(nFlags, point);
+}
+
+
+/// <summary>
+/// Caculate the world coordinates of position that mouse is clicked on the model
+/// </summary>
+/// <param name="p">: the position of point that is the viewport coordinates </param>
+/// <returns></returns>
+glm::vec3 CSynthDefectView::GetPickedPoint(CPoint p)
+{
+	// Viewport coordinates -> NDC coordinates
+	glm::vec3 nds = glm::vec3((2.0f * (float)p.x) / m_viewWidth - 1.0f, 1.0f - (2.0f * (float)p.y) / m_viewHeight, -1.0f);
+	// NDC coordinates -> Clip coordinates
+	glm::vec4 clip = glm::vec4(nds, 1.0f);
+	// Clip coordinates -> Eye coordinates
+	glm::vec4 eye = glm::inverse(m_projMatrix) * clip;
+	eye = glm::vec4(eye.x, eye.y, -1.0, 1.0); // unproject only x, y part
+	// Eye coordinates -> World coordinates
+	glm::vec3 world = glm::vec3(glm::inverse(m_viewMatrix) * eye);
+	return glm::normalize(world);
 }
 
 
