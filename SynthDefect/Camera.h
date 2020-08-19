@@ -12,6 +12,7 @@ const float PITCH			= 20.0f;
 const float YAW				= 0.0f;
 const float SENSITIVITY		= 4.0f;
 const float FOV				= 45.0f;
+const float distanceFromModel = 50.0f;
 
 class CCamera
 {
@@ -46,6 +47,7 @@ public:
 
 	// Implementation
 public:
+	void CalculateZoom(short zDelta);
 	glm::mat4 GetViewMatrix();
 	glm::vec3 GetPosition();
 	glm::vec3 GetForwardAxis();
@@ -54,6 +56,10 @@ public:
 	const float GetFOV();
 	void SetZoom(float value);
 	float GetZoom();
+	void SetPitch(float value);
+	float GetPitch();
+	void SetYaw(float value);
+	float GetYaw();
 	const float GetSensitivity();
 	const float GetSpeed();
 	~CCamera();

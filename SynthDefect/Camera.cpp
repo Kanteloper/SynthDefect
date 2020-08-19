@@ -9,6 +9,24 @@ CCamera::CCamera()
 }
 
 
+void CCamera::CalculateZoom(short zDelta)
+{
+	if (zDelta < 0)
+	{
+		if (m_Zoom >= MAX_ZOOM)
+			m_Zoom = MAX_ZOOM;
+		else
+			m_Zoom += ZOOM_OFFSET;
+	}
+	else
+	{
+		if (m_Zoom <= MIN_ZOOM)
+			m_Zoom = MIN_ZOOM;
+		else
+			m_Zoom -= ZOOM_OFFSET;
+	}
+}
+
 /// <summary>
 /// Return the Model-View Matrix calculated using the LookAt Matrix
 /// </summary>
@@ -64,6 +82,26 @@ void CCamera::SetZoom(float value)
 float CCamera::GetZoom()
 {
 	return m_Zoom;
+}
+
+void CCamera::SetPitch(float value)
+{
+	m_Pitch = value;
+}
+
+float CCamera::GetPitch()
+{
+	return m_Pitch;
+}
+
+void CCamera::SetYaw(float value)
+{
+	m_Yaw = value;
+}
+
+float CCamera::GetYaw()
+{
+	return m_Yaw;
 }
 
 
