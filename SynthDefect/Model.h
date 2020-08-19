@@ -6,7 +6,6 @@
 #include "assimp/Importer.hpp"
 #include "assimp/scene.h"
 #include "assimp/postprocess.h"
-
 #include <vector>
 #include "Mesh.h"
 #include "Shader.h"
@@ -27,11 +26,11 @@ private:
 	// model data
 	std::vector<CMesh> m_meshes;
 	glm::vec3 m_rayPoint;
-
 	// Impelementation
 public:
 	void DrawModel(CShader& shaders);
-	void SetRayPoint(glm::vec3 point);
+	std::vector<aiFace> GetFacesFromModel();
+	std::vector<Vertex> GetVerticesFromModel();
 	~CModel();
 
 private:
