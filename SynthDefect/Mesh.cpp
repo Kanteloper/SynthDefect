@@ -93,6 +93,25 @@ void CMesh::Draw(CShader& shaders)
 }
 
 
+/// <summary>
+/// Retrieve faces of a mesh
+/// </summary>
+/// <returns> a vector that faces of a mesh is stored </returns>
+std::vector<aiFace> CMesh::GetFaces()
+{
+	return m_faces;
+}
+
+
+/// <summary>
+/// Retrieve vertices of a mesh
+/// </summary>
+/// <returns> a vector that vertices of a mesh is stored </returns>
+std::vector<Vertex> CMesh::GetVertices()
+{
+	return m_vertices;
+}
+
 CMesh::~CMesh()
 {
 }
