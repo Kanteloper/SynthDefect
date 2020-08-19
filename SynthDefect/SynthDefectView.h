@@ -17,16 +17,20 @@ public:
 	float m_viewWidth = 0.0f;
 	float m_viewHeight = 0.0f;
 private:
+	/* Flag */
 	BOOL m_bInitGL = TRUE;
 	BOOL m_bWireframe = FALSE;
 
 	/* Model */
-	float m_scaleFactor = 0.0f;
 	CShader m_backgroundShader, m_modelShader;
 	CModel* m_model = nullptr;
+
+	/* Render */
+	float m_scaleFactor = 0.0f;
 	glm::vec3 m_modelCenter;
 	glm::mat4 m_projMatrix;
 	glm::mat4 m_viewMatrix;
+	glm::mat4 m_modelMatrix;
 
 	/* Camera */
 	CCamera* m_camera = nullptr;
