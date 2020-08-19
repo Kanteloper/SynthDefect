@@ -131,21 +131,16 @@ void CSynthDefectView::DrawLoadedModel()
 	m_modelShader.SetMat4("view", m_viewMatrix);
 
 	// model transformation: Scale -> Rotation -> Translation
-	glm::mat4 modelMatrix = glm::mat4(1.0f);
-
-	// Scale the model
-	modelMatrix = glm::scale(modelMatrix, glm::vec3(m_scaleFactor, m_scaleFactor, m_scaleFactor));			// control the scale of the model
-	
+	m_modelMatrix = glm::mat4(1.0f);
+	m_modelMatrix = glm::scale(m_modelMatrix, glm::vec3(m_scaleFactor, m_scaleFactor, m_scaleFactor));			// control the scale of the model
 	// Rotate the model using Euler's Angles
 	// Rotation order is Y-axis => X-axis => Z-axis for minimize Gimble Lock
-	modelMatrix = glm::rotate(modelMatrix, m_angleY, glm::vec3(0.0f, 1.0f, 0.0f));							// Y-axis rotation
-	modelMatrix = glm::rotate(modelMatrix, m_angleX, glm::vec3(1.0f, 0.0f, 0.0f));							// X-axis rotation
+	m_modelMatrix = glm::rotate(m_modelMatrix, m_angleY, glm::vec3(0.0f, 1.0f, 0.0f));							// Y-axis rotation
+	m_modelMatrix = glm::rotate(m_modelMatrix, m_angleX, glm::vec3(1.0f, 0.0f, 0.0f));							// X-axis rotation
+	m_modelMatrix = glm::translate(m_modelMatrix, -m_modelCenter);												// translate to the origin
+	m_modelShader.SetMat4("model", m_modelMatrix);
 
-	// Translate the model
-	modelMatrix = glm::translate(modelMatrix, -m_modelCenter);												// translate to the origin
-	m_modelShader.SetMat4("model", modelMatrix);
-
-	// for lightning
+	// lightning
 	glm::vec3 lightColor = glm::vec3(LIGHT_R, LIGHT_G, LIGHT_B);
 	m_modelShader.SetVec3("lightColor", lightColor);
 	glm::vec3 lightPosition = glm::vec3(LIGHT_X, LIGHT_Y, LIGHT_Z);
@@ -187,7 +182,7 @@ void CSynthDefectView::InitSettings()
 	m_camera = new CCamera(m_cameraPos, m_modelCenter);
 	m_camera->m_Zoom = 45.0f;
 
-	// model
+	// Flag
 	m_bWireframe = FALSE;
 }
 
@@ -419,40 +414,20 @@ void CSynthDefectView::OnLButtonDown(UINT nFlags, CPoint point)
 {
 	if (m_camera)
 	{
-		glm::vec3 forward = m_camera->GetForwardAxis();
-		glm::vec3 left = m_camera->GetLeftAxis();
-		glm::vec3 up = m_camera->GetUpAxis();
-
-		// viewport coordinates
-		TRACE2("Log: viweport x = %d, screen y = %d\n", point.x, point.y);
-
-		// NDC coordinates
-		float x = (2.0f * (float)point.x) / m_viewWidth - 1.0f;
-		float y = 1.0f - (2.0f * (float)point.y) / m_viewHeight;
-		float z = -1.0f;
-		glm::vec3 ray_nds = glm::vec3(x, y, z);
-		TRACE3("Log: ndc x = %f, y = %f, z = %f\n", ray_nds.x, ray_nds.y, ray_nds.z);
-
-		// Clip coordinates
+		// Viewport coordinates -> NDC coordinates
+		glm::vec3 ray_nds = glm::vec3((2.0f * (float)point.x) / m_viewWidth - 1.0f, 1.0f - (2.0f * (float)point.y) / m_viewHeight, -1.0f);
+		// NDC coordinates -> Clip coordinates
 		glm::vec4 ray_clip = glm::vec4(ray_nds, 1.0f);
-		TRACE3("Log: clip x = %f, y = %f, z = %f\n", ray_clip.x, ray_clip.y, ray_clip.z);
-
-		// Eye coordinates
+		// Clip coordinates -> Eye coordinates
 		glm::vec4 ray_eye = glm::inverse(m_projMatrix) * ray_clip;
-		ray_eye = glm::vec4(ray_eye.x, ray_eye.y, -1.0, 1.0);			// unproject only x, y part
-		TRACE3("Log: eye x = %f, y = %f, z = %f\n", ray_eye.x, ray_eye.y, ray_eye.z);
-
-		// 4d World coordinates
+		ray_eye = glm::vec4(ray_eye.x, ray_eye.y, -1.0, 1.0);											// unproject only x, y part
+		// Eye coordinates -> World coordinates
 		glm::vec3 ray_world = glm::vec3(glm::inverse(m_viewMatrix) * ray_eye);
 		ray_world = glm::normalize(ray_world);
+
 		TRACE3("Log: world x = %f, y = %f, z = %f\n", ray_world.x, ray_world.y, ray_world.z);
-
-
-
-
-
-
-
+		if (m_model)
+			m_model->SetRayPoint(ray_world);
 	}
 	CView::OnLButtonDown(nFlags, point);
 }
