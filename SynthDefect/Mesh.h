@@ -6,6 +6,9 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <vector>
+#include "assimp/Importer.hpp"
+#include "assimp/scene.h"
+#include "assimp/postprocess.h"
 #include "Shader.h"
 
 // this structure represents 'Vertex'
@@ -31,7 +34,8 @@ class CMesh
 // Construction
 public:
 	CMesh();
-	CMesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices) : m_vertices(vertices), m_indices(indices) 
+	CMesh(std::vector<aiFace> faces, std::vector<Vertex> vertices, std::vector<unsigned int> indices) 
+		: m_faces(faces), m_vertices(vertices), m_indices(indices) 
 	{
 		// set the vertex buffers and its attribute pointers
 		setupMesh();
@@ -44,7 +48,8 @@ private:
 	unsigned int m_VAO, m_VBO, m_EBO = 0;
 	// mesh data
 	std::vector<Vertex>			m_vertices;
-	std::vector<unsigned int>	 m_indices;
+	std::vector<unsigned int>	m_indices;
+	std::vector<aiFace>			m_faces;
 
 // Implementation
 protected :
@@ -52,6 +57,7 @@ protected :
 public:
 	virtual ~CMesh();
 	void Draw(CShader& shaders);
-	
+	std::vector<aiFace> GetFaces();
+	std::vector<Vertex> GetVertices();
 };
 
