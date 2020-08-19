@@ -26,10 +26,12 @@ public:
 private:
 	// model data
 	std::vector<CMesh> m_meshes;
+	glm::vec3 m_rayPoint;
 
 	// Impelementation
 public:
 	void DrawModel(CShader& shaders);
+	void SetRayPoint(glm::vec3 point);
 	~CModel();
 
 private:

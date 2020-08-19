@@ -88,8 +88,7 @@ CMesh CModel::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 {
 	std::vector<Vertex>			vertices;
 	std::vector<unsigned int>	indices;
-
-	// Walk through each of the mesh's vertices
+	// Iterate each of the mesh's vertices
 	for (unsigned int i = 0; i < mesh->mNumVertices; i++)
 	{
 		Vertex vertex;
@@ -158,7 +157,7 @@ CMesh CModel::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 		vertices.push_back(vertex);
 	}
 
-	// Walk through each of the mesh's faces
+	// Iterate each of the mesh's faces
 	for (unsigned int i = 0; i < mesh->mNumFaces; i++)
 	{
 		aiFace face = mesh->mFaces[i];
@@ -224,6 +223,16 @@ BOOL CModel::IsBiTangentsExisted(aiMesh* mesh)
 		return TRUE;
 	else
 		return FALSE;;
+}
+
+
+/// <summary>
+///	Save the world coordinates of the position which users click in the screen
+/// </summary>
+/// <param name="point"> the position that users click </param>
+void CModel::SetRayPoint(glm::vec3 point)
+{
+	m_rayPoint = point;
 }
 
 
