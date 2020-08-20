@@ -15,19 +15,21 @@ public:
 	CCamera(glm::vec3 eye, glm::vec3 target) : m_Zoom(FOV)
 	{
 		m_Position = eye;
+		m_Target = target;
 		m_UpDirection = glm::vec3(0.0f, 1.0f, 0.0f);								// Assume the camera is straight up to +y axis
 		m_ForwardAxis = glm::normalize(eye - target);
-		m_LeftAxis = glm::normalize(glm::cross(m_ForwardAxis, m_UpDirection));
-		m_UpAxis = glm::cross(m_LeftAxis, m_ForwardAxis);
+		m_RightAxis = glm::normalize(glm::cross(m_UpDirection, m_ForwardAxis));
+		m_UpAxis = glm::cross(m_ForwardAxis, m_RightAxis);
 	};
 
 	// Attributes
 private:
 	// camera attributes
 	glm::vec3 m_Position;
+	glm::vec3 m_Target;
 	glm::vec3 m_ForwardAxis;
 	glm::vec3 m_UpAxis;
-	glm::vec3 m_LeftAxis;
+	glm::vec3 m_RightAxis;
 	glm::vec3 m_UpDirection;
 	float m_Zoom;
 public:
