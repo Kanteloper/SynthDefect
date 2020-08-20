@@ -17,7 +17,7 @@ glm::mat4 CCamera::GetViewMatrix()
 {
 	// lookAt - Translate whole scene(camera + object) from the eye position to the origin(0, 0, 0)
 	//          Rotate for facing to the -z axis
-	return glm::lookAt(m_Position, m_ForwardAxis, m_UpAxis);
+	return glm::lookAt(m_Position, m_Target, m_UpDirection);
 }
 
 
@@ -45,7 +45,7 @@ glm::vec3 CCamera::GetUpAxis()
 
 glm::vec3 CCamera::GetLeftAxis()
 {
-	return m_LeftAxis;
+	return m_RightAxis;
 }
 
 
