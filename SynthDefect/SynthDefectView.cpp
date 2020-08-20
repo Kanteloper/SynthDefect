@@ -49,7 +49,7 @@ CSynthDefectView::CSynthDefectView() noexcept
 }
 
 
-// »ý¼ºµÇ´Â windowÀÇ ´Ù¾çÇÑ ¼Ó¼º º¯°æ
+// ìƒì„±ë˜ëŠ” windowì˜ ë‹¤ì–‘í•œ ì†ì„± ë³€ê²½
 BOOL CSynthDefectView::PreCreateWindow(CREATESTRUCT& cs)
 {
 	// WS_EX_CLIENTEDGE: Specify that a window has a 3D look - a border with a sunken edge
@@ -130,6 +130,8 @@ void CSynthDefectView::DrawLoadedModel()
 	// note that the aspect ratio in glm::perspective should match the aspect ratio of the Viewport
 	m_projMatrix = glm::perspective(glm::radians(m_camera->GetZoom()), m_viewWidth / m_viewHeight, 0.1f, 100.0f);
 	m_viewMatrix = m_camera->GetViewMatrix();
+	m_viewMatrix = glm::rotate(m_viewMatrix, m_angleY, glm::vec3(0.0f, 1.0f, 0.0f));							// Y-axis rotation
+	m_viewMatrix = glm::rotate(m_viewMatrix, m_angleX, glm::vec3(1.0f, 0.0f, 0.0f));							// X-axis rotation
 	m_modelShader.SetMat4("projection", m_projMatrix);
 	m_modelShader.SetMat4("view", m_viewMatrix);
 
@@ -138,15 +140,16 @@ void CSynthDefectView::DrawLoadedModel()
 	m_modelMatrix = glm::scale(m_modelMatrix, glm::vec3(m_scaleFactor, m_scaleFactor, m_scaleFactor));			// control the scale of the model
 	// Rotate the model using Euler's Angles
 	// Rotation order is Y-axis => X-axis => Z-axis for minimize Gimble Lock
-	m_modelMatrix = glm::rotate(m_modelMatrix, m_angleY, glm::vec3(0.0f, 1.0f, 0.0f));							// Y-axis rotation
-	m_modelMatrix = glm::rotate(m_modelMatrix, m_angleX, glm::vec3(1.0f, 0.0f, 0.0f));							// X-axis rotation
 	m_modelMatrix = glm::translate(m_modelMatrix, -m_modelCenter);												// translate to the origin
 	m_modelShader.SetMat4("model", m_modelMatrix);
 
 	// lightning
 	glm::vec3 lightColor = glm::vec3(LIGHT_R, LIGHT_G, LIGHT_B);
 	m_modelShader.SetVec3("lightColor", lightColor);
-	glm::vec3 lightPosition = glm::vec3(LIGHT_X, LIGHT_Y, LIGHT_Z);
+	glm::mat4 m_lightMatrix = glm::mat4(1.0f);
+	m_lightMatrix = glm::rotate(m_lightMatrix, -m_angleX, glm::vec3(1.0f, 0.0f, 0.0f));							// X-axis rotation
+	m_lightMatrix = glm::rotate(m_lightMatrix, -m_angleY, glm::vec3(0.0f, 1.0f, 0.0f));							// Y-axis rotation
+	glm::vec3 lightPosition = glm::vec3(m_lightMatrix * glm::vec4(LIGHT_X, LIGHT_Y, LIGHT_Z, 1.0));
 	m_modelShader.SetVec3("lightPos", lightPosition);
 	m_modelShader.SetVec3("viewPos", m_camera->GetPosition());
 
@@ -182,8 +185,8 @@ void CSynthDefectView::InitSettings()
 	m_cameraPos = glm::vec3(0.0f, 0.0f, 40.0f);
 	m_angleX = 0.0f;
 	m_angleY = 0.0f;
-	m_camera = new CCamera(m_cameraPos, m_modelCenter);
-	m_camera->SetZoom(45.0f);
+	m_camera = new CCamera(m_cameraPos, glm::vec3(0.0f, 0.0f, 0.0f));
+	m_camera->m_Zoom = 45.0f;
 
 	// Flag
 	m_bWireframe = FALSE;
