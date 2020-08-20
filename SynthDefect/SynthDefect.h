@@ -9,6 +9,10 @@
 
 #include "resource.h"       // main symbols
 
+#ifdef _DEBUG
+#pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:console")
+#endif
+
 
 // CSynthDefectApp:
 // See SynthDefect.cpp for the implementation of this class
