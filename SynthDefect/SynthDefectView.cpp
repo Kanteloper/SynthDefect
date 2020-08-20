@@ -140,15 +140,16 @@ void CSynthDefectView::DrawLoadedModel()
 	m_modelMatrix = glm::scale(m_modelMatrix, glm::vec3(m_scaleFactor, m_scaleFactor, m_scaleFactor));			// control the scale of the model
 	// Rotate the model using Euler's Angles
 	// Rotation order is Y-axis => X-axis => Z-axis for minimize Gimble Lock
-	//m_modelMatrix = glm::rotate(m_modelMatrix, m_angleY, glm::vec3(0.0f, 1.0f, 0.0f));							// Y-axis rotation
-	//m_modelMatrix = glm::rotate(m_modelMatrix, m_angleX, glm::vec3(1.0f, 0.0f, 0.0f));							// X-axis rotation
 	m_modelMatrix = glm::translate(m_modelMatrix, -m_modelCenter);												// translate to the origin
 	m_modelShader.SetMat4("model", m_modelMatrix);
 
 	// lightning
 	glm::vec3 lightColor = glm::vec3(LIGHT_R, LIGHT_G, LIGHT_B);
 	m_modelShader.SetVec3("lightColor", lightColor);
-	glm::vec3 lightPosition = glm::vec3(LIGHT_X, LIGHT_Y, LIGHT_Z);
+	glm::mat4 m_lightMatrix = glm::mat4(1.0f);
+	m_lightMatrix = glm::rotate(m_lightMatrix, -m_angleX, glm::vec3(1.0f, 0.0f, 0.0f));							// X-axis rotation
+	m_lightMatrix = glm::rotate(m_lightMatrix, -m_angleY, glm::vec3(0.0f, 1.0f, 0.0f));							// Y-axis rotation
+	glm::vec3 lightPosition = glm::vec3(m_lightMatrix * glm::vec4(LIGHT_X, LIGHT_Y, LIGHT_Z, 1.0));
 	m_modelShader.SetVec3("lightPos", lightPosition);
 	m_modelShader.SetVec3("viewPos", m_camera->GetPosition());
 
