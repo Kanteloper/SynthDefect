@@ -130,6 +130,8 @@ void CSynthDefectView::DrawLoadedModel()
 	// note that the aspect ratio in glm::perspective should match the aspect ratio of the Viewport
 	m_projMatrix = glm::perspective(glm::radians(m_camera->m_Zoom), m_viewWidth / m_viewHeight, 0.1f, 100.0f);
 	m_viewMatrix = m_camera->GetViewMatrix();
+	m_viewMatrix = glm::rotate(m_viewMatrix, m_angleY, glm::vec3(0.0f, 1.0f, 0.0f));							// Y-axis rotation
+	m_viewMatrix = glm::rotate(m_viewMatrix, m_angleX, glm::vec3(1.0f, 0.0f, 0.0f));							// X-axis rotation
 	m_modelShader.SetMat4("projection", m_projMatrix);
 	m_modelShader.SetMat4("view", m_viewMatrix);
 
@@ -138,8 +140,8 @@ void CSynthDefectView::DrawLoadedModel()
 	m_modelMatrix = glm::scale(m_modelMatrix, glm::vec3(m_scaleFactor, m_scaleFactor, m_scaleFactor));			// control the scale of the model
 	// Rotate the model using Euler's Angles
 	// Rotation order is Y-axis => X-axis => Z-axis for minimize Gimble Lock
-	m_modelMatrix = glm::rotate(m_modelMatrix, m_angleY, glm::vec3(0.0f, 1.0f, 0.0f));							// Y-axis rotation
-	m_modelMatrix = glm::rotate(m_modelMatrix, m_angleX, glm::vec3(1.0f, 0.0f, 0.0f));							// X-axis rotation
+	//m_modelMatrix = glm::rotate(m_modelMatrix, m_angleY, glm::vec3(0.0f, 1.0f, 0.0f));							// Y-axis rotation
+	//m_modelMatrix = glm::rotate(m_modelMatrix, m_angleX, glm::vec3(1.0f, 0.0f, 0.0f));							// X-axis rotation
 	m_modelMatrix = glm::translate(m_modelMatrix, -m_modelCenter);												// translate to the origin
 	m_modelShader.SetMat4("model", m_modelMatrix);
 
@@ -182,7 +184,7 @@ void CSynthDefectView::InitSettings()
 	m_cameraPos = glm::vec3(0.0f, 0.0f, 40.0f);
 	m_angleX = 0.0f;
 	m_angleY = 0.0f;
-	m_camera = new CCamera(m_cameraPos, m_modelCenter);
+	m_camera = new CCamera(m_cameraPos, glm::vec3(0.0f, 0.0f, 0.0f));
 	m_camera->m_Zoom = 45.0f;
 
 	// Flag
