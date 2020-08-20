@@ -49,8 +49,6 @@ public:
 	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
 	void InitChildView();
 
-protected:
-
 // Implementation
 private:
 	BOOL DrawGLScene();
@@ -59,6 +57,12 @@ private:
 	glm::vec3 GetModelCentroid(glm::vec3 max, glm::vec3 min);
 	float GetScaleFactor(glm::vec3 max, glm::vec3 min, glm::vec3 center);
 	void InitSettings();
+	glm::vec3 CalculateMouseRay(CPoint p);
+	glm::vec2 GetNormalizedDeviceCoords(CPoint p);
+	glm::vec4 toEyeCoords(glm::vec4 clip);
+	glm::vec3 toWorldCoords(glm::vec4 eye);
+
+
 public:
 	virtual ~CSynthDefectView();
 	
