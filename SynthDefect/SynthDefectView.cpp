@@ -49,7 +49,7 @@ CSynthDefectView::CSynthDefectView() noexcept
 }
 
 
-// »ý¼ºµÇ´Â windowÀÇ ´Ù¾çÇÑ ¼Ó¼º º¯°æ
+// ìƒì„±ë˜ëŠ” windowì˜ ë‹¤ì–‘í•œ ì†ì„± ë³€ê²½
 BOOL CSynthDefectView::PreCreateWindow(CREATESTRUCT& cs)
 {
 	// WS_EX_CLIENTEDGE: Specify that a window has a 3D look - a border with a sunken edge
@@ -128,7 +128,7 @@ void CSynthDefectView::DrawLoadedModel()
 	// view, projection transformations
 	// aspect - the ratio of width to height
 	// note that the aspect ratio in glm::perspective should match the aspect ratio of the Viewport
-	m_projMatrix = glm::perspective(glm::radians(m_camera->m_Zoom), m_viewWidth / m_viewHeight, 0.1f, 100.0f);
+	m_projMatrix = glm::perspective(glm::radians(m_camera->GetZoom()), m_viewWidth / m_viewHeight, 0.1f, 100.0f);
 	m_viewMatrix = m_camera->GetViewMatrix();
 	m_viewMatrix = glm::rotate(m_viewMatrix, m_angleY, glm::vec3(0.0f, 1.0f, 0.0f));							// Y-axis rotation
 	m_viewMatrix = glm::rotate(m_viewMatrix, m_angleX, glm::vec3(1.0f, 0.0f, 0.0f));							// X-axis rotation
@@ -366,22 +366,7 @@ BOOL CSynthDefectView::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
 	if (nFlags != MK_MBUTTON) 
 	{
 		if (m_camera)
-		{
-			if (zDelta < 0)
-			{
-				if (m_camera->m_Zoom >= MAX_ZOOM)
-					m_camera->m_Zoom = MAX_ZOOM;
-				else
-					m_camera->m_Zoom += ZOOM_OFFSET;
-			}
-			else
-			{
-				if (m_camera->m_Zoom <= MIN_ZOOM)
-					m_camera->m_Zoom = MIN_ZOOM;
-				else
-					m_camera->m_Zoom -= ZOOM_OFFSET;
-			}
-		}
+			m_camera->CalculateZoom(zDelta);
 	}
 	return CView::OnMouseWheel(nFlags, zDelta, pt);
 }
@@ -399,15 +384,15 @@ void CSynthDefectView::OnMouseMove(UINT nFlags, CPoint point)
 			float deltaY = (m_currentY - laterY);				// reversed since y-coordinates go from bottom to top
 
 			if (deltaY > m_camera->GetSensitivity())
-				m_angleX -= ROTATION_OFFSET;
+				m_camera->SetPitch(m_camera->GetPitch() - ROTATION_OFFSET);
 			else if (deltaY < -m_camera->GetSensitivity())
-				m_angleX += ROTATION_OFFSET;
+				m_camera->SetPitch(m_camera->GetPitch() + ROTATION_OFFSET);
 			m_currentY = laterY;
 
 			if (deltaX > m_camera->GetSensitivity())
-				m_angleY += ROTATION_OFFSET;
+				m_camera->SetYaw(m_camera->GetYaw() + ROTATION_OFFSET);
 			else if (deltaX < -m_camera->GetSensitivity())
-				m_angleY -= ROTATION_OFFSET;
+				m_camera->SetYaw(m_camera->GetYaw() - ROTATION_OFFSET);
 			m_currentX = laterX;
 		}
 	}
@@ -420,9 +405,20 @@ void CSynthDefectView::OnLButtonDown(UINT nFlags, CPoint point)
 {
 	if (m_camera)
 	{
-		glm::vec3 ray_world = GetPickedPoint(point);
-		TRACE3("Log: world x = %f, y = %f, z = %f\n", ray_world.x, ray_world.y, ray_world.z);
+		float x = 2.0f * (float)point.x / m_viewWidth - 1.0f;
+		float y = 1.0f - (2.0f * (float)point.y) / m_viewHeight ;
 
+		glm::vec4 clip = glm::vec4(x, y, -1.0f, 1.0f);
+
+		glm::vec4 eye = glm::inverse(m_projMatrix) * clip;
+		eye = glm::vec4(eye.x, eye.y, -1.0f, 1.0f);
+
+		glm::vec4 temp = glm::inverse(m_viewMatrix) * eye;
+		glm::vec3 world = glm::vec3(temp.x, temp.y, temp.z);
+		world = glm::normalize(world);
+		TRACE3("Log: world x = %f, y = %f, z = %f\n", world.x, world.y, world.z);
+
+		
 		// Normals Test
 		if (m_model)
 		{
@@ -436,6 +432,9 @@ void CSynthDefectView::OnLButtonDown(UINT nFlags, CPoint point)
 				{
 					std::vector<Vertex> vertices = m_model->GetVerticesFromModel();
 					unsigned int index = face.mIndices[j];
+					glm::vec3 test = m_modelMatrix * glm::vec4(vertices[index].Position, 1.0);
+					test = glm::normalize(test);
+					//TRACE3("Log: world2 x = %f, y = %f, z = %f\n", test.x, test.y, test.z);
 					// get three points of a face
 					// check whether the ray point is in the face
 
@@ -445,26 +444,6 @@ void CSynthDefectView::OnLButtonDown(UINT nFlags, CPoint point)
 			
 	}
 	CView::OnLButtonDown(nFlags, point);
-}
-
-
-/// <summary>
-/// Caculate the world coordinates of position that mouse is clicked on the model
-/// </summary>
-/// <param name="p">: the position of point that is the viewport coordinates </param>
-/// <returns></returns>
-glm::vec3 CSynthDefectView::GetPickedPoint(CPoint p)
-{
-	// Viewport coordinates -> NDC coordinates
-	glm::vec3 nds = glm::vec3((2.0f * (float)p.x) / m_viewWidth - 1.0f, 1.0f - (2.0f * (float)p.y) / m_viewHeight, -1.0f);
-	// NDC coordinates -> Clip coordinates
-	glm::vec4 clip = glm::vec4(nds, 1.0f);
-	// Clip coordinates -> Eye coordinates
-	glm::vec4 eye = glm::inverse(m_projMatrix) * clip;
-	eye = glm::vec4(eye.x, eye.y, -1.0, 1.0); // unproject only x, y part
-	// Eye coordinates -> World coordinates
-	glm::vec3 world = glm::vec3(glm::inverse(m_viewMatrix) * eye);
-	return glm::normalize(world);
 }
 
 
