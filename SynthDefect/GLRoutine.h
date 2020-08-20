@@ -31,6 +31,8 @@ const float MAX_ZOOM = 180.0f;
 const float MIN_ZOOM = 5.0f;
 const float ZOOM_OFFSET = 4.0f;
 const float ROTATION_OFFSET = 0.06f;
+const float CAMERA_SENSITIVITY = 4.0f;
+const float FOV = 45.0f;
 
 
 bool CreateGLWindow(CWnd* pWnd, int bits);
