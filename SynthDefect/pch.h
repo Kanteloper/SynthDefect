@@ -8,8 +8,6 @@
 #define PCH_H
 
 // add headers that you want to pre-compile here
-#include <glm/gtx/string_cast.hpp>
-#include <iostream>
 #include "framework.h"
 #include "GLRoutine.h"
 #include "GlobMyProc.h"

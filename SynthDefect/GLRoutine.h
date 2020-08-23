@@ -16,24 +16,26 @@
 /******************* Constants for Light Source *******************/
 
 // light position
-const float LIGHT_X = 0.0f;
-const float LIGHT_Y = 0.0f;
-const float LIGHT_Z = 40.0f;
+const GLfloat LIGHT_X = 0.0f;
+const GLfloat LIGHT_Y = 0.0f;
+const GLfloat LIGHT_Z = 40.0f;
 
 // light color
-const float LIGHT_R = 1.0f;
-const float LIGHT_G = 1.0f;
-const float LIGHT_B = 1.0f;
+const GLfloat LIGHT_R = 1.0f;
+const GLfloat LIGHT_G = 1.0f;
+const GLfloat LIGHT_B = 1.0f;
 
 /******************* Constants for Camera *******************/
 
-const float MAX_ZOOM = 180.0f;
-const float MIN_ZOOM = 5.0f;
-const float ZOOM_OFFSET = 4.0f;
-const float ROTATION_OFFSET = 0.06f;
-const float CAMERA_SENSITIVITY = 4.0f;
-const float FOV = 45.0f;
-const float DISTANCE_FROM_MODEL = 40.0f;
+const GLfloat MAX_ZOOM = 180.0f;
+const GLfloat MIN_ZOOM = 5.0f;
+const GLfloat ZOOM_OFFSET = 4.0f;
+const GLfloat ROTATION_OFFSET = 0.06f;
+const GLfloat CAMERA_SENSITIVITY = 4.0f;
+const GLfloat FOV = 45.0f;
+const GLfloat DISTANCE_FROM_MODEL = 40.0f;
+
+/******************* Constants for Camera *******************/
 
 
 bool CreateGLWindow(CWnd* pWnd, int bits);
