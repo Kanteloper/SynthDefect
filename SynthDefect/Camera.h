@@ -36,7 +36,10 @@ public:
 
 
 	// Implementation
+private:
+	glm::vec3 ProjectTrackBall(glm::vec2 point);
 public:
+	void Rotate(glm::vec2 prev, glm::vec2 cur);
 	glm::mat4 GetViewMatrix();
 	glm::vec3 GetPosition();
 	glm::vec3 GetForwardAxis();
