@@ -35,10 +35,8 @@ private:
 	/* Camera */
 	CCamera* m_camera = nullptr;
 	glm::vec3 m_cameraPos;
-	float m_angleX = 0.0f;
-	float m_angleY = 0.0f;
-	float m_currentX = 0.0f;
-	float m_currentY = 0.0f;
+	glm::vec2 m_current;
+	glm::vec2 m_later;
 
 public:
 	CSynthDefectDoc* GetDocument() const;
