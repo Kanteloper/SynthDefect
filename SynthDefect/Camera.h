@@ -38,6 +38,7 @@ public:
 private:
 	glm::vec3 ProjectTrackBall(glm::vec2 point);
 	void SetCameraVectors(glm::vec3 eye, glm::vec3 target);
+	void UpdateCameraVectors(glm::mat4 trans);
 public:
 	void Rotate(glm::vec2 prev, glm::vec2 cur);
 	glm::mat4 GetViewMatrix();
