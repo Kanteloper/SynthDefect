@@ -15,27 +15,32 @@
 
 /******************* Constants for Light Source *******************/
 
-// light position
+// Light position
 const GLfloat LIGHT_X = 0.0f;
 const GLfloat LIGHT_Y = 0.0f;
 const GLfloat LIGHT_Z = 40.0f;
 
-// light color
+// Light color
 const GLfloat LIGHT_R = 1.0f;
 const GLfloat LIGHT_G = 1.0f;
 const GLfloat LIGHT_B = 1.0f;
 
 /******************* Constants for Camera *******************/
 
+// Zoom
 const GLfloat MAX_ZOOM = 180.0f;
 const GLfloat MIN_ZOOM = 5.0f;
 const GLfloat ZOOM_OFFSET = 4.0f;
-const GLfloat ROTATION_OFFSET = 0.06f;
-const GLfloat CAMERA_SENSITIVITY = 4.0f;
 const GLfloat FOV = 45.0f;
-const GLfloat DISTANCE_FROM_MODEL = 40.0f;
 
-/******************* Constants for Camera *******************/
+// Rotation
+const GLfloat ROTATION_OFFSET = 0.06f;
+const GLfloat SENSITIVITY = 0.5f;
+const GLfloat TRACKBALL_RADIUS = 1.0f;
+const GLint REFRESH = 100;
+
+// Default setting
+const GLfloat DISTANCE_FROM_MODEL = 40.0f;
 
 
 bool CreateGLWindow(CWnd* pWnd, int bits);
