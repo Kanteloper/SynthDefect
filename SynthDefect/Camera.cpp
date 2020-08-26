@@ -28,14 +28,10 @@ void CCamera::Rotate(glm::vec2 prev, glm::vec2 cur)
 
 	// calculate rotation orientation
 	RefreshQuaternion();
-	glm::quat camera_change = glm::angleAxis(-rotation_angle * SENSITIVITY, rotation_axis);
-	glm::quat camera_transform = m_CameraOrientation * camera_change;
-	m_CameraOrientation = camera_change;
-	UpdateCameraVectors(camera_transform);
-	glm::quat light_change = glm::angleAxis(-rotation_angle * SENSITIVITY, rotation_axis);
-	glm::quat light_transform = m_LightOrientation * light_change;
-	m_LightOrientation = light_change;
-	UpdateLightPosition(light_transform);
+	glm::quat change = glm::angleAxis(-rotation_angle * SENSITIVITY, rotation_axis);
+	glm::quat transform = m_Orientation * change;
+	m_Orientation = change;
+	Update(transform);
 }
 
 
@@ -89,8 +85,7 @@ void CCamera::RefreshQuaternion()
 	if (m_RefreshCount++ == REFRESH)
 	{
 		m_RefreshCount = 0;
-		m_CameraOrientation = glm::normalize(m_CameraOrientation);
-		m_LightOrientation = glm::normalize(m_LightOrientation);
+		m_Orientation = glm::normalize(m_Orientation);
 	}
 }
 
@@ -119,26 +114,16 @@ void CCamera::SetLightVectors()
 
 
 /// <summary>
-/// Re-calculate the related vectors of Camera for rotation
+/// Re-calculate the related vectors of Camera and light for rotation
 /// </summary>
 /// <param name="q"> the rotation matrix using quaternion </param>
-void CCamera::UpdateCameraVectors(glm::quat trans)
+void CCamera::Update(glm::quat trans)
 {
 	m_Position = trans * m_Position;
 	m_WorldUp = trans * m_WorldUp;
 	m_Target = trans * m_Target;
-	SetCameraVectors(m_Position, m_Target);
-}
-
-
-/// <summary>
-/// 
-/// </summary>
-/// <param name="angle"></param>
-/// <param name="axis"></param>
-void CCamera::UpdateLightPosition(glm::quat trans)
-{
 	m_LightPosition = trans * m_LightPosition;
+	SetCameraVectors(m_Position, m_Target);
 }
 
 
@@ -152,34 +137,23 @@ glm::mat4 CCamera::GetViewMatrix()
 }
 
 
-/// <summary>
-/// Retrieve camera position
-/// </summary>
-/// <returns> currently set the camera position vector </returns>
 glm::vec3 CCamera::GetPosition()
 {
 	return m_Position;
 }
 
 
-/// <summary>
-/// 
-/// </summary>
-/// <param name="value"></param>
 void CCamera::SetZoom(float value)
 {
 	m_Zoom = value;
 }
 
 
-/// <summary>
-/// 
-/// </summary>
-/// <returns></returns>
 float CCamera::GetZoom()
 {
 	return m_Zoom;
 }
+
 
 glm::vec3 CCamera::GetLightColor()
 {

@@ -17,8 +17,7 @@ public:
 		m_Position = eye;
 		m_Target = target;
 		m_WorldUp = glm::vec3(0.0f, 1.0f, 0.0f);
-		m_CameraOrientation = glm::quat(1.0f, 0.0f, 0.0f, 0.0f);
-		m_LightOrientation = glm::quat(1.0f, 0.0f, 0.0f, 0.0f);
+		m_Orientation = glm::quat(1.0f, 0.0f, 0.0f, 0.0f);
 		SetCameraVectors(m_Position, m_Target);
 		SetLightVectors();
 	};
@@ -32,8 +31,7 @@ private:
 	glm::vec3 m_UpAxis;
 	glm::vec3 m_RightAxis;
 	glm::vec3 m_WorldUp;
-	glm::quat m_CameraOrientation;
-	glm::quat m_LightOrientation;
+	glm::quat m_Orientation;
 	float m_Zoom;
 	int m_RefreshCount = 0;
 
@@ -49,8 +47,7 @@ private:
 	void RefreshQuaternion();
 	void SetCameraVectors(glm::vec3 eye, glm::vec3 target);
 	void SetLightVectors();
-	void UpdateCameraVectors(glm::quat trans);
-	void UpdateLightPosition(glm::quat trans);
+	void Update(glm::quat trans);
 public:
 	void Rotate(glm::vec2 prev, glm::vec2 cur);
 	glm::mat4 GetViewMatrix();
