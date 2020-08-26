@@ -28,10 +28,14 @@ void CCamera::Rotate(glm::vec2 prev, glm::vec2 cur)
 
 	// calculate rotation orientation
 	RefreshQuaternion();
-	glm::quat change = glm::angleAxis(-rotation_angle * SENSITIVITY, rotation_axis);
-	glm::quat transform = m_Orientation * change;
-	m_Orientation = change;
-	UpdateCameraVectors(transform);
+	glm::quat camera_change = glm::angleAxis(-rotation_angle * SENSITIVITY, rotation_axis);
+	glm::quat camera_transform = m_CameraOrientation * camera_change;
+	m_CameraOrientation = camera_change;
+	UpdateCameraVectors(camera_transform);
+	glm::quat light_change = glm::angleAxis(-rotation_angle * SENSITIVITY, rotation_axis);
+	glm::quat light_transform = m_LightOrientation * light_change;
+	m_LightOrientation = light_change;
+	UpdateLightPosition(light_transform);
 }
 
 
@@ -85,13 +89,14 @@ void CCamera::RefreshQuaternion()
 	if (m_RefreshCount++ == REFRESH)
 	{
 		m_RefreshCount = 0;
-		m_Orientation = glm::normalize(m_Orientation);
+		m_CameraOrientation = glm::normalize(m_CameraOrientation);
+		m_LightOrientation = glm::normalize(m_LightOrientation);
 	}
 }
 
 
 /// <summary>
-/// Set the default Camera vectors
+/// Set the Camera vectors
 /// </summary>
 /// <param name="eye">: the position of camera </param>
 /// <param name="target">: the position of centroid of the target </param>
@@ -100,6 +105,16 @@ void CCamera::SetCameraVectors(glm::vec3 eye, glm::vec3 target)
  	m_ForwardAxis = glm::normalize(target - eye);
 	m_RightAxis = glm::normalize(glm::cross(m_ForwardAxis, m_WorldUp));
 	m_UpAxis = glm::cross(m_RightAxis, m_ForwardAxis);
+}
+
+
+/// <summary>
+/// Set the light vectors
+/// </summary>
+void CCamera::SetLightVectors()
+{
+	m_LightColor = glm::vec3(LIGHT_R, LIGHT_G, LIGHT_B);
+	m_LightPosition = glm::vec3(LIGHT_X, LIGHT_Y, LIGHT_Z);
 }
 
 
@@ -113,6 +128,17 @@ void CCamera::UpdateCameraVectors(glm::quat trans)
 	m_WorldUp = trans * m_WorldUp;
 	m_Target = trans * m_Target;
 	SetCameraVectors(m_Position, m_Target);
+}
+
+
+/// <summary>
+/// 
+/// </summary>
+/// <param name="angle"></param>
+/// <param name="axis"></param>
+void CCamera::UpdateLightPosition(glm::quat trans)
+{
+	m_LightPosition = trans * m_LightPosition;
 }
 
 
@@ -153,6 +179,16 @@ void CCamera::SetZoom(float value)
 float CCamera::GetZoom()
 {
 	return m_Zoom;
+}
+
+glm::vec3 CCamera::GetLightColor()
+{
+	return m_LightColor;
+}
+
+glm::vec3 CCamera::GetLightPosition()
+{
+	return m_LightPosition;
 }
 
 
