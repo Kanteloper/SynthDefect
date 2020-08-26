@@ -31,8 +31,6 @@ private:
 	glm::vec3 m_UpDirection;
 	float m_Zoom;
 	const float radius = 1.0f;
-	glm::quat q;
-	int m_count = 0;
 public:
 
 
@@ -40,9 +38,6 @@ public:
 private:
 	glm::vec3 ProjectTrackBall(glm::vec2 point);
 	void SetCameraVectors(glm::vec3 eye, glm::vec3 target);
-	void UpdateCameraVectors(glm::quat trans);
-	glm::mat4 LookAt(glm::vec3 const& right, glm::vec3 const& up, glm::vec3 const& forward, glm::vec3 const& center);
-	glm::vec3 MultiplyQuaternion(glm::quat q, glm::vec3 v);
 public:
 	void Rotate(glm::vec2 prev, glm::vec2 cur);
 	glm::mat4 GetViewMatrix();
