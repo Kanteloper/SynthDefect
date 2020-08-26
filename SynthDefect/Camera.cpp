@@ -18,27 +18,25 @@ CCamera::CCamera()
 /// <param name="cur">: the current mouse position </param>
 void CCamera::Rotate(glm::vec2 prev, glm::vec2 cur)
 {
-	// calculate the prev, cur coordinates on the virtual trackball
+	// calculate the prev, cur coordinates using virtual trackball algorithm
 	glm::vec3 prev_trackball = ProjectTrackBall(prev);
 	glm::vec3 cur_trackball = ProjectTrackBall(cur);
 
-	// calculate rotation axis
-	prev_trackball = glm::normalize(prev_trackball);
-	cur_trackball = glm::normalize(cur_trackball);
-	glm::vec3 rotation_axis = glm::cross(prev_trackball, cur_trackball);
-	rotation_axis = glm::normalize(rotation_axis);
-	std::cout << "rot_axis: " << glm::to_string(rotation_axis) << std::endl;
+	// calculate the axis and angle of rotation for camera
+	glm::vec3 rotation_axis = CalculateAxis(prev_trackball, cur_trackball);
+	float rotation_angle = CalculateAngle(prev_trackball, cur_trackball);
 
-	float rotation_amount = glm::dot(prev_trackball, cur_trackball);										// calculate the amount of rotation
-	rotation_amount = rotation_amount > 1.0f ? 1.0f : rotation_amount < -1.0f ? -1.0f : rotation_amount;	// clamp the amount of rotation
-	rotation_amount = glm::acos(rotation_amount);
-	
-	// calculate rotation matrix
-	glm::mat4 rot_mat = glm::rotate(glm::mat4(1), -rotation_amount, rotation_axis);
-
-	UpdateCameraVectors(rot_mat);
+	// calculate rotation orientation
+	RefreshQuaternion();
+	glm::quat camera_change = glm::angleAxis(-rotation_angle * SENSITIVITY, rotation_axis);
+	glm::quat camera_transform = m_CameraOrientation * camera_change;
+	m_CameraOrientation = camera_change;
+	UpdateCameraVectors(camera_transform);
+	glm::quat light_change = glm::angleAxis(-rotation_angle * SENSITIVITY, rotation_axis);
+	glm::quat light_transform = m_LightOrientation * light_change;
+	m_LightOrientation = light_change;
+	UpdateLightPosition(light_transform);
 }
-
 
 
 /// <summary>
@@ -51,44 +49,96 @@ glm::vec3 CCamera::ProjectTrackBall(glm::vec2 point)
 	double z = 0.0f;
 	double distance = sqrt(pow(point.x, 2.0) + pow(point.y, 2.0));
 	// check the mouse point is inside the virtua trackball or not
-	if (distance < (radius / sqrt(2.0)))	// inside the sphere(virtual trackball)
-		z = sqrt(pow(radius, 2.0) - pow(distance, 2.0));
+	if (distance < (TRACKBALL_RADIUS / sqrt(2.0)))	// inside the sphere(virtual trackball)
+		z = sqrt(pow(TRACKBALL_RADIUS, 2.0) - pow(distance, 2.0));
 	else									// outside the sphere(virtual trackball) - on hyperbola
-		z = pow((radius / sqrt(2.0)), 2.0) / distance;
-	return glm::vec3(point.x, point.y, (float)z);
+		z = pow((TRACKBALL_RADIUS / sqrt(2.0)), 2.0) / distance;
+	return glm::normalize(glm::vec3(point.x, point.y, (float)z));
 }
 
 
 /// <summary>
-/// Set the default Camera vectors
+/// Calculate rotation axis of the camera
+/// </summary>
+/// <param name="prev">: the previous mouse position on virtual trackball </param>
+/// <param name="cur">: the current mouse position on virtual trackball </param>
+/// <returns> the rotation axis of the camera </returns>
+glm::vec3 CCamera::CalculateAxis(glm::vec3 const& prev, glm::vec3 const& cur)
+{
+	return glm::normalize(glm::cross(prev, cur));
+}
+
+
+/// <summary>
+/// Calculate rotation angle of the camera
+/// </summary>
+/// <param name="prev">: the previous mouse position on virtual trackball </param>
+/// <param name="cur">: the current mouse position on virtual trackball </param>
+/// <returns> the rotation angle of the camera </returns>
+float CCamera::CalculateAngle(glm::vec3 prev, glm::vec3 cur)
+{
+	return glm::acos(glm::dot(prev, cur));
+}
+
+
+/// <summary>
+/// Refresh the origin orientation for quaternion rotation
+/// </summary>
+void CCamera::RefreshQuaternion()
+{
+	if (m_RefreshCount++ == REFRESH)
+	{
+		m_RefreshCount = 0;
+		m_CameraOrientation = glm::normalize(m_CameraOrientation);
+		m_LightOrientation = glm::normalize(m_LightOrientation);
+	}
+}
+
+
+/// <summary>
+/// Set the Camera vectors
 /// </summary>
 /// <param name="eye">: the position of camera </param>
 /// <param name="target">: the position of centroid of the target </param>
 void CCamera::SetCameraVectors(glm::vec3 eye, glm::vec3 target)
 {
-	std::cout << "eye: " << glm::to_string(eye) << std::endl;
-	std::cout << "target: " << glm::to_string(target) << std::endl;
-	m_ForwardAxis = glm::normalize(target - eye);
-	std::cout << "forward: " << glm::to_string(m_ForwardAxis) << std::endl;
-	m_RightAxis = glm::normalize(glm::cross(m_ForwardAxis, m_UpDirection));
-	//std::cout << "right: " << glm::to_string(m_RightAxis) << std::endl;
+ 	m_ForwardAxis = glm::normalize(target - eye);
+	m_RightAxis = glm::normalize(glm::cross(m_ForwardAxis, m_WorldUp));
 	m_UpAxis = glm::cross(m_RightAxis, m_ForwardAxis);
-	//std::cout << "up: " << glm::to_string(m_UpAxis) << std::endl;
+}
+
+
+/// <summary>
+/// Set the light vectors
+/// </summary>
+void CCamera::SetLightVectors()
+{
+	m_LightColor = glm::vec3(LIGHT_R, LIGHT_G, LIGHT_B);
+	m_LightPosition = glm::vec3(LIGHT_X, LIGHT_Y, LIGHT_Z);
+}
+
+
+/// <summary>
+/// Re-calculate the related vectors of Camera for rotation
+/// </summary>
+/// <param name="q"> the rotation matrix using quaternion </param>
+void CCamera::UpdateCameraVectors(glm::quat trans)
+{
+	m_Position = trans * m_Position;
+	m_WorldUp = trans * m_WorldUp;
+	m_Target = trans * m_Target;
+	SetCameraVectors(m_Position, m_Target);
 }
 
 
 /// <summary>
 /// 
 /// </summary>
-/// <param name="trans"></param>
-void CCamera::UpdateCameraVectors(glm::mat4 trans)
+/// <param name="angle"></param>
+/// <param name="axis"></param>
+void CCamera::UpdateLightPosition(glm::quat trans)
 {
-
-	m_Target = trans * glm::vec4(m_Target, 1.0);
-	m_Position = trans * glm::vec4(m_Position, 1.0);
-	m_RightAxis = glm::normalize(trans * glm::vec4(m_RightAxis, 1.0));
-	m_UpDirection = glm::normalize(trans * glm::vec4(m_UpDirection, 1.0));
-	SetCameraVectors(m_Position, m_Target);
+	m_LightPosition = trans * m_LightPosition;
 }
 
 
@@ -98,9 +148,7 @@ void CCamera::UpdateCameraVectors(glm::mat4 trans)
 /// <returns> 4 x 4 Model-View Matrix </returns>
 glm::mat4 CCamera::GetViewMatrix()
 {
-	// lookAt - Translate whole scene(camera + object) from the eye position to the origin(0, 0, 0)
-	//          Rotate for facing to the -z axis
-	return glm::lookAt(m_Position, m_Target, m_UpDirection);
+	return glm::lookAt(m_Position, m_Target, m_WorldUp);
 }
 
 
@@ -114,33 +162,33 @@ glm::vec3 CCamera::GetPosition()
 }
 
 
-glm::vec3 CCamera::GetForwardAxis()
-{
-	return m_ForwardAxis;
-}
-
-
-glm::vec3 CCamera::GetUpAxis()
-{
-	return m_UpAxis;
-}
-
-
-glm::vec3 CCamera::GetLeftAxis()
-{
-	return m_RightAxis;
-}
-
-
+/// <summary>
+/// 
+/// </summary>
+/// <param name="value"></param>
 void CCamera::SetZoom(float value)
 {
 	m_Zoom = value;
 }
 
 
+/// <summary>
+/// 
+/// </summary>
+/// <returns></returns>
 float CCamera::GetZoom()
 {
 	return m_Zoom;
+}
+
+glm::vec3 CCamera::GetLightColor()
+{
+	return m_LightColor;
+}
+
+glm::vec3 CCamera::GetLightPosition()
+{
+	return m_LightPosition;
 }
 
 
