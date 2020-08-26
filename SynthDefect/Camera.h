@@ -16,36 +16,35 @@ public:
 	{
 		m_Position = eye;
 		m_Target = target;
-		m_UpDirection = glm::vec3(0.0f, 1.0f, 0.0f);								// Assume the camera is straight up to +y axis
+		m_WorldUp = glm::vec3(0.0f, 1.0f, 0.0f);
+		m_Orientation = glm::quat(1.0f, 0.0f, 0.0f, 0.0f);
 		SetCameraVectors(m_Position, m_Target);
 	};
 
 	// Attributes
 private:
-	// camera attributes
 	glm::vec3 m_Position;
 	glm::vec3 m_Target;
 	glm::vec3 m_ForwardAxis;
 	glm::vec3 m_UpAxis;
 	glm::vec3 m_RightAxis;
-	glm::vec3 m_UpDirection;
+	glm::vec3 m_WorldUp;
+	glm::quat m_Orientation;
 	float m_Zoom;
-	const float radius = 1.0f;
-public:
-
+	int m_RefreshCount = 0;
 
 	// Implementation
 private:
 	glm::vec3 ProjectTrackBall(glm::vec2 point);
+	glm::vec3 CalculateAxis(glm::vec3 const& prev, glm::vec3 const& cur);
+	float CalculateAngle(glm::vec3 prev, glm::vec3 cur);
+	void RefreshQuaternion();
 	void SetCameraVectors(glm::vec3 eye, glm::vec3 target);
-	void UpdateCameraVectors(glm::mat4 trans);
+	void UpdateCameraVectors(glm::quat trans);
 public:
 	void Rotate(glm::vec2 prev, glm::vec2 cur);
 	glm::mat4 GetViewMatrix();
 	glm::vec3 GetPosition();
-	glm::vec3 GetForwardAxis();
-	glm::vec3 GetUpAxis();
-	glm::vec3 GetLeftAxis();
 	void SetZoom(float value);
 	float GetZoom();
 	~CCamera();
