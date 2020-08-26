@@ -37,7 +37,7 @@ const GLfloat FOV = 45.0f;
 const GLfloat ROTATION_OFFSET = 0.06f;
 const GLfloat SENSITIVITY = 0.5f;
 const GLfloat TRACKBALL_RADIUS = 1.0f;
-const GLint REFRESH = 50;
+const GLint REFRESH = 100;
 
 // Default setting
 const GLfloat DISTANCE_FROM_MODEL = 40.0f;
