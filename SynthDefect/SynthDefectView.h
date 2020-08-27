@@ -42,6 +42,8 @@ private:
 	/* Ray Picking */
 	glm::vec3 m_rayStart;
 	glm::vec3 m_rayDir;
+	std::vector<aiFace> m_faces;
+	std::vector<Vertex> m_vertices;
 	std::queue<unsigned int> m_faceQueue; // maybe a new class takes this
 	unsigned int selected_face = 0;
 
@@ -64,11 +66,12 @@ private:
 	glm::vec2 GetNormalizedDeviceCoords(CPoint const& p);
 	glm::vec4 toEyeCoords(glm::vec4 const& clip);
 	glm::vec3 toWorldCoords(glm::vec4 const& eye);
-	float CalculateIntersectedDistance(std::vector<aiFace> const& faces, std::vector<Vertex> const& vertices);
+	float CalculateIntersectedDistance();
 	void SaveFaceInfo(int const& index);
 	float CalculateDistanceToSurface(std::vector<glm::vec3> const& points);
-	void ProcessNormalTest(std::vector<aiFace> const& faces, std::vector<Vertex> const& vertices, glm::vec3 const& p);
-	std::vector<glm::vec3> GetPointsFromFace(aiFace const& f, std::vector<Vertex> const& vertices);
+	void ProcessNormalTest(std::queue<unsigned int> Q, glm::vec3 const& p);
+	std::vector<glm::vec3> GetPointsFromFace(aiFace const& f);
+	//BOOL IsPointInOrOnTriangle(glm::vec3 const& p);
 
 
 public:
