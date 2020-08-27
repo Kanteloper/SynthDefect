@@ -11,14 +11,12 @@
 #include "assimp/postprocess.h"
 #include "Shader.h"
 
-// this structure represents 'Vertex'
-// each item means an attribute of 'Vertex'
 struct Vertex {
 	// position
 	glm::vec3 Position;
 	// color
 	glm::vec4 Color;
-	// surface normal
+	// vertex normal
 	glm::vec3 Normal;
 	// texture Coordinates
 	glm::vec2 TexCoords;
