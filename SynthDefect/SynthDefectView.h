@@ -42,7 +42,8 @@ private:
 	/* Ray Picking */
 	glm::vec3 m_rayStart;
 	glm::vec3 m_rayDir;
-	std::queue<unsigned int> m_faceQueue;
+	std::queue<unsigned int> m_faceQueue; // maybe a new class takes this
+	unsigned int selected_face = 0;
 
 public:
 	CSynthDefectDoc* GetDocument() const;
@@ -66,6 +67,8 @@ private:
 	float CalculateIntersectedDistance(std::vector<aiFace> const& faces, std::vector<Vertex> const& vertices);
 	void SaveFaceInfo(int const& index);
 	float CalculateDistanceToSurface(std::vector<glm::vec3> const& points);
+	void ProcessNormalTest(std::vector<aiFace> const& faces, std::vector<Vertex> const& vertices, glm::vec3 const& p);
+	std::vector<glm::vec3> GetPointsFromFace(aiFace const& f, std::vector<Vertex> const& vertices);
 
 
 public:
