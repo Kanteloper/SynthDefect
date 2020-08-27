@@ -137,29 +137,50 @@ glm::mat4 CCamera::GetViewMatrix()
 }
 
 
+/// <summary>
+/// Retrieve the position of camera
+/// </summary>
+/// <returns> XYZ coordinate for the camera position </returns>
 glm::vec3 CCamera::GetPosition()
 {
 	return m_Position;
 }
 
 
+/// <summary>
+/// Set the Field Of View for camera
+/// </summary>
+/// <param name="value"> the FOV which users define </param>
 void CCamera::SetZoom(float value)
 {
 	m_Zoom = value;
 }
 
 
+/// <summary>
+/// Retrieve the Field of View for camera
+/// </summary>
+/// <returns> FOV of the camera </returns>
 float CCamera::GetZoom()
 {
 	return m_Zoom;
 }
 
 
+/// <summary>
+/// Retrieve the Color of light source
+/// </summary>
+/// <returns> the RGB value for color of the light source </returns>
 glm::vec3 CCamera::GetLightColor()
 {
 	return m_LightColor;
 }
 
+
+/// <summary>
+/// Retrieve the position of light source
+/// </summary>
+/// <returns> XYZ coordinates for the light source position </returns>
 glm::vec3 CCamera::GetLightPosition()
 {
 	return m_LightPosition;
