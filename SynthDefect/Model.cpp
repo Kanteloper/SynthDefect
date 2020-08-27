@@ -272,6 +272,21 @@ glm::vec3 CModel::GetModelCentroid()
 }
 
 
+/// <summary>
+/// Calculate the scale factor for fitting the loaded model into veiwport
+/// </summary>
+/// <param name="cam_pos">: the position of camera </param>
+/// <param name="center">: the geometry centroid of the loaded model </param>
+/// <returns> the scale factor for the loaded model </returns>
+float CModel::GetModelScaleFactor(glm::vec3 const& cam_pos, glm::vec3 const& center)
+{
+	float r = glm::distance(center, m_max);					// the radius of bounding sphere
+	float z = glm::distance(center, cam_pos);				// the distance from model to camera
+	float r_max = z * glm::sin(glm::radians(FOV) / 2.0f);	// the maximum radius of bounding sphere
+	return r_max / r;
+}
+
+
 CModel::~CModel()
 {
 }

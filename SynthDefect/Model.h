@@ -32,6 +32,7 @@ public:
 	std::vector<aiFace> GetFacesFromModel();
 	std::vector<Vertex> GetVerticesFromModel();
 	glm::vec3 GetModelCentroid();
+	float GetModelScaleFactor(glm::vec3 const& cam_pos, glm::vec3 const& center);
 	~CModel();
 
 private:
