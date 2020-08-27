@@ -57,7 +57,7 @@ private:
 	glm::vec2 GetNormalizedDeviceCoords(CPoint const& p);
 	glm::vec4 toEyeCoords(glm::vec4 const& clip);
 	glm::vec3 toWorldCoords(glm::vec4 const& eye);
-	float CalculateDistanceToInterSectedPoint(std::vector<glm::vec3> const& points);
+	float CalculateIntersectedDistance(std::vector<glm::vec3> const& points, glm::vec3 const& ray_start, glm::vec3 const& ray_dir);
 
 
 public:
