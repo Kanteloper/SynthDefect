@@ -22,7 +22,7 @@ CModel::CModel(LPCTSTR filePath)
 /// </summary>
 /// <param name="pathName">: the path of selected file </param>
 /// <returns> TRUE if load success, FALSE on failure </returns>
-void CModel::LoadModel(LPCTSTR pathName)
+void CModel::LoadModel(LPCTSTR const& pathName)
 {
 	Assimp::Importer import;
 	const aiScene* scene = import.ReadFile(ConvertStdString(pathName),
@@ -46,7 +46,7 @@ void CModel::LoadModel(LPCTSTR pathName)
 /// Draw the model, and thus all its meshes
 /// </summary>
 /// <param name="shader">: linked shaders</param>
-void CModel::DrawModel(CShader& shaders)
+void CModel::DrawModel(const CShader& shaders)
 {
 	for (unsigned int i = 0; i < m_meshes.size(); i++)
 	{
@@ -60,7 +60,7 @@ void CModel::DrawModel(CShader& shaders)
 /// </summary>
 /// <param name="node">: A part of structure of the imported data</param>
 /// <param name="scene">: The root structure of the imported data</param>
-void CModel::ProcessNode(aiNode* node, const aiScene* scene)
+void CModel::ProcessNode(const aiNode* node, const aiScene* scene)
 {
 	// process all the node's meshes (if any)
 	for (unsigned int i = 0; i < node->mNumMeshes; i++)
@@ -84,7 +84,7 @@ void CModel::ProcessNode(aiNode* node, const aiScene* scene)
 /// <param name="mesh">: The Mesh data of Assimp structure</param>
 /// <param name="scene">: The root structure of the imported data</param>
 /// <returns> Mesh that can be rendered using OpenGL</returns>
-CMesh CModel::ProcessMesh(aiMesh* mesh, const aiScene* scene)
+CMesh CModel::ProcessMesh(const aiMesh* mesh, const aiScene* scene)
 {
 	std::vector<Vertex>			vertices;
 	std::vector<unsigned int>	indices;
@@ -178,7 +178,7 @@ CMesh CModel::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 /// </summary>
 /// <param name="mesh">: Meshes in loaded model </param>
 /// <returns> TRUE if existed, otherwise FALSE </returns>
-BOOL CModel::IsTexCoordsExisted(aiMesh* mesh)
+BOOL CModel::IsTexCoordsExisted(const aiMesh* mesh)
 {
 	if (mesh->mTextureCoords[0])
 		return TRUE;
@@ -192,7 +192,7 @@ BOOL CModel::IsTexCoordsExisted(aiMesh* mesh)
 /// </summary>
 /// <param name="mesh">: Meshes in loaded model </param>
 /// <returns> TRUE if existed, otherwise FALSE </returns>
-BOOL CModel::IsNormalsExisted(aiMesh* mesh)
+BOOL CModel::IsNormalsExisted(const aiMesh* mesh)
 {
 	if (mesh->mNormals)
 		return TRUE;
@@ -206,7 +206,7 @@ BOOL CModel::IsNormalsExisted(aiMesh* mesh)
 /// </summary>
 /// <param name="mesh">: Meshes in loaded model </param>
 /// <returns> TRUE if existed, otherwise FALSE </returns>
-BOOL CModel::IsTangentsExisted(aiMesh* mesh)
+BOOL CModel::IsTangentsExisted(const aiMesh* mesh)
 {
 	if (mesh->mTangents)
 		return TRUE;
@@ -220,7 +220,7 @@ BOOL CModel::IsTangentsExisted(aiMesh* mesh)
 /// </summary>
 /// <param name="mesh">: Meshdes in loaded model </param>
 /// <returns> TRUE if existed, otherwise FALSE </returns>
-BOOL CModel::IsBiTangentsExisted(aiMesh* mesh)
+BOOL CModel::IsBiTangentsExisted(const aiMesh* mesh)
 {
 	if (mesh->mBitangents)
 		return TRUE;
@@ -246,6 +246,16 @@ std::vector<aiFace> CModel::GetFacesFromModel()
 std::vector<Vertex> CModel::GetVerticesFromModel()
 {
 	return  m_meshes.at(0).GetVertices();
+}
+
+
+/// <summary>
+/// 
+/// </summary>
+/// <returns></returns>
+glm::vec3 CModel::GetModelCentroid()
+{
+	return glm::vec3();
 }
 
 

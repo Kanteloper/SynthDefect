@@ -28,18 +28,19 @@ private:
 	glm::vec3 m_rayPoint;
 	// Impelementation
 public:
-	void DrawModel(CShader& shaders);
+	void DrawModel(const CShader& shaders);
 	std::vector<aiFace> GetFacesFromModel();
 	std::vector<Vertex> GetVerticesFromModel();
+	glm::vec3 GetModelCentroid();
 	~CModel();
 
 private:
-	void LoadModel(LPCTSTR pathName);
-	void ProcessNode(aiNode* node, const aiScene* scene);
-	CMesh ProcessMesh(aiMesh *mesh, const aiScene *scene);
-	BOOL IsTexCoordsExisted(aiMesh *mesh);
-	BOOL IsNormalsExisted(aiMesh *mesh);
-	BOOL IsTangentsExisted(aiMesh *mesh);
-	BOOL IsBiTangentsExisted(aiMesh *mesh);
+	void LoadModel(LPCTSTR const& pathName);
+	void ProcessNode(const aiNode* node, const aiScene* scene);
+	CMesh ProcessMesh(const aiMesh* mesh, const aiScene* scene);
+	BOOL IsTexCoordsExisted(const aiMesh *mesh);
+	BOOL IsNormalsExisted(const aiMesh *mesh);
+	BOOL IsTangentsExisted(const aiMesh *mesh);
+	BOOL IsBiTangentsExisted(const aiMesh *mesh);
 };
 

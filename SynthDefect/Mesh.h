@@ -56,7 +56,7 @@ protected :
 	virtual void setupMesh();
 public:
 	virtual ~CMesh();
-	void Draw(CShader& shaders);
+	void Draw(const CShader& shaders);
 	std::vector<aiFace> GetFaces();
 	std::vector<Vertex> GetVertices();
 };
