@@ -53,10 +53,11 @@ private:
 	void DrawBackground();
 	void DrawLoadedModel();
 	void InitSettings();
-	glm::vec3 CalculateMouseRay(CPoint p);
-	glm::vec2 GetNormalizedDeviceCoords(CPoint p);
-	glm::vec4 toEyeCoords(glm::vec4 clip);
-	glm::vec3 toWorldCoords(glm::vec4 eye);
+	glm::vec3 CalculateMouseRay(CPoint const& p, glm::vec3 const& ray_origin);
+	glm::vec2 GetNormalizedDeviceCoords(CPoint const& p);
+	glm::vec4 toEyeCoords(glm::vec4 const& clip);
+	glm::vec3 toWorldCoords(glm::vec4 const& eye);
+	float CalculateDistanceToInterSectedPoint(std::vector<glm::vec3> const& points);
 
 
 public:
