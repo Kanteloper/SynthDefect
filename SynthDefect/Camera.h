@@ -41,18 +41,18 @@ private:
 
 	// Implementation
 private:
-	glm::vec3 ProjectTrackBall(glm::vec2 point);
+	glm::vec3 ProjectTrackBall(glm::vec2 const& point);
 	glm::vec3 CalculateAxis(glm::vec3 const& prev, glm::vec3 const& cur);
-	float CalculateAngle(glm::vec3 prev, glm::vec3 cur);
+	float CalculateAngle(glm::vec3 const& prev, glm::vec3 const& cur);
 	void RefreshQuaternion();
-	void SetCameraVectors(glm::vec3 eye, glm::vec3 target);
+	void SetCameraVectors(glm::vec3 const& eye, glm::vec3 const& target);
 	void SetLightVectors();
-	void Update(glm::quat trans);
+	void Update(glm::quat const& trans);
 public:
-	void Rotate(glm::vec2 prev, glm::vec2 cur);
+	void Rotate(glm::vec2 const& prev, glm::vec2 const& cur);
 	glm::mat4 GetViewMatrix();
 	glm::vec3 GetPosition();
-	void SetZoom(float value);
+	void SetZoom(float const& value);
 	float GetZoom();
 	glm::vec3 GetLightColor();
 	glm::vec3 GetLightPosition();

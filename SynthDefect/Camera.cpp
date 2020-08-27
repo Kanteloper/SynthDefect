@@ -16,7 +16,7 @@ CCamera::CCamera()
 /// </summary>
 /// <param name="prev">: the previous mouse position </param>
 /// <param name="cur">: the current mouse position </param>
-void CCamera::Rotate(glm::vec2 prev, glm::vec2 cur)
+void CCamera::Rotate(glm::vec2 const& prev, glm::vec2 const& cur)
 {
 	// calculate the prev, cur coordinates using virtual trackball algorithm
 	glm::vec3 prev_trackball = ProjectTrackBall(prev);
@@ -40,7 +40,7 @@ void CCamera::Rotate(glm::vec2 prev, glm::vec2 cur)
 /// </summary>
 /// <param name="point">: the mouse point for transforming Normalized Device Coordinates </param>
 /// <returns> the NDC of mouse point </returns>
-glm::vec3 CCamera::ProjectTrackBall(glm::vec2 point)
+glm::vec3 CCamera::ProjectTrackBall(glm::vec2 const& point)
 {
 	double z = 0.0f;
 	double distance = sqrt(pow(point.x, 2.0) + pow(point.y, 2.0));
@@ -71,7 +71,7 @@ glm::vec3 CCamera::CalculateAxis(glm::vec3 const& prev, glm::vec3 const& cur)
 /// <param name="prev">: the previous mouse position on virtual trackball </param>
 /// <param name="cur">: the current mouse position on virtual trackball </param>
 /// <returns> the rotation angle of the camera </returns>
-float CCamera::CalculateAngle(glm::vec3 prev, glm::vec3 cur)
+float CCamera::CalculateAngle(glm::vec3 const& prev, glm::vec3 const& cur)
 {
 	return glm::acos(glm::dot(prev, cur));
 }
@@ -95,7 +95,7 @@ void CCamera::RefreshQuaternion()
 /// </summary>
 /// <param name="eye">: the position of camera </param>
 /// <param name="target">: the position of centroid of the target </param>
-void CCamera::SetCameraVectors(glm::vec3 eye, glm::vec3 target)
+void CCamera::SetCameraVectors(glm::vec3 const& eye, glm::vec3 const& target)
 {
  	m_ForwardAxis = glm::normalize(target - eye);
 	m_RightAxis = glm::normalize(glm::cross(m_ForwardAxis, m_WorldUp));
@@ -117,7 +117,7 @@ void CCamera::SetLightVectors()
 /// Re-calculate the related vectors of Camera and light for rotation
 /// </summary>
 /// <param name="q"> the rotation matrix using quaternion </param>
-void CCamera::Update(glm::quat trans)
+void CCamera::Update(glm::quat const& trans)
 {
 	m_Position = trans * m_Position;
 	m_WorldUp = trans * m_WorldUp;
@@ -151,7 +151,7 @@ glm::vec3 CCamera::GetPosition()
 /// Set the Field Of View for camera
 /// </summary>
 /// <param name="value"> the FOV which users define </param>
-void CCamera::SetZoom(float value)
+void CCamera::SetZoom(float const& value)
 {
 	m_Zoom = value;
 }
