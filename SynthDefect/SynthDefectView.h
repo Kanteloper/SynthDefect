@@ -61,7 +61,7 @@ private:
 	glm::vec2 GetNormalizedDeviceCoords(CPoint const& p);
 	glm::vec4 toEyeCoords(glm::vec4 const& clip);
 	glm::vec3 toWorldCoords(glm::vec4 const& eye);
-	float CalculateIntersectedDistance(std::vector<aiFace> const& fs, std::vector<Vertex> const& vs);
+	float CalculateIntersectedDistance(std::vector<aiFace> const& faces, std::vector<Vertex> const& vertices);
 	float CalculateDistanceToSurface(std::vector<glm::vec3> const& points);
 
 
