@@ -12,32 +12,32 @@ class CCamera
 	// Constructor
 public:
 	CCamera();
-	CCamera(glm::vec3 eye, glm::vec3 target) : m_Zoom(FOV)
+	CCamera(glm::vec3 eye, glm::vec3 target) : m_zoom(FOV)
 	{
-		m_Position = eye;
-		m_Target = target;
-		m_WorldUp = glm::vec3(0.0f, 1.0f, 0.0f);
-		m_Orientation = glm::quat(1.0f, 0.0f, 0.0f, 0.0f);
-		SetCameraVectors(m_Position, m_Target);
+		m_position = eye;
+		m_target = target;
+		m_worldUp = glm::vec3(0.0f, 1.0f, 0.0f);
+		m_orientation = glm::quat(1.0f, 0.0f, 0.0f, 0.0f);
+		SetCameraVectors(m_position, m_target);
 		SetLightVectors();
 	};
 
 	// Attributes
 private:
 	// for camera
-	glm::vec3 m_Position;
-	glm::vec3 m_Target;
-	glm::vec3 m_ForwardAxis;
-	glm::vec3 m_UpAxis;
-	glm::vec3 m_RightAxis;
-	glm::vec3 m_WorldUp;
-	glm::quat m_Orientation;
-	float m_Zoom;
-	int m_RefreshCount = 0;
+	glm::vec3 m_position;
+	glm::vec3 m_target;
+	glm::vec3 m_forwardAxis;
+	glm::vec3 m_upAxis;
+	glm::vec3 m_rightAxis;
+	glm::vec3 m_worldUp;
+	glm::quat m_orientation;
+	float m_zoom;
+	int m_refreshCount = 0;
 
 	// for light
-	glm::vec3 m_LightColor;
-	glm::vec3 m_LightPosition;
+	glm::vec3 m_lightColor;
+	glm::vec3 m_lightPosition;
 
 	// Implementation
 private:
