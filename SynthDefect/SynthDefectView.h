@@ -69,7 +69,7 @@ private:
 	float CalculateIntersectedDistance();
 	void SaveFaceInfo(int const& index);
 	float CalculateDistanceToSurface(std::vector<glm::vec3> const& points);
-	void ProcessNormalTest(std::queue<unsigned int> Q, glm::vec3 const& p);
+	void ProcessNormalTest(glm::vec3 const& p);
 	std::vector<glm::vec3> GetPointsFromFace(aiFace const& f);
 	//BOOL IsPointInOrOnTriangle(glm::vec3 const& p);
 
