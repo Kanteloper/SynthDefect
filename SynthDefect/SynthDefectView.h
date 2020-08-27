@@ -5,6 +5,7 @@
 #pragma once
 #include "Shader.h"
 #include "Camera.h"
+#include <queue>
 
 class CSynthDefectView : public CView
 {
@@ -39,8 +40,9 @@ private:
 	glm::vec2 m_later;
 
 	/* Ray Picking */
-	glm::vec3 ray_start;
-	glm::vec3 ray_dir;
+	glm::vec3 m_rayStart;
+	glm::vec3 m_rayDir;
+	std::queue<unsigned int> m_faceQueue;
 
 public:
 	CSynthDefectDoc* GetDocument() const;
@@ -62,6 +64,7 @@ private:
 	glm::vec4 toEyeCoords(glm::vec4 const& clip);
 	glm::vec3 toWorldCoords(glm::vec4 const& eye);
 	float CalculateIntersectedDistance(std::vector<aiFace> const& faces, std::vector<Vertex> const& vertices);
+	void SaveFaceInfo(int const& index);
 	float CalculateDistanceToSurface(std::vector<glm::vec3> const& points);
 
 
