@@ -102,12 +102,7 @@ CMesh CModel::ProcessMesh(const aiMesh* mesh, const aiScene* scene)
 		vertex.Position = vecForThreeComp;
 
 		// find the max, min value of x, y, z
-		m_max.x = glm::max(m_max.x, vertex.Position.x);
-		m_min.x = glm::min(m_min.x, vertex.Position.x);
-		m_max.y = glm::max(m_max.y, vertex.Position.y);
-		m_min.y = glm::min(m_min.y, vertex.Position.y);
-		m_max.z = glm::max(m_max.z, vertex.Position.z);
-		m_min.z = glm::min(m_min.z, vertex.Position.z);
+		FindMinMaxVertex(vertex.Position);
 
 		// colors
 		vertex.Color = glm::vec4(0.5f, 0.5f, 0.5f, 1.0f);
@@ -170,6 +165,21 @@ CMesh CModel::ProcessMesh(const aiMesh* mesh, const aiScene* scene)
 
 	// process indieces
 	return CMesh(faces, vertices, indices);
+}
+
+
+/// <summary>
+/// Search and Store the max and min value of each coordinate
+/// </summary>
+/// <param name="vertex_pos"> XYZ coordinates for a vertex of mesh </param>
+void CModel::FindMinMaxVertex(glm::vec3 const& vertex_pos)
+{
+	m_max.x = glm::max(m_max.x, vertex_pos.x);
+	m_min.x = glm::min(m_min.x, vertex_pos.x);
+	m_max.y = glm::max(m_max.y, vertex_pos.y);
+	m_min.y = glm::min(m_min.y, vertex_pos.y);
+	m_max.z = glm::max(m_max.z, vertex_pos.z);
+	m_min.z = glm::min(m_min.z, vertex_pos.z);
 }
 
 
@@ -250,12 +260,15 @@ std::vector<Vertex> CModel::GetVerticesFromModel()
 
 
 /// <summary>
-/// 
+/// Calculate and Retrieve the centroid of the loaded model
 /// </summary>
-/// <returns></returns>
+/// <returns> the geometry centroid of the loaded model </returns>
 glm::vec3 CModel::GetModelCentroid()
 {
-	return glm::vec3();
+	float centerX = (m_max.x + m_min.x) / 2.0f;
+	float centerY = (m_max.y + m_min.y) / 2.0f;
+	float centerZ = (m_max.z + m_min.z) / 2.0f;
+	return glm::vec3(centerX, centerY, centerZ);
 }
 
 
