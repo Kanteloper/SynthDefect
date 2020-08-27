@@ -38,6 +38,10 @@ private:
 	glm::vec2 m_current;
 	glm::vec2 m_later;
 
+	/* Ray Picking */
+	glm::vec3 ray_start;
+	glm::vec3 ray_dir;
+
 public:
 	CSynthDefectDoc* GetDocument() const;
 
@@ -53,11 +57,12 @@ private:
 	void DrawBackground();
 	void DrawLoadedModel();
 	void InitSettings();
-	glm::vec3 CalculateMouseRay(CPoint const& p, glm::vec3 const& ray_origin);
+	glm::vec3 CalculateMouseRay(CPoint const& p);
 	glm::vec2 GetNormalizedDeviceCoords(CPoint const& p);
 	glm::vec4 toEyeCoords(glm::vec4 const& clip);
 	glm::vec3 toWorldCoords(glm::vec4 const& eye);
-	float CalculateIntersectedDistance(std::vector<glm::vec3> const& points, glm::vec3 const& ray_start, glm::vec3 const& ray_dir);
+	float CalculateIntersectedDistance(std::vector<aiFace> const& fs, std::vector<Vertex> const& vs);
+	float CalculateDistanceToSurface(std::vector<glm::vec3> const& points);
 
 
 public:
