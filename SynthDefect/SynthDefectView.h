@@ -41,8 +41,6 @@ private:
 	glm::vec2 m_later;
 
 	/* Ray Picking */
-	glm::vec3 m_rayStart;
-	glm::vec3 m_rayDir;
 	std::vector<aiFace> m_faces;
 	std::vector<Vertex> m_vertices;
 	std::queue<unsigned int> m_faceQueue; // maybe a new class takes this
@@ -63,13 +61,14 @@ private:
 	void DrawBackground();
 	void DrawLoadedModel();
 	void InitSettings();
-	glm::vec3 CalculateMouseRay(CPoint const& p);
+	glm::vec3 CalculateMouseRay(CPoint const& p, glm::vec3 const& origin);
+	BOOL IsRayIntersected(glm::vec3 const& origin, glm::vec3 const& dir);
 	glm::vec2 GetNormalizedDeviceCoords(CPoint const& p);
 	glm::vec4 toEyeCoords(glm::vec4 const& clip);
 	glm::vec3 toWorldCoords(glm::vec4 const& eye);
-	float CalculateIntersectedDistance();
+	float CalIntersectedDistance(glm::vec3 const& origin, glm::vec3 const& dir);
 	void SaveFaceInfo(int const& index);
-	float CalculateDistanceToSurface(std::vector<glm::vec3> const& points);
+	float CalDistanceToSurface(std::vector<glm::vec3> const& points, glm::vec3 const& origin, glm::vec3 const& dir);
 	void ProcessNormalTest(glm::vec3 const& p);
 	std::vector<glm::vec3> GetPointsFromFace(aiFace const& f);
 	//BOOL IsPointInOrOnTriangle(glm::vec3 const& p);

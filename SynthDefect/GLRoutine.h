@@ -41,7 +41,7 @@ const GLint REFRESH = 100;
 
 // Default setting
 const GLfloat DISTANCE_FROM_MODEL = 40.0f;
-
+const GLfloat MAX_RAY_DISTANCE = 600.0f;
 
 bool CreateGLWindow(CWnd* pWnd, int bits);
 bool KillGLWindow(CWnd* pWnd);
