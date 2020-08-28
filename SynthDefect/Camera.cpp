@@ -97,9 +97,9 @@ void CCamera::RefreshQuaternion()
 /// <param name="target">: the position of centroid of the target </param>
 void CCamera::SetCameraVectors(glm::vec3 const& eye, glm::vec3 const& target)
 {
- 	m_forwardAxis = glm::normalize(target - eye);
-	m_rightAxis = glm::normalize(glm::cross(m_forwardAxis, m_worldUp));
-	m_upAxis = glm::cross(m_rightAxis, m_forwardAxis);
+ 	m_forwardAxis = glm::normalize(eye - target);
+	m_rightAxis = glm::normalize(glm::cross(m_worldUp, m_forwardAxis));
+	m_upAxis = glm::cross(m_forwardAxis, m_rightAxis);
 }
 
 
