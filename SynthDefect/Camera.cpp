@@ -148,6 +148,16 @@ glm::vec3 CCamera::GetPosition()
 
 
 /// <summary>
+/// Set the postion of camera
+/// </summary>
+/// <param name="pos">: the coordinate to be set for the camera </param>
+void CCamera::SetPosition(glm::vec3 const& pos)
+{
+	m_position = pos;
+}
+
+
+/// <summary>
 /// Set the Field Of View for camera
 /// </summary>
 /// <param name="value"> the FOV which users define </param>
