@@ -254,6 +254,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="background_fs.glsl" />
+    <None Include="base_fs.glsl" />
+    <None Include="base_vs.glsl" />
     <None Include="model_fs.glsl" />
     <None Include="model_vs.glsl" />
     <None Include="res\SynthDefect.rc2" />

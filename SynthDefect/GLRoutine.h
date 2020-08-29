@@ -12,6 +12,8 @@
 #define FS_BACKGROUND_PATH	"./background_fs.glsl"		// The current path of fragment shader code file for background mesh
 #define VS_MODEL_PATH		"./model_vs.glsl"			// The current path of vertex shader code file for model mesh
 #define FS_MODEL_PATH		"./model_fs.glsl"			// The current path of fragment shader code file for model mesh
+#define VS_BASE_PATH		"./base_vs.glsl"			// The current path of vertex shader code file for base plane mesh
+#define FS_BASE_PATH		"./base_fs.glsl"			// The current path of fragment shader code file for base plane mesh
 
 /******************* Constants for Light Source *******************/
 
