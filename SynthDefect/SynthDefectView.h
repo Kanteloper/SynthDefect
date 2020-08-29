@@ -35,6 +35,7 @@ private:
 
 	/* Camera */
 	CCamera* m_camera = nullptr;
+	glm::vec3 m_defaultCameraPosistion;
 
 	/* Mouse Event */
 	glm::vec2 m_current;
