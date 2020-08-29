@@ -203,6 +203,11 @@ void InitializeGLEngine()
 	glShadeModel(GL_SMOOTH);							// Enable Smooth Shading
 }
 
+
+/// <summary>
+/// Turn on and off the wireframe mode
+/// </summary>
+/// <param name="set">: if TRUE, wireframe mode is on, otherwise, be off </param>
 void SetWireFrameMode(BOOL set)
 {
 	if(set)
