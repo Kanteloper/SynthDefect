@@ -23,7 +23,9 @@ private:
 	BOOL m_bWireframe = FALSE;
 
 	/* Model */
-	CShader m_backgroundShader, m_modelShader;
+	CShader m_backgroundShader;
+	CShader m_modelShader;
+	CShader m_baseShader;
 	CModel* m_model = nullptr;
 
 	/* Render */
@@ -60,6 +62,7 @@ public:
 private:
 	BOOL DrawGLScene();
 	void DrawBackground();
+	void DrawBasePlane();
 	void DrawLoadedModel();
 	void InitSettings();
 	glm::vec3 CalculateMouseRay(CPoint const& p, glm::vec3 const& origin);
