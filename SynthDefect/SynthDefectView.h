@@ -5,6 +5,7 @@
 #pragma once
 #include "Shader.h"
 #include "Camera.h"
+#include "BasePlane.h"
 #include <queue>
 
 class CSynthDefectView : public CView
@@ -27,6 +28,7 @@ private:
 	CShader m_modelShader;
 	CShader m_baseShader;
 	CModel* m_model = nullptr;
+	CBasePlane m_base;
 
 	/* Render */
 	float m_scaleFactor = 0.0f;
