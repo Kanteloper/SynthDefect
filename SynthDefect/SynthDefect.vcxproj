@@ -198,6 +198,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Background.h" />
+    <ClInclude Include="BasePlane.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="GlobMyProc.h" />
@@ -217,6 +218,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Background.cpp" />
+    <ClCompile Include="BasePlane.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="GlobMyProc.cpp" />
     <ClCompile Include="GLRoutine.cpp" />
