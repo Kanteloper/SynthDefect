@@ -1,5 +1,5 @@
 
-// Model.cpp for 3D model data
+// Model.cpp for loaded 3D model data
 
 #include "pch.h"
 #include "Model.h"
