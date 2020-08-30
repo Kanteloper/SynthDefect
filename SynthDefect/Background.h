@@ -8,10 +8,9 @@ class CBackground : public CMesh
 {
 	// Constructor
 public:
-	CBackground();
-	CBackground(glm::vec3 points)
+	CBackground()
 	{
-		SetDefaultBackground(points);
+		SetDefaultBackground(glm::vec3(1.0f, 1.0f, 0.0f));
 		SetupMesh();
 	};
 

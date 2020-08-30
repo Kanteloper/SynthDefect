@@ -4,11 +4,6 @@
 #include "pch.h"
 #include "Background.h"
 
-CBackground::CBackground()
-{
-}
-
-
 /// <summary>
 /// Initialize all the buffer objects / arrays
 /// </summary>
