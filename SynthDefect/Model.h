@@ -26,6 +26,7 @@ private:
 	// model data
 	std::vector<CMesh> m_meshes;
 	glm::vec3 m_rayPoint;
+
 	// Impelementation
 public:
 	void DrawModel(const CShader& shaders);
