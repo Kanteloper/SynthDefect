@@ -29,12 +29,11 @@ private:
 	CShader m_modelShader;
 	CShader m_baseShader;
 	CBackground* m_back = nullptr;
+	CBasePlane* m_base = nullptr;
 	CModel* m_model = nullptr;
 
-	CBasePlane m_base;
-
 	/* Render */
-	float m_scaleFactor = 0.0f;
+	float m_modelScale;
 	glm::vec3 m_modelCenter;
 	glm::mat4 m_projMatrix;
 	glm::mat4 m_viewMatrix;
@@ -61,14 +60,14 @@ public:
 public:
 	virtual void OnDraw(CDC* pDC); // overridden to draw this view
 	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
-	void InitChildView();
-
+	
 // Implementation
 private:
 	BOOL DrawGLScene();
 	void DrawBackground();
 	void DrawBasePlane();
 	void DrawLoadedModel();
+	void InitChildView();
 	void InitSettings();
 	glm::vec3 CalculateMouseRay(CPoint const& p, glm::vec3 const& origin);
 	BOOL IsRayIntersected(glm::vec3 const& origin, glm::vec3 const& dir);
