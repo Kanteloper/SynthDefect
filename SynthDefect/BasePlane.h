@@ -2,8 +2,8 @@
 // BasePlane.h : Interface of BasePlane class
 
 #pragma once
-#include "Model.h"
-class CBasePlane : public CModel
+#include "Mesh.h"
+class CBasePlane : public CMesh
 {
 	// Constructor
 public:
@@ -12,6 +12,8 @@ public:
 	// Attributes
 
 	// Implementation
+private:
+	void SetBasePlane();
 public:
 	~CBasePlane();
 };
