@@ -6,6 +6,7 @@
 #include "Shader.h"
 #include "Camera.h"
 #include "BasePlane.h"
+#include "Background.h"
 #include <queue>
 
 class CSynthDefectView : public CView
@@ -27,7 +28,9 @@ private:
 	CShader m_backgroundShader;
 	CShader m_modelShader;
 	CShader m_baseShader;
+	CBackground* m_back = nullptr;
 	CModel* m_model = nullptr;
+
 	CBasePlane m_base;
 
 	/* Render */
