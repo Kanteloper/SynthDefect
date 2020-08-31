@@ -76,8 +76,7 @@ void CMesh::setupMesh()
 /// <summary>
 /// Render the Model Mesh
 /// </summary>
-/// <param name="shaders">: liked Shader objects</param>
-void CMesh::Draw(const CShader& shaders)
+void CMesh::Draw()
 {
 	GLenum err;
 	// bind appropriate textures

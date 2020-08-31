@@ -53,8 +53,8 @@ private:
 protected :
 	virtual void setupMesh();
 public:
-	virtual ~CMesh();
-	void Draw(const CShader& shaders);
+	~CMesh();
+	virtual void Draw();
 	std::vector<aiFace> GetFaces();
 	std::vector<Vertex> GetVertices();
 };
