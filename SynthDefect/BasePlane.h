@@ -10,11 +10,19 @@ public:
 	CBasePlane();
 
 	// Attributes
+private:
+	std::vector<Vertex> m_vertices;
+	std::vector<unsigned int> m_indices;
+	unsigned int m_VAO;
+	unsigned int m_VBO;
+	unsigned int m_EBO;
 
 	// Implementation
 private:
 	void SetBasePlane();
+	virtual void SetupMesh();
 public:
 	~CBasePlane();
+	virtual void Draw();
 };
 
