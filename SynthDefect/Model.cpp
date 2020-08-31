@@ -46,11 +46,11 @@ void CModel::LoadModel(LPCTSTR const& pathName)
 /// Draw the model, and thus all its meshes
 /// </summary>
 /// <param name="shader">: linked shaders</param>
-void CModel::DrawModel(const CShader& shaders)
+void CModel::DrawModel()
 {
 	for (unsigned int i = 0; i < m_meshes.size(); i++)
 	{
-		m_meshes[i].Draw(shaders);
+		m_meshes[i].Draw();
 	}
 }
 

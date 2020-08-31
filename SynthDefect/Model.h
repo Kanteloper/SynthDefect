@@ -29,7 +29,7 @@ private:
 
 	// Impelementation
 public:
-	void DrawModel(const CShader& shaders);
+	void DrawModel();
 	std::vector<aiFace> GetFacesFromModel();
 	std::vector<Vertex> GetVerticesFromModel();
 	glm::vec3 GetModelCentroid();
