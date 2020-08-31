@@ -4,6 +4,14 @@
 #include "pch.h"
 #include "Background.h"
 
+CBackground::CBackground()
+{
+	m_VAO = m_VBO = m_EBO = 0;
+	SetDefaultBackground(glm::vec3(1.0f, 1.0f, 0.0f));
+	SetupMesh();
+}
+
+
 /// <summary>
 /// Initialize all the buffer objects / arrays
 /// </summary>

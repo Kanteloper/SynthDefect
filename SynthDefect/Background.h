@@ -8,17 +8,15 @@ class CBackground : public CMesh
 {
 	// Constructor
 public:
-	CBackground()
-	{
-		SetDefaultBackground(glm::vec3(1.0f, 1.0f, 0.0f));
-		SetupMesh();
-	};
+	CBackground();
 
 	// Attributes
 private:
 	std::vector<Vertex> m_vertices;
 	std::vector<unsigned int> m_indices;
-	unsigned int m_VAO = 0, m_VBO = 0, m_EBO = 0;
+	unsigned int m_VAO;
+	unsigned int m_VBO;
+	unsigned int m_EBO;
 
 	// Implements
 private:
