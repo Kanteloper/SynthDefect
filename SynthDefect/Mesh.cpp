@@ -12,10 +12,21 @@ CMesh::CMesh()
 }
 
 
+CMesh::CMesh(std::vector<aiFace> faces, std::vector<Vertex> vertices, std::vector<unsigned int> indices)
+{
+	m_faces = faces;
+	m_vertices = vertices;
+	m_indices = indices;
+	// set the vertex buffers and its attribute pointers
+	m_VAO, m_VBO, m_EBO = 0;
+	SetupMesh();
+}
+
+
 /// <summary>
 /// Initialize all the buffer objects / arrays
 /// </summary>
-void CMesh::setupMesh()
+void CMesh::SetupMesh()
 {
 	GLenum err;
 	// generate the reference of a VAO, VBO and an EBO 

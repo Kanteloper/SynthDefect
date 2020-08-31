@@ -32,18 +32,16 @@ class CMesh
 // Construction
 public:
 	CMesh();
-	CMesh(std::vector<aiFace> faces, std::vector<Vertex> vertices, std::vector<unsigned int> indices) 
-		: m_faces(faces), m_vertices(vertices), m_indices(indices) 
-	{
-		// set the vertex buffers and its attribute pointers
-		setupMesh();
-	};
+	CMesh(std::vector<aiFace> faces, std::vector<Vertex> vertices, std::vector<unsigned int> indices);
 
 // Attributes
 private:
 	// render data
 	// VAO - Vertex Array Object, VBO - Vertex Buffer Object, EBO - Element Buffer Object
-	unsigned int m_VAO, m_VBO, m_EBO = 0;
+	unsigned int m_VAO;
+	unsigned int m_VBO;
+	unsigned int m_EBO;
+
 	// mesh data
 	std::vector<Vertex>			m_vertices;
 	std::vector<unsigned int>	m_indices;
@@ -51,7 +49,7 @@ private:
 
 // Implementation
 protected :
-	virtual void setupMesh();
+	virtual void SetupMesh();
 public:
 	~CMesh();
 	virtual void Draw();
