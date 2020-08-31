@@ -43,12 +43,13 @@ const GLint REFRESH = 100;
 
 // Default setting
 const GLfloat CAMERA_X = 0.0f;
-const GLfloat CAMERA_Y = 0.0f;
+const GLfloat CAMERA_Y = 40.0f;
 const GLfloat CAMERA_Z = 40.0f;
 const GLfloat MAX_RAY_DISTANCE = 600.0f;
 
 /******************* Constants for Base plane *******************/
-const GLint VERTEX_NUM = 128;
+const GLint VERTEX_NUM = 64;
+const GLint BASE_SIZE = 150;
 
 bool CreateGLWindow(CWnd* pWnd, int bits);
 bool KillGLWindow(CWnd* pWnd);
