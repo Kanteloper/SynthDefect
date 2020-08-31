@@ -11,6 +11,18 @@ CCamera::CCamera()
 }
 
 
+CCamera::CCamera(glm::vec3 eye, glm::vec3 target)
+{
+	m_zoom = FOV;
+	m_position = eye;
+	m_target = target;
+	m_worldUp = glm::vec3(0.0f, 1.0f, 0.0f);
+	m_orientation = glm::quat(1.0f, 0.0f, 0.0f, 0.0f);
+	SetCameraVectors(m_position, m_target);
+	SetLightVectors();
+}
+
+
 /// <summary>
 /// Calculate rotation of the camera on the virtual trackball
 /// </summary>
@@ -154,6 +166,7 @@ glm::vec3 CCamera::GetPosition()
 void CCamera::SetPosition(glm::vec3 const& pos)
 {
 	m_position = pos;
+	SetCameraVectors(m_position, m_target);
 }
 
 
@@ -164,6 +177,7 @@ void CCamera::SetPosition(glm::vec3 const& pos)
 void CCamera::SetTarget(glm::vec3 const& target)
 {
 	m_target = target;
+	SetCameraVectors(m_position, m_target);
 }
 
 

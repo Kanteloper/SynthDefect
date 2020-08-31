@@ -12,15 +12,7 @@ class CCamera
 	// Constructor
 public:
 	CCamera();
-	CCamera(glm::vec3 eye, glm::vec3 target) : m_zoom(FOV)
-	{
-		m_position = eye;
-		m_target = target;
-		m_worldUp = glm::vec3(0.0f, 1.0f, 0.0f);
-		m_orientation = glm::quat(1.0f, 0.0f, 0.0f, 0.0f);
-		SetCameraVectors(m_position, m_target);
-		SetLightVectors();
-	};
+	CCamera(glm::vec3 eye, glm::vec3 target);
 
 	// Attributes
 private:
