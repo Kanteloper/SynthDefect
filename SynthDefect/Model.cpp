@@ -171,7 +171,7 @@ CMesh CModel::ProcessMesh(const aiMesh* mesh, const aiScene* scene)
 
 
 /// <summary>
-/// Search and Store the max and min value of each coordinate
+/// Search and Save the max and min value of each coordinate
 /// </summary>
 /// <param name="vertex_pos"> XYZ coordinates for a vertex of mesh </param>
 void CModel::FindMinMaxVertex(glm::vec3 const& vertex_pos)
