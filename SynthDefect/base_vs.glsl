@@ -1,9 +1,12 @@
-#version 460
+#version 460                                                          // GLSL v4.6 matched OpenGL 4.6
 
-in vec4 vertexColor; 
-out vec4 FragColor;
+layout(location = 0) in vec3 aPos;
+layout(location = 1) in vec4 aColor;
+
+out vec4 vertexColor;
 
 void main()
-{    
-	FragColor = vertexColor;
+{
+    gl_Position = vec4(aPos, 1.0);
+    vertexColor = aColor;
 }
