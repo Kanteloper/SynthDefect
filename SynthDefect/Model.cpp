@@ -13,6 +13,8 @@ CModel::CModel()
 
 CModel::CModel(LPCTSTR filePath)
 { 
+	m_max = glm::vec3(0.0f, 0.0f, 0.0f);
+	m_min = glm::vec3(0.0f, 0.0f, 0.0f);
 	LoadModel(filePath);
 }
 

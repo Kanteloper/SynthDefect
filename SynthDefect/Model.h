@@ -19,8 +19,8 @@ public:
 
 	// Attributes
 public:
-	glm::vec3 m_max = glm::vec3(0.0f, 0.0f, 0.0f);				// max value of coordinates
-	glm::vec3 m_min = glm::vec3(0.0f, 0.0f, 0.0f);				// min value of coordinates
+	glm::vec3 m_max;	// max value of coordinates
+	glm::vec3 m_min;	// min value of coordinates
 
 private:
 	// model data
