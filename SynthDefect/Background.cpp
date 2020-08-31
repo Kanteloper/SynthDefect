@@ -64,7 +64,6 @@ void CBackground::SetupMesh()
 /// Set background mesh with the default color
 /// </summary>
 /// <param name="v">: vertices for background </param>
-/// <returns> </returns>
 void CBackground::SetDefaultBackground(glm::vec3 v)
 {
 	Vertex top_left, top_right;
