@@ -150,10 +150,20 @@ glm::vec3 CCamera::GetPosition()
 /// <summary>
 /// Set the postion of camera
 /// </summary>
-/// <param name="pos">: the coordinate to be set for the camera </param>
+/// <param name="pos">: the coordinate to be set for the camera's position </param>
 void CCamera::SetPosition(glm::vec3 const& pos)
 {
 	m_position = pos;
+}
+
+
+/// <summary>
+/// Set the target of camera which looks at
+/// </summary>
+/// <param name="pos">the coordinate to be set for camera's target </param>
+void CCamera::SetTarget(glm::vec3 const& target)
+{
+	m_target = target;
 }
 
 

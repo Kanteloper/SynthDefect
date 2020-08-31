@@ -53,6 +53,7 @@ public:
 	glm::mat4 GetViewMatrix();
 	glm::vec3 GetPosition();
 	void SetPosition(glm::vec3 const& pos);
+	void SetTarget(glm::vec3 const& pos);
 	void SetZoom(float const& value);
 	float GetZoom();
 	glm::vec3 GetLightColor();
