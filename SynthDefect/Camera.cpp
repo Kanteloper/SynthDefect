@@ -24,30 +24,6 @@ CCamera::CCamera(glm::vec3 eye, glm::vec3 target)
 
 
 /// <summary>
-/// Calculate rotation of the camera on the virtual trackball
-/// </summary>
-/// <param name="prev">: the previous mouse position </param>
-/// <param name="cur">: the current mouse position </param>
-void CCamera::Rotate(glm::vec2 const& prev, glm::vec2 const& cur)
-{
-	// calculate the prev, cur coordinates using virtual trackball algorithm
-	glm::vec3 prev_trackball = ProjectTrackBall(prev);
-	glm::vec3 cur_trackball = ProjectTrackBall(cur);
-
-	// calculate the axis and angle of rotation for camera
-	glm::vec3 rotation_axis = CalculateAxis(prev_trackball, cur_trackball);
-	float rotation_angle = CalculateAngle(prev_trackball, cur_trackball);
-
-	// calculate rotation orientation
-	RefreshQuaternion();
-	glm::quat change = glm::angleAxis(-rotation_angle * SENSITIVITY, rotation_axis);
-	glm::quat transform = m_orientation * change;
-	m_orientation = change;
-	Update(transform);
-}
-
-
-/// <summary>
 /// Calculate the coordinates of mouse point projected to the virtual trackball
 /// </summary>
 /// <param name="point">: the mouse point for transforming Normalized Device Coordinates </param>

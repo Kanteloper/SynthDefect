@@ -41,7 +41,6 @@ private:
 	void SetLightVectors();
 	void Update(glm::quat const& trans);
 public:
-	void Rotate(glm::vec2 const& prev, glm::vec2 const& cur);
 	glm::mat4 GetViewMatrix();
 	glm::vec3 GetPosition();
 	void SetZoom(float const& value);
