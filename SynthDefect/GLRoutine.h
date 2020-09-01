@@ -12,8 +12,6 @@
 #define FS_BACKGROUND_PATH	"./background_fs.glsl"		// The current path of fragment shader code file for background mesh
 #define VS_MODEL_PATH		"./model_vs.glsl"			// The current path of vertex shader code file for model mesh
 #define FS_MODEL_PATH		"./model_fs.glsl"			// The current path of fragment shader code file for model mesh
-#define VS_BASE_PATH		"./base_vs.glsl"			// The current path of vertex shader code file for base plane mesh
-#define FS_BASE_PATH		"./base_fs.glsl"			// The current path of fragment shader code file for base plane mesh
 
 /******************* Constants for Camera *******************/
 
@@ -25,13 +23,13 @@ const GLfloat FOV = 45.0f;
 
 // Rotation
 const GLfloat ROTATION_OFFSET = 0.06f;
-const GLfloat SENSITIVITY = 0.5f;
+const GLfloat SENSITIVITY = 4.0f;
 const GLfloat TRACKBALL_RADIUS = 1.0f;
 const GLint REFRESH = 100;
 
 // Default setting
-const GLfloat CAMERA_X = -20.0f;
-const GLfloat CAMERA_Y = 30.0f;
+const GLfloat CAMERA_X = 0.0f;
+const GLfloat CAMERA_Y = 0.0f;
 const GLfloat CAMERA_Z = 40.0f;
 const GLfloat MAX_RAY_DISTANCE = 600.0f;
 
