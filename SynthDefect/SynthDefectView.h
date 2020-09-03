@@ -7,7 +7,6 @@
 #include "Camera.h"
 #include "BasePlane.h"
 #include "Background.h"
-#include <queue>
 
 class CSynthDefectView : public CView
 {
@@ -17,8 +16,8 @@ protected: // create from serialization only
 
 // Attributes
 public:
-	float m_viewWidth = 0.0f;
-	float m_viewHeight = 0.0f;
+	float m_viewWidth;
+	float m_viewHeight;
 private:
 	/* Flag */
 	BOOL m_bInitGL = TRUE;
@@ -27,10 +26,9 @@ private:
 	/* Model */
 	CShader m_backgroundShader;
 	CShader m_modelShader;
-	CShader m_baseShader;
-	CBackground* m_back = nullptr;
-	CBasePlane* m_base = nullptr;
 	CModel* m_model = nullptr;
+	float m_angleX;
+	float m_angleY;
 
 	/* Render */
 	float m_modelScale;
@@ -50,8 +48,6 @@ private:
 	/* Ray Picking */
 	std::vector<aiFace> m_faces;
 	std::vector<Vertex> m_vertices;
-	std::queue<unsigned int> m_faceQueue; // maybe a new class takes this
-	unsigned int selected_face = 0;
 
 public:
 	CSynthDefectDoc* GetDocument() const;
@@ -64,9 +60,9 @@ public:
 // Implementation
 private:
 	BOOL DrawGLScene();
-	void DrawBackground();
-	void DrawBasePlane();
+	void DrawDefaultView();
 	void DrawLoadedModel();
+	void DrawBackground();
 	void InitChildView();
 	void InitSettings();
 	glm::vec3 CalculateMouseRay(CPoint const& p, glm::vec3 const& origin);
@@ -74,12 +70,11 @@ private:
 	glm::vec2 GetNormalizedDeviceCoords(CPoint const& p);
 	glm::vec4 toEyeCoords(glm::vec4 const& clip);
 	glm::vec3 toWorldCoords(glm::vec4 const& eye);
-	float CalIntersectedDistance(glm::vec3 const& origin, glm::vec3 const& dir);
-	void SaveFaceInfo(int const& index);
-	float CalDistanceToSurface(std::vector<glm::vec3> const& points, glm::vec3 const& origin, glm::vec3 const& dir);
-	void ProcessNormalTest(glm::vec3 const& p);
 	std::vector<glm::vec3> GetPointsFromFace(aiFace const& f);
-	//BOOL IsPointInOrOnTriangle(glm::vec3 const& p);
+	float CalculateIntersectedDistance(glm::vec3 const& P, glm::vec3 const& N, glm::vec3 const& O, glm::vec3 const& D);
+	glm::vec3 CalculateIntersectedPoint(float dis, glm::vec3 const& O, glm::vec3 const& D);
+	BOOL IsPointOnSurface(glm::vec3 const& P, glm::vec3 const& A, glm::vec3 const& B, glm::vec3 const& C);
+	BOOL DoNormalTest(glm::vec3 const& P, glm::vec3 const& T, glm::vec3 const& A, glm::vec3 const& B);
 
 
 public:
