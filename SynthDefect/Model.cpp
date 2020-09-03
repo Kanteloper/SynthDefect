@@ -3,11 +3,12 @@
 
 #include "pch.h"
 #include "Model.h"
-
 #include <string>
 
 CModel::CModel() 
 {
+	m_max = glm::vec3(0.0f, 0.0f, 0.0f);
+	m_min = glm::vec3(0.0f, 0.0f, 0.0f);
 }
 
 

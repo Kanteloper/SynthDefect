@@ -9,6 +9,7 @@
 
 CMesh::CMesh()
 {
+	m_VAO = m_VBO = m_EBO = 0;
 }
 
 
@@ -18,7 +19,7 @@ CMesh::CMesh(std::vector<aiFace> faces, std::vector<Vertex> vertices, std::vecto
 	m_vertices = vertices;
 	m_indices = indices;
 	// set the vertex buffers and its attribute pointers
-	m_VAO, m_VBO, m_EBO = 0;
+	m_VAO = m_VBO = m_EBO = 0;
 	SetupMesh();
 }
 
