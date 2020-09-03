@@ -71,19 +71,19 @@ void CBackground::SetDefaultBackground(glm::vec3 v)
 	top_left.Position.x = -v.x;
 	top_left.Position.y = v.y;
 	top_left.Position.z = v.z;
-	top_left.Color.r = 0.04f;
-	top_left.Color.g = 0.4f;
-	top_left.Color.b = 0.6f;
-	top_left.Color.a = 1.0f;
+	top_left.Color.r = BACK_TOP_R;
+	top_left.Color.g = BACK_TOP_G;
+	top_left.Color.b = BACK_TOP_B;
+	top_left.Color.a = BACK_A;
 	m_vertices.push_back(top_left);
 	// top right
 	top_right.Position.x = v.x;
 	top_right.Position.y = v.y;
 	top_right.Position.z = v.z;
-	top_right.Color.r = 0.04f;
-	top_right.Color.g = 0.4f;
-	top_right.Color.b = 0.6f;
-	top_right.Color.a = 1.0f;
+	top_right.Color.r = BACK_TOP_R;
+	top_right.Color.g = BACK_TOP_G;
+	top_right.Color.b = BACK_TOP_B;
+	top_right.Color.a = BACK_A;
 	m_vertices.push_back(top_right);
 
 	Vertex bottom_left, bottom_right;
@@ -91,19 +91,19 @@ void CBackground::SetDefaultBackground(glm::vec3 v)
 	bottom_left.Position.x = -v.x;
 	bottom_left.Position.y = -v.y;
 	bottom_left.Position.z = v.z;
-	bottom_left.Color.r = 0.0f;
-	bottom_left.Color.g = 0.0f;
-	bottom_left.Color.b = 0.0f;
-	bottom_left.Color.a = 1.0f;
+	bottom_left.Color.r = BACK_BOTTOM_R;
+	bottom_left.Color.g = BACK_BOTTOM_G;
+	bottom_left.Color.b = BACK_BOTTOM_B;
+	bottom_left.Color.a = BACK_A;
 	m_vertices.push_back(bottom_left);
 	// bottom right
 	bottom_right.Position.x = v.x;
 	bottom_right.Position.y = -v.y;
 	bottom_right.Position.z = v.z;
-	bottom_right.Color.r = 0.0f;
-	bottom_right.Color.g = 0.0f;
-	bottom_right.Color.b = 0.0f;
-	bottom_right.Color.a = 1.0f;
+	bottom_right.Color.r = BACK_BOTTOM_R;
+	bottom_right.Color.g = BACK_BOTTOM_G;
+	bottom_right.Color.b = BACK_BOTTOM_B;
+	bottom_right.Color.a = BACK_A;
 	m_vertices.push_back(bottom_right);
 
 	m_indices = {

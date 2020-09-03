@@ -41,9 +41,9 @@ private:
 	void ProcessNode(const aiNode* node, const aiScene* scene);
 	CMesh ProcessMesh(const aiMesh* mesh, const aiScene* scene);
 	void FindMinMaxVertex(glm::vec3 const& vertex_pos);
-	BOOL IsTexCoordsExisted(const aiMesh *mesh);
-	BOOL IsNormalsExisted(const aiMesh *mesh);
-	BOOL IsTangentsExisted(const aiMesh *mesh);
-	BOOL IsBiTangentsExisted(const aiMesh *mesh);
+	BOOL IsTexCoordsExisted(const aiMesh* mesh);
+	BOOL IsNormalsExisted(const aiMesh* mesh);
+	BOOL IsTangentsExisted(const aiMesh* mesh);
+	BOOL IsBiTangentsExisted(const aiMesh* mesh);
 };
 

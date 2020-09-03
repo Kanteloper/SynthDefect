@@ -106,8 +106,10 @@ CMesh CModel::ProcessMesh(const aiMesh* mesh, const aiScene* scene)
 		// find the max, min value of x, y, z
 		FindMinMaxVertex(vertex.Position);
 
-		// colors
-		vertex.Color = glm::vec4(0.5f, 0.5f, 0.5f, 1.0f);
+		vertex.Color.r = MODEL_R;
+		vertex.Color.g = MODEL_G;
+		vertex.Color.b = MODEL_B;
+		vertex.Color.a = MODEL_A;
 
 		// normals
 		if (IsNormalsExisted(mesh))
