@@ -31,7 +31,6 @@ const GLint REFRESH = 100;
 const GLfloat CAMERA_X = 0.0f;
 const GLfloat CAMERA_Y = 0.0f;
 const GLfloat CAMERA_Z = 40.0f;
-const GLfloat MAX_RAY_DISTANCE = 600.0f;
 
 /******************* Constants for Light Source *******************/
 
@@ -45,10 +44,23 @@ const GLfloat LIGHT_R = 1.0f;
 const GLfloat LIGHT_G = 1.0f;
 const GLfloat LIGHT_B = 1.0f;
 
+/******************* Constants for Model *******************/
 
-/******************* Constants for Base plane *******************/
-const GLint VERTEX_NUM = 64;
-const GLint BASE_SIZE = 150;
+// Model color
+const GLfloat MODEL_R = 0.5f;
+const GLfloat MODEL_G = 0.5f;
+const GLfloat MODEL_B = 0.5f;
+const GLfloat MODEL_A = 1.0f;
+
+/******************* Constants for Background *******************/
+
+const GLfloat BACK_TOP_R = 0.04f;
+const GLfloat BACK_TOP_G = 0.4f;
+const GLfloat BACK_TOP_B = 0.6f;
+const GLfloat BACK_BOTTOM_R = 0.0f;
+const GLfloat BACK_BOTTOM_G = 0.0f;
+const GLfloat BACK_BOTTOM_B = 0.0f;
+const GLfloat BACK_A = 1.0f;
 
 bool CreateGLWindow(CWnd* pWnd, int bits);
 bool KillGLWindow(CWnd* pWnd);
