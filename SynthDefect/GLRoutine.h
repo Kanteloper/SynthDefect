@@ -15,6 +15,10 @@
 
 /******************* Constants for Camera *******************/
 
+// Projection
+const GLfloat NEAR_PLANE = 0.5f;
+const GLfloat FAR_PLANE = 100.0f;
+
 // Zoom
 const GLfloat MAX_ZOOM = 180.0f;
 const GLfloat MIN_ZOOM = 5.0f;
@@ -31,6 +35,9 @@ const GLint REFRESH = 100;
 const GLfloat CAMERA_X = 0.0f;
 const GLfloat CAMERA_Y = 0.0f;
 const GLfloat CAMERA_Z = 40.0f;
+
+// Ray casting
+const GLfloat RAY_OFFSET = -1.32f;
 
 /******************* Constants for Light Source *******************/
 
@@ -54,6 +61,7 @@ const GLfloat MODEL_A = 1.0f;
 
 /******************* Constants for Background *******************/
 
+// Background color
 const GLfloat BACK_TOP_R = 0.04f;
 const GLfloat BACK_TOP_G = 0.4f;
 const GLfloat BACK_TOP_B = 0.6f;
