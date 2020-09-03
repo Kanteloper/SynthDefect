@@ -5,7 +5,6 @@
 #pragma once
 #include "Shader.h"
 #include "Camera.h"
-#include "BasePlane.h"
 #include "Background.h"
 
 class CSynthDefectView : public CView
@@ -26,6 +25,7 @@ private:
 	/* Model */
 	CShader m_backgroundShader;
 	CShader m_modelShader;
+	CBackground* m_back = nullptr;
 	CModel* m_model = nullptr;
 	float m_angleX;
 	float m_angleY;
@@ -60,9 +60,8 @@ public:
 // Implementation
 private:
 	BOOL DrawGLScene();
-	void DrawDefaultView();
-	void DrawLoadedModel();
 	void DrawBackground();
+	void DrawLoadedModel();
 	void InitChildView();
 	void InitSettings();
 	glm::vec3 CalculateMouseRay(CPoint const& p, glm::vec3 const& origin);
