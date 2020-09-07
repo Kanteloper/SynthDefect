@@ -45,10 +45,6 @@ private:
 	glm::vec2 m_current;
 	glm::vec2 m_later;
 
-	/* Ray Picking */
-	std::vector<aiFace> m_faces;
-	std::vector<Vertex> m_vertices;
-
 public:
 	CSynthDefectDoc* GetDocument() const;
 
@@ -64,12 +60,12 @@ private:
 	void DrawLoadedModel();
 	void InitChildView();
 	void InitSettings();
+	int GetPickedTriangle(glm::vec3 const& origin, glm::vec3 const& dir);
 	glm::vec3 CalculateMouseRay(CPoint const& p, glm::vec3 const& origin);
-	BOOL IsRayIntersected(glm::vec3 const& origin, glm::vec3 const& dir);
 	glm::vec2 GetNormalizedDeviceCoords(CPoint const& p);
 	glm::vec4 toEyeCoords(glm::vec4 const& clip);
 	glm::vec3 toWorldCoords(glm::vec4 const& eye);
-	std::vector<glm::vec3> GetPointsFromFace(aiFace const& f);
+	std::vector<glm::vec3> GetPointsFromFace(aiFace const& f, std::vector<Vertex> const& v);
 	float CalculateIntersectedDistance(glm::vec3 const& P, glm::vec3 const& N, glm::vec3 const& O, glm::vec3 const& D);
 	glm::vec3 CalculateIntersectedPoint(float dis, glm::vec3 const& O, glm::vec3 const& D);
 	BOOL IsPointOnSurface(glm::vec3 const& P, glm::vec3 const& A, glm::vec3 const& B, glm::vec3 const& C);
