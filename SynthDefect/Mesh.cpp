@@ -13,7 +13,7 @@ CMesh::CMesh()
 }
 
 
-CMesh::CMesh(std::vector<aiFace> faces, std::vector<Vertex> vertices, std::vector<unsigned int> indices)
+CMesh::CMesh(std::vector<aiFace> const& faces, std::vector<Vertex> vertices, std::vector<unsigned int> const& indices)
 {
 	m_faces = faces;
 	m_vertices = vertices;
@@ -108,7 +108,7 @@ void CMesh::Draw()
 /// Retrieve faces of a mesh
 /// </summary>
 /// <returns> a vector that faces of a mesh is stored </returns>
-std::vector<aiFace> CMesh::GetFaces()
+std::vector<aiFace> CMesh::GetFaces() const
 {
 	return m_faces;
 }
@@ -118,7 +118,7 @@ std::vector<aiFace> CMesh::GetFaces()
 /// Retrieve vertices of a mesh
 /// </summary>
 /// <returns> a vector that vertices of a mesh is stored </returns>
-std::vector<Vertex> CMesh::GetVertices()
+std::vector<Vertex> CMesh::GetVertices() const
 {
 	return m_vertices;
 }

@@ -29,10 +29,10 @@ private:
 	// Impelementation
 public:
 	void DrawModel();
-	std::vector<aiFace> GetFacesFromModel();
-	std::vector<Vertex> GetVerticesFromModel();
-	glm::vec3 GetModelCentroid();
-	float GetModelScaleFactor(glm::vec3 const& cam_pos, glm::vec3 const& center);
+	std::vector<aiFace> GetFacesFromModel() const;
+	std::vector<Vertex> GetVerticesFromModel() const;
+	glm::vec3 GetModelCentroid() const;
+	float GetModelScaleFactor(glm::vec3 const& cam_pos, glm::vec3 const& center) const;
 	~CModel();
 
 private:

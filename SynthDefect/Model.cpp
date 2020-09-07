@@ -91,7 +91,7 @@ CMesh CModel::ProcessMesh(const aiMesh* mesh, const aiScene* scene)
 {
 	std::vector<Vertex>			vertices;
 	std::vector<unsigned int>	indices;
-	std::vector<aiFace>			faces;
+	std::vector<aiFace>		    faces;
 
 	// Iterate each of the mesh's vertices
 	for (unsigned int i = 0; i < mesh->mNumVertices; i++)
@@ -248,7 +248,7 @@ BOOL CModel::IsBiTangentsExisted(const aiMesh* mesh)
 /// Retrieve faces of a model
 /// </summary>
 /// <returns> a vector for aiFace </returns>
-std::vector<aiFace> CModel::GetFacesFromModel()
+std::vector<aiFace> CModel::GetFacesFromModel() const
 {
 	return m_meshes.at(0).GetFaces();
 }
@@ -258,7 +258,7 @@ std::vector<aiFace> CModel::GetFacesFromModel()
 /// Retrieve vertices of a model
 /// </summary>
 /// <returns> the vector for Vertex </returns>
-std::vector<Vertex> CModel::GetVerticesFromModel()
+std::vector<Vertex> CModel::GetVerticesFromModel() const
 {
 	return  m_meshes.at(0).GetVertices();
 }
@@ -268,7 +268,7 @@ std::vector<Vertex> CModel::GetVerticesFromModel()
 /// Calculate and Retrieve the centroid of the loaded model
 /// </summary>
 /// <returns> the geometry centroid of the loaded model </returns>
-glm::vec3 CModel::GetModelCentroid()
+glm::vec3 CModel::GetModelCentroid() const
 {
 	float centerX = (m_max.x + m_min.x) / 2.0f;
 	float centerY = (m_max.y + m_min.y) / 2.0f;
@@ -283,7 +283,7 @@ glm::vec3 CModel::GetModelCentroid()
 /// <param name="cam_pos">: the position of camera </param>
 /// <param name="center">: the geometry centroid of the loaded model </param>
 /// <returns> the scale factor for the loaded model </returns>
-float CModel::GetModelScaleFactor(glm::vec3 const& cam_pos, glm::vec3 const& center)
+float CModel::GetModelScaleFactor(glm::vec3 const& cam_pos, glm::vec3 const& center) const
 {
 	float r = glm::distance(center, m_max);					// the radius of bounding sphere
 	float z = glm::distance(center, cam_pos);				// the distance from model to camera

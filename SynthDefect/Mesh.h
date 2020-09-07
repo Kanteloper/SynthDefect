@@ -32,7 +32,7 @@ class CMesh
 // Construction
 public:
 	CMesh();
-	CMesh(std::vector<aiFace> faces, std::vector<Vertex> vertices, std::vector<unsigned int> indices);
+	CMesh(std::vector<aiFace> const& faces, std::vector<Vertex> vertices, std::vector<unsigned int> const& indices);
 
 // Attributes
 private:
@@ -45,7 +45,7 @@ private:
 	// mesh data
 	std::vector<Vertex>			m_vertices;
 	std::vector<unsigned int>	m_indices;
-	std::vector<aiFace>			m_faces;
+	std::vector<aiFace>	        m_faces;
 
 // Implementation
 protected :
@@ -53,7 +53,7 @@ protected :
 public:
 	~CMesh();
 	virtual void Draw();
-	std::vector<aiFace> GetFaces();
-	std::vector<Vertex> GetVertices();
+	std::vector<aiFace> GetFaces() const;
+	std::vector<Vertex> GetVertices() const;
 };
 
