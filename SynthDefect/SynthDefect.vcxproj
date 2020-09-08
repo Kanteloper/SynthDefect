@@ -205,8 +205,10 @@
     <ClInclude Include="MainFrm.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="Model.h" />
+    <ClInclude Include="MousePicker.h" />
     <ClInclude Include="OutputWnd.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="Pipeline.h" />
     <ClInclude Include="PropertiesWnd.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Shader.h" />
@@ -218,6 +220,8 @@
   <ItemGroup>
     <ClCompile Include="Background.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="MousePicker.cpp" />
+    <ClCompile Include="Pipeline.cpp" />
     <ClCompile Include="GlobMyProc.cpp" />
     <ClCompile Include="GLRoutine.cpp" />
     <ClCompile Include="MainFrm.cpp" />
