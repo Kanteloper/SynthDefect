@@ -17,64 +17,8 @@ CCamera::CCamera(glm::vec3 eye, glm::vec3 target)
 	m_position = eye;
 	m_target = target;
 	m_worldUp = glm::vec3(0.0f, 1.0f, 0.0f);
-	m_orientation = glm::quat(1.0f, 0.0f, 0.0f, 0.0f);
 	SetCameraVectors(m_position, m_target);
 	SetLightVectors();
-}
-
-
-/// <summary>
-/// Calculate the coordinates of mouse point projected to the virtual trackball
-/// </summary>
-/// <param name="point">: the mouse point for transforming Normalized Device Coordinates </param>
-/// <returns> the NDC of mouse point </returns>
-glm::vec3 CCamera::ProjectTrackBall(glm::vec2 const& point)
-{
-	double z = 0.0f;
-	double distance = sqrt(pow(point.x, 2.0) + pow(point.y, 2.0));
-	// check the mouse point is inside the virtua trackball or not
-	if (distance < (TRACKBALL_RADIUS / sqrt(2.0)))	// inside the sphere(virtual trackball)
-		z = sqrt(pow(TRACKBALL_RADIUS, 2.0) - pow(distance, 2.0));
-	else									// outside the sphere(virtual trackball) - on hyperbola
-		z = pow((TRACKBALL_RADIUS / sqrt(2.0)), 2.0) / distance;
-	return glm::normalize(glm::vec3(point.x, point.y, (float)z));
-}
-
-
-/// <summary>
-/// Calculate rotation axis of the camera
-/// </summary>
-/// <param name="prev">: the previous mouse position on virtual trackball </param>
-/// <param name="cur">: the current mouse position on virtual trackball </param>
-/// <returns> the rotation axis of the camera </returns>
-glm::vec3 CCamera::CalculateAxis(glm::vec3 const& prev, glm::vec3 const& cur)
-{
-	return glm::normalize(glm::cross(prev, cur));
-}
-
-
-/// <summary>
-/// Calculate rotation angle of the camera
-/// </summary>
-/// <param name="prev">: the previous mouse position on virtual trackball </param>
-/// <param name="cur">: the current mouse position on virtual trackball </param>
-/// <returns> the rotation angle of the camera </returns>
-float CCamera::CalculateAngle(glm::vec3 const& prev, glm::vec3 const& cur)
-{
-	return glm::acos(glm::dot(prev, cur));
-}
-
-
-/// <summary>
-/// Refresh the origin orientation for quaternion rotation
-/// </summary>
-void CCamera::RefreshQuaternion()
-{
-	if (m_refreshCount++ == REFRESH)
-	{
-		m_refreshCount = 0;
-		m_orientation = glm::normalize(m_orientation);
-	}
 }
 
 
@@ -101,25 +45,12 @@ void CCamera::SetLightVectors()
 }
 
 
-/// <summary>
-/// Re-calculate the related vectors of Camera and light for rotation
-/// </summary>
-/// <param name="q"> the rotation matrix using quaternion </param>
-void CCamera::Update(glm::quat const& trans)
-{
-	m_position = trans * m_position;
-	m_worldUp = trans * m_worldUp;
-	m_target = trans * m_target;
-	m_lightPosition = trans * m_lightPosition;
-	SetCameraVectors(m_position, m_target);
-}
-
 
 /// <summary>
 /// Return the Model-View Matrix calculated using the LookAt Matrix
 /// </summary>
 /// <returns> 4 x 4 Model-View Matrix </returns>
-glm::mat4 CCamera::GetViewMatrix()
+glm::mat4 CCamera::GetViewMatrix() const
 {
 	return glm::lookAt(m_position, m_target, m_worldUp);
 }
@@ -129,7 +60,7 @@ glm::mat4 CCamera::GetViewMatrix()
 /// Retrieve the position of camera
 /// </summary>
 /// <returns> XYZ coordinate for the camera position </returns>
-glm::vec3 CCamera::GetPosition()
+glm::vec3 CCamera::GetPosition() const
 {
 	return m_position;
 }
@@ -149,7 +80,7 @@ void CCamera::SetZoom(float const& value)
 /// Retrieve the Field of View for camera
 /// </summary>
 /// <returns> FOV of the camera </returns>
-float CCamera::GetZoom()
+float CCamera::GetZoom() const
 {
 	return m_zoom;
 }
@@ -159,7 +90,7 @@ float CCamera::GetZoom()
 /// Retrieve the Color of light source
 /// </summary>
 /// <returns> the RGB value for color of the light source </returns>
-glm::vec3 CCamera::GetLightColor()
+glm::vec3 CCamera::GetLightColor() const
 {
 	return m_lightColor;
 }
@@ -169,7 +100,7 @@ glm::vec3 CCamera::GetLightColor()
 /// Retrieve the position of light source
 /// </summary>
 /// <returns> XYZ coordinates for the light source position </returns>
-glm::vec3 CCamera::GetLightPosition()
+glm::vec3 CCamera::GetLightPosition() const
 {
 	return m_lightPosition;
 }

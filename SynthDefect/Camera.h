@@ -5,7 +5,6 @@
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtx/quaternion.hpp>
 
 class CCamera
 {
@@ -23,7 +22,6 @@ private:
 	glm::vec3 m_upAxis;
 	glm::vec3 m_rightAxis;
 	glm::vec3 m_worldUp;
-	glm::quat m_orientation;
 	float m_zoom;
 	int m_refreshCount = 0;
 
@@ -33,20 +31,15 @@ private:
 
 	// Implementation
 private:
-	glm::vec3 ProjectTrackBall(glm::vec2 const& point);
-	glm::vec3 CalculateAxis(glm::vec3 const& prev, glm::vec3 const& cur);
-	float CalculateAngle(glm::vec3 const& prev, glm::vec3 const& cur);
-	void RefreshQuaternion();
 	void SetCameraVectors(glm::vec3 const& eye, glm::vec3 const& target);
 	void SetLightVectors();
-	void Update(glm::quat const& trans);
 public:
-	glm::mat4 GetViewMatrix();
-	glm::vec3 GetPosition();
+	glm::mat4 GetViewMatrix() const;
+	glm::vec3 GetPosition() const;
 	void SetZoom(float const& value);
-	float GetZoom();
-	glm::vec3 GetLightColor();
-	glm::vec3 GetLightPosition();
+	float GetZoom() const;
+	glm::vec3 GetLightColor() const;
+	glm::vec3 GetLightPosition() const;
 	~CCamera();
 };
 
