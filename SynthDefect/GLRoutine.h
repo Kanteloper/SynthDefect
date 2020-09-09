@@ -57,7 +57,7 @@ const GLfloat LIGHT_B = 1.0f;
 const GLfloat MODEL_R = 0.5f;
 const GLfloat MODEL_G = 0.5f;
 const GLfloat MODEL_B = 0.5f;
-const GLfloat MODEL_A = 1.0f;
+const GLfloat MODEL_A = 0.0f;
 
 /******************* Constants for Background *******************/
 

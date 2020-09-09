@@ -1,7 +1,6 @@
 
 // MainFrm.h : interface of the CMainFrame class
 // parent window가 없는 최상위 window
-//
 
 #pragma once
 #include "OutputWnd.h"
