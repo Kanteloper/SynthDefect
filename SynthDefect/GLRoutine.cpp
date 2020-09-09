@@ -200,7 +200,7 @@ void InitializeGLEngine()
 		exit(1);
 	}
 
-	glShadeModel(GL_SMOOTH);							// Enable Smooth Shading
+	glShadeModel(GL_FLAT);
 }
 
 
