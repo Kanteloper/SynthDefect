@@ -33,6 +33,7 @@ public:
 	std::vector<Vertex> GetVerticesFromModel() const;
 	glm::vec3 GetModelCentroid() const;
 	float GetModelScaleFactor(glm::vec3 const& cam_pos, glm::vec3 const& center) const;
+	void UpdateModel(std::vector<Vertex> vertices);
 	~CModel();
 
 private:

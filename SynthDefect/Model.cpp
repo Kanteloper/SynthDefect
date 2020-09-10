@@ -31,7 +31,6 @@ void CModel::LoadModel(LPCTSTR const& pathName)
 	const aiScene* scene = import.ReadFile(ConvertStdString(pathName),
 		aiProcess_CalcTangentSpace |
 		aiProcess_Triangulate |
-		aiProcess_JoinIdenticalVertices |
 		aiProcess_ValidateDataStructure);
 
 	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
@@ -289,6 +288,15 @@ float CModel::GetModelScaleFactor(glm::vec3 const& cam_pos, glm::vec3 const& cen
 	float z = glm::distance(center, cam_pos);				// the distance from model to camera
 	float r_max = z * glm::sin(glm::radians(FOV) / 2.0f);	// the maximum radius of bounding sphere
 	return r_max / r;
+}
+
+
+/// <summary>
+/// Update the mesh of the loaded model
+/// </summary>
+void CModel::UpdateModel(std::vector<Vertex> vertices)
+{
+	m_meshes.at(0).Update(vertices);
 }
 
 
