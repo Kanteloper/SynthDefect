@@ -38,6 +38,10 @@ const GLfloat CAMERA_Z = 40.0f;
 
 // Ray casting
 const GLfloat RAY_OFFSET = -1.03f;
+const GLfloat PICK_R = 1.0f;
+const GLfloat PICK_G = 0.68f;
+const GLfloat PICK_B = 0.0f;
+const GLfloat PICK_A = 0.0f;
 
 /******************* Constants for Light Source *******************/
 
