@@ -75,8 +75,9 @@ private:
 	glm::vec3 CalculateIntersectedPoint(float dis, glm::vec3 const& O, glm::vec3 const& D);
 	BOOL IsPointOnSurface(glm::vec3 const& P, glm::vec3 const& A, glm::vec3 const& B, glm::vec3 const& C);
 	BOOL DoNormalTest(glm::vec3 const& P, glm::vec3 const& T, glm::vec3 const& A, glm::vec3 const& B);
-	void SavePickedFace(int index);
 	void ChangePickedFaceColor(int index, glm::vec4 const& color);
+	BOOL IsPicked(int index);
+	int FindDuplicatedFace(int index);
 
 public:
 	virtual ~CSynthDefectView();
