@@ -26,7 +26,6 @@ struct Vertex {
 	glm::vec3 BiTangent;
 };
 
-
 class CMesh
 {
 // Construction
@@ -55,5 +54,6 @@ public:
 	virtual void Draw();
 	std::vector<aiFace> GetFaces() const;
 	std::vector<Vertex> GetVertices() const;
+	void CMesh::Update(std::vector<Vertex> vertices);
 };
 

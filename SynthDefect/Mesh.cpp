@@ -91,7 +91,6 @@ void CMesh::SetupMesh()
 void CMesh::Draw()
 {
 	GLenum err;
-	// bind appropriate textures
 	// draw mesh
 	glBindVertexArray(m_VAO);
 	if ((err = glGetError()) != GL_NO_ERROR)
@@ -122,6 +121,18 @@ std::vector<Vertex> CMesh::GetVertices() const
 {
 	return m_vertices;
 }
+
+
+/// <summary>
+/// Update vertices of the mesh
+/// </summary>
+/// <param name="vertices"> updated vertices </param>
+void CMesh::Update(std::vector<Vertex> vertices)
+{
+	m_vertices = vertices;
+	SetupMesh();
+}
+
 
 CMesh::~CMesh()
 {
