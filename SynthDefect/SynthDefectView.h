@@ -7,12 +7,6 @@
 #include "Camera.h"
 #include "Background.h"
 
-// A Triangle(face) of loaded model
-struct Triangle {
-	int index = -1;
-	BOOL isPicked = FALSE;
-};
-
 class CSynthDefectView : public CView
 {
 protected: // create from serialization only
@@ -48,7 +42,7 @@ private:
 	glm::vec3 m_defaultCameraPosistion;
 
 	/* Ray Picking */
-	std::vector<Triangle> m_pickedFaces;
+	std::vector<int> m_pickedFaces;
 	std::vector<aiFace> m_faces;
 	std::vector<Vertex> m_vertices;
 
