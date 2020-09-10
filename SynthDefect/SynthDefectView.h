@@ -7,6 +7,12 @@
 #include "Camera.h"
 #include "Background.h"
 
+// A Triangle(face) of loaded model
+struct Triangle {
+	int index = -1;
+	BOOL isPicked = FALSE;
+};
+
 class CSynthDefectView : public CView
 {
 protected: // create from serialization only
@@ -41,6 +47,11 @@ private:
 	CCamera* m_camera = nullptr;
 	glm::vec3 m_defaultCameraPosistion;
 
+	/* Ray Picking */
+	std::vector<Triangle> m_pickedFaces;
+	std::vector<aiFace> m_faces;
+	std::vector<Vertex> m_vertices;
+
 	/* Mouse Event */
 	glm::vec2 m_current;
 	glm::vec2 m_later;
@@ -65,12 +76,13 @@ private:
 	glm::vec2 GetNormalizedDeviceCoords(CPoint const& p);
 	glm::vec4 toEyeCoords(glm::vec4 const& clip);
 	glm::vec3 toWorldCoords(glm::vec4 const& eye);
-	std::vector<glm::vec3> GetPointsFromFace(aiFace const& f, std::vector<Vertex> const& v);
+	std::vector<glm::vec3> GetPointsFromFace(aiFace const& f);
 	float CalculateIntersectedDistance(glm::vec3 const& P, glm::vec3 const& N, glm::vec3 const& O, glm::vec3 const& D);
 	glm::vec3 CalculateIntersectedPoint(float dis, glm::vec3 const& O, glm::vec3 const& D);
 	BOOL IsPointOnSurface(glm::vec3 const& P, glm::vec3 const& A, glm::vec3 const& B, glm::vec3 const& C);
 	BOOL DoNormalTest(glm::vec3 const& P, glm::vec3 const& T, glm::vec3 const& A, glm::vec3 const& B);
-
+	void SavePickedFace(int index);
+	void SetPickedFaceColor(int index, glm::vec4 const& color);
 
 public:
 	virtual ~CSynthDefectView();
