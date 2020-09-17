@@ -77,14 +77,6 @@ int CPropertiesWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		return -1;      // fail to create
 	}
 
-	m_wndObjectCombo.AddString(_T("Application"));
-	m_wndObjectCombo.AddString(_T("Properties Window"));
-	m_wndObjectCombo.SetCurSel(0);
-
-	CRect rectCombo;
-	m_wndObjectCombo.GetClientRect (&rectCombo);
-
-	m_nComboHeight = rectCombo.Height();
 
 	if (!m_wndPropList.Create(WS_VISIBLE | WS_CHILD, rectDummy, this, 2))
 	{
