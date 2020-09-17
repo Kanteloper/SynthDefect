@@ -136,15 +136,6 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	// enable quick (Alt+drag) toolbar customization
 	CMFCToolBar::EnableQuickCustomization();
 
-	if (CMFCToolBar::GetUserImages() == nullptr)
-	{
-		// load user-defined toolbar images
-		if (m_UserImages.Load(_T(".\\UserImages.bmp")))
-		{
-			CMFCToolBar::SetUserImages(&m_UserImages);
-		}
-	}
-
 	// enable menu personalization (most-recently used commands)
 	// TODO: define your own basic commands, ensuring that each pulldown menu has at least one basic command.
 	CList<UINT, UINT> lstBasicCommands;
