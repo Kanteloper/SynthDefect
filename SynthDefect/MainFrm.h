@@ -62,6 +62,8 @@ public:
 	afx_msg void OnNcDestroy();
 	afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
 	afx_msg void OnGetMinMaxInfo(MINMAXINFO* lpMMI);
+	afx_msg void OnGenerateStart();
+	afx_msg void OnGenerateStop();
 };
 
 

@@ -34,6 +34,8 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWndEx)
 	ON_WM_NCDESTROY()
 	ON_WM_SHOWWINDOW()
 	ON_WM_GETMINMAXINFO()
+	ON_COMMAND(ID_GENERATE_START, &CMainFrame::OnGenerateStart)
+	ON_COMMAND(ID_GENERATE_STOP, &CMainFrame::OnGenerateStop)
 END_MESSAGE_MAP()
 
 static UINT indicators[] =
@@ -447,4 +449,17 @@ void CMainFrame::OnGetMinMaxInfo(MINMAXINFO* lpMMI)
 	lpMMI->ptMinTrackSize.x = 620;
 	lpMMI->ptMinTrackSize.y = 500;
 	CFrameWndEx::OnGetMinMaxInfo(lpMMI);
+}
+
+
+void CMainFrame::OnGenerateStart()
+{
+	TRACE("Log: Work");
+	// TODO: Add your command handler code here
+}
+
+
+void CMainFrame::OnGenerateStop()
+{
+	// TODO: Add your command handler code here
 }
