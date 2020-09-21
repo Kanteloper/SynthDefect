@@ -39,7 +39,8 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWndEx)
 	ON_COMMAND(ID_GENERATE_STOP, &CMainFrame::OnGenerateStop)
 	ON_UPDATE_COMMAND_UI(ID_GENERATE_START, &CMainFrame::OnUpdateGenerateStart)
 	ON_UPDATE_COMMAND_UI(ID_GENERATE_STOP, &CMainFrame::OnUpdateGenerateStop)
-	ON_MESSAGE(UM_GETPROPERTIES, &CMainFrame::OnGetProperties)
+	ON_MESSAGE(UM_GET_PROPERTIES, &CMainFrame::OnGetProperties)
+	ON_MESSAGE(UM_GENERATE_ERROR, &CMainFrame::OnGenerateError)
 END_MESSAGE_MAP()
 
 static UINT indicators[] =
@@ -408,9 +409,8 @@ void CMainFrame::OnGetMinMaxInfo(MINMAXINFO* lpMMI)
 
 void CMainFrame::OnGenerateStart()
 {
-	TRACE("Log: Generate Start\n");
 	m_bRunning = TRUE;
-	PostMessageA(m_wndProperties.GetSafeHwnd(), UM_UPDATEPROPERTIES, 0, 0);
+	PostMessageA(m_wndProperties.GetSafeHwnd(), UM_UPDATE_PROPERTIES, 0, 0);
 }
 
 void CMainFrame::OnGenerateStop()
@@ -432,8 +432,36 @@ afx_msg LRESULT CMainFrame::OnGetProperties(WPARAM wParam, LPARAM lParam)
 {
 	DefectProperties* def_props = reinterpret_cast<DefectProperties*>(wParam);
 	std::cout << def_props->num << std::endl;
+	if (GetChildView())
+		std::cout << "not null" << std::endl;
+	else
+		std::cout << "null" << std::endl;
 	delete def_props;
 	return 0;
+}
+
+afx_msg LRESULT CMainFrame::OnGenerateError(WPARAM wParam, LPARAM lParam)
+{
+	m_bRunning = FALSE;
+	return 0;
+}
+
+
+/// <summary>
+/// Get the reference of View object in MainFrame
+/// </summary>
+/// <returns> the pointer of CView object </returns>
+CView* CMainFrame::GetChildView()
+{
+	CView* view = nullptr;
+	CDocument* pDoc = this->GetActiveDocument();
+	if (pDoc)
+	{
+		POSITION pos = pDoc->GetFirstViewPosition();
+		if (pos)
+			view = pDoc->GetNextView(pos);
+	}
+	return view;
 }
 
 CMainFrame::~CMainFrame()

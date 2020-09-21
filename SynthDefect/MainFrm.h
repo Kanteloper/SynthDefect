@@ -26,6 +26,8 @@ public:
 	virtual BOOL LoadFrame(UINT nIDResource, DWORD dwDefaultStyle = WS_OVERLAPPEDWINDOW | FWS_ADDTOTITLE, CWnd* pParentWnd = nullptr, CCreateContext* pContext = nullptr);
 
 // Implementation
+private:
+	CView* GetChildView();
 public:
 	virtual ~CMainFrame();
 #ifdef _DEBUG
@@ -69,6 +71,7 @@ public:
 	afx_msg void OnUpdateGenerateStop(CCmdUI* pCmdUI);
 protected:
 	afx_msg LRESULT OnGetProperties(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnGenerateError(WPARAM wParam, LPARAM lParam);
 };
 
 
