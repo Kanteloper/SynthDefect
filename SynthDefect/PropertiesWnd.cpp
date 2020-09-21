@@ -223,13 +223,13 @@ void CPropertiesWnd::SetPropListFont()
 afx_msg LRESULT CPropertiesWnd::OnUpdateProperty(WPARAM wParam, LPARAM lParam)
 {
 	TRACE("Log: UPDATEPROPERTY event handler work\n");
-	DefectProperties def_props;
+	DefectProperties* def_props = new DefectProperties();
 	if (m_pNumber->IsModified())
 	{
 		COleVariant num = m_pNumber->GetValue();
-		def_props.num = _wtoi(num.bstrVal);
+		def_props->num = _wtoi(num.bstrVal);
 	}
 
-	PostMessageA(m_hParent, UM_GETPROPERTIES, 0, 0);
+	PostMessageA(m_hParent, UM_GETPROPERTIES, reinterpret_cast<WPARAM>(def_props), 0);
 	return 0;
 }
