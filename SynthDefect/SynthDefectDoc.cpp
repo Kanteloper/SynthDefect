@@ -62,7 +62,7 @@ BOOL CSynthDefectDoc::OnNewDocument()
 
 
 /// <summary>
-/// Get the reference of View object
+/// Get the reference of View object in Document
 /// </summary>
 /// <returns> the pointer of CView object </returns>
 CView* CSynthDefectDoc::GetChildView()
