@@ -6,6 +6,7 @@
 #include "Resource.h"
 #include "MainFrm.h"
 #include "SynthDefect.h"
+#include <iostream>
 
 #ifdef _DEBUG
 #undef THIS_FILE
@@ -19,6 +20,9 @@ static char THIS_FILE[]=__FILE__;
 CPropertiesWnd::CPropertiesWnd() noexcept
 {
 	m_nComboHeight = 0;
+	m_pNumber = nullptr;
+	m_pType = nullptr;
+	m_pSize = nullptr;
 }
 
 CPropertiesWnd::~CPropertiesWnd()
@@ -124,7 +128,6 @@ void CPropertiesWnd::OnUpdateSortProperties(CCmdUI* pCmdUI)
 	pCmdUI->SetCheck(m_wndPropList.IsAlphabeticMode());
 }
 
-
 void CPropertiesWnd::InitPropList()
 {
 	SetPropListFont();
@@ -135,32 +138,19 @@ void CPropertiesWnd::InitPropList()
 	m_wndPropList.MarkModifiedProperties();
 
 	CMFCPropertyGridProperty* pGroup1 = new CMFCPropertyGridProperty(_T("Defects"));
-	CMFCPropertyGridProperty* pNumber = new CMFCPropertyGridProperty(_T("Number"), (_variant_t)_T("0"), _T("Specifies how many defects you want to make"));
-	pGroup1->AddSubItem(pNumber);
-
-	CMFCPropertyGridProperty* pProp = new CMFCPropertyGridProperty(_T("Type"), _T("Dialog Frame"), _T("One of: None, Thin, Resizable, or Dialog Frame"));
-	pProp->AddOption(_T("None"));
-	pProp->AddOption(_T("Thin"));
-	pProp->AddOption(_T("Resizable"));
-	pProp->AddOption(_T("Dialog Frame"));
-	pProp->AllowEdit(FALSE);
-
-	pGroup1->AddSubItem(pProp);
-	pGroup1->AddSubItem(new CMFCPropertyGridProperty(_T("Caption"), (_variant_t) _T("About"), _T("Specifies the text that will be displayed in the window's title bar")));
+	m_pNumber = new CMFCPropertyGridProperty(_T("Number"), (_variant_t) 0, _T("Specifies how many defects you want to make"));
+	pGroup1->AddSubItem(m_pNumber);
+	m_pType = new CMFCPropertyGridProperty(_T("Type"), _T("Dialog Frame"), _T("One of: None, Thin, Resizable, or Dialog Frame"));
+	m_pType->AddOption(_T("None"));
+	m_pType->AddOption(_T("Thin"));
+	m_pType->AddOption(_T("Resizable"));
+	m_pType->AddOption(_T("Dialog Frame"));
+	m_pType->AllowEdit(FALSE);
+	pGroup1->AddSubItem(m_pType);
+	m_pSize = new CMFCPropertyGridProperty(_T("Size"), (_variant_t)_T("0.0"), _T("Specifies the text that will be displayed in the window's title bar"));
+	pGroup1->AddSubItem(m_pSize);
 
 	m_wndPropList.AddProperty(pGroup1);
-
-	CMFCPropertyGridProperty* pSize = new CMFCPropertyGridProperty(_T("Window Size"), 0, TRUE);
-
-	pProp = new CMFCPropertyGridProperty(_T("Height"), (_variant_t) 250l, _T("Specifies the window's height"));
-	pProp->EnableSpinControl(TRUE, 50, 300);
-	pSize->AddSubItem(pProp);
-
-	pProp = new CMFCPropertyGridProperty( _T("Width"), (_variant_t) 150l, _T("Specifies the window's width"));
-	pProp->EnableSpinControl(TRUE, 50, 200);
-	pSize->AddSubItem(pProp);
-
-	m_wndPropList.AddProperty(pSize);
 
 	CMFCPropertyGridProperty* pGroup2 = new CMFCPropertyGridProperty(_T("Point Clouds"));
 
@@ -176,7 +166,7 @@ void CPropertiesWnd::InitPropList()
 	m_wndPropList.AddProperty(pGroup2);
 
 	CMFCPropertyGridProperty* pGroup3 = new CMFCPropertyGridProperty(_T("Misc"));
-	pProp = new CMFCPropertyGridProperty(_T("(Name)"), _T("Application"));
+	CMFCPropertyGridProperty* pProp = new CMFCPropertyGridProperty(_T("(Name)"), _T("Application"));
 	pProp->Enable(FALSE);
 	pGroup3->AddSubItem(pProp);
 
@@ -227,9 +217,12 @@ void CPropertiesWnd::SetPropListFont()
 	m_wndObjectCombo.SetFont(&m_fntPropList);
 }
 
-
 afx_msg LRESULT CPropertiesWnd::OnUpdateProperty(WPARAM wParam, LPARAM lParam)
 {
 	TRACE("Log: UPDATEPROPERTY event handler work\n");
+	if (m_pNumber->IsModified()) {
+
+
+	}
 	return 0;
 }

@@ -29,9 +29,9 @@ public:
 
 // Attributes
 private:
-	CMFCPropertyGridProperty* pNumber;
-	CMFCPropertyGridProperty* pType;
-	CMFCPropertyGridProperty* pSize;
+	CMFCPropertyGridProperty* m_pNumber;
+	CMFCPropertyGridProperty* m_pType;
+	CMFCPropertyGridProperty* m_pSize;
 
 public:
 	void SetVSDotNetLook(BOOL bSet)
