@@ -431,11 +431,9 @@ void CMainFrame::OnUpdateGenerateStop(CCmdUI* pCmdUI)
 afx_msg LRESULT CMainFrame::OnGetProperties(WPARAM wParam, LPARAM lParam)
 {
 	DefectProperties* def_props = reinterpret_cast<DefectProperties*>(wParam);
-	std::cout << def_props->num << std::endl;
-	if (GetChildView())
-		std::cout << "not null" << std::endl;
-	else
-		std::cout << "null" << std::endl;
+	CView* cur_child_view = GetChildView();
+	if (cur_child_view)
+		PostMessageA(cur_child_view->GetSafeHwnd(), UM_EXECUTE_PIPELINE, reinterpret_cast<WPARAM>(def_props), 0);
 	delete def_props;
 	return 0;
 }
