@@ -39,7 +39,7 @@ BEGIN_MESSAGE_MAP(CPropertiesWnd, CDockablePane)
 	ON_UPDATE_COMMAND_UI(ID_SORTPROPERTIES, OnUpdateSortProperties)
 	ON_WM_SETFOCUS()
 	ON_WM_SETTINGCHANGE()
-	ON_MESSAGE(UM_UPDATEPROPERTIES, &CPropertiesWnd::OnUpdateProperty)
+	ON_MESSAGE(UM_UPDATE_PROPERTIES, &CPropertiesWnd::OnUpdateProperty)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -231,8 +231,13 @@ afx_msg LRESULT CPropertiesWnd::OnUpdateProperty(WPARAM wParam, LPARAM lParam)
 	}
 
 	if (m_pNumber->IsModified())
-		PostMessageA(m_hParent, UM_GETPROPERTIES, reinterpret_cast<WPARAM>(def_props), 0);
+	{
+		PostMessageA(m_hParent, UM_GET_PROPERTIES, reinterpret_cast<WPARAM>(def_props), 0);
+	}
 	else
+	{
 		AfxMessageBox(_T("There are no updated properties."));
+		PostMessageA(m_hParent, UM_GENERATE_ERROR, 0, 0);
+	}
 	return 0;
 }
