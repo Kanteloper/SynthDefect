@@ -15,6 +15,7 @@ protected: // create from serialization only
 
 // Attributes
 public:
+	BOOL m_bRunning;
 
 // Operations
 public:
@@ -64,6 +65,8 @@ public:
 	afx_msg void OnGetMinMaxInfo(MINMAXINFO* lpMMI);
 	afx_msg void OnGenerateStart();
 	afx_msg void OnGenerateStop();
+	afx_msg void OnUpdateGenerateStart(CCmdUI* pCmdUI);
+	afx_msg void OnUpdateGenerateStop(CCmdUI* pCmdUI);
 };
 
 

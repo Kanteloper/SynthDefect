@@ -36,6 +36,8 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWndEx)
 	ON_WM_GETMINMAXINFO()
 	ON_COMMAND(ID_GENERATE_START, &CMainFrame::OnGenerateStart)
 	ON_COMMAND(ID_GENERATE_STOP, &CMainFrame::OnGenerateStop)
+	ON_UPDATE_COMMAND_UI(ID_GENERATE_START, &CMainFrame::OnUpdateGenerateStart)
+	ON_UPDATE_COMMAND_UI(ID_GENERATE_STOP, &CMainFrame::OnUpdateGenerateStop)
 END_MESSAGE_MAP()
 
 static UINT indicators[] =
@@ -51,6 +53,7 @@ static UINT indicators[] =
 CMainFrame::CMainFrame() noexcept
 {
 	// TODO: add member initialization code here
+	m_bRunning = FALSE;
 	theApp.m_nAppLook = theApp.GetInt(_T("ApplicationLook"), ID_VIEW_APPLOOK_VS_2008);
 }
 
@@ -228,6 +231,7 @@ BOOL CMainFrame::CreateDockingWindows()
 	return TRUE;
 }
 
+
 void CMainFrame::SetDockingWindowIcons(BOOL bHiColorIcons)
 {
 	HICON hOutputBarIcon = (HICON) ::LoadImage(::AfxGetResourceHandle(), MAKEINTRESOURCE(bHiColorIcons ? IDI_OUTPUT_WND_HC : IDI_OUTPUT_WND), IMAGE_ICON, ::GetSystemMetrics(SM_CXSMICON), ::GetSystemMetrics(SM_CYSMICON), 0);
@@ -262,6 +266,7 @@ void CMainFrame::OnViewCustomize()
 	pDlgCust->Create();
 }
 
+
 LRESULT CMainFrame::OnToolbarCreateNew(WPARAM wp,LPARAM lp)
 {
 	LRESULT lres = CFrameWndEx::OnToolbarCreateNew(wp,lp);
@@ -281,6 +286,7 @@ LRESULT CMainFrame::OnToolbarCreateNew(WPARAM wp,LPARAM lp)
 	pUserToolbar->EnableCustomizeButton(TRUE, ID_VIEW_CUSTOMIZE, strCustomize);
 	return lres;
 }
+
 
 void CMainFrame::OnApplicationLook(UINT id)
 {
@@ -353,6 +359,7 @@ void CMainFrame::OnApplicationLook(UINT id)
 	theApp.WriteInt(_T("ApplicationLook"), theApp.m_nAppLook);
 }
 
+
 void CMainFrame::OnUpdateApplicationLook(CCmdUI* pCmdUI)
 {
 	pCmdUI->SetRadio(theApp.m_nAppLook == pCmdUI->m_nID);
@@ -414,6 +421,7 @@ void CMainFrame::OnGetMinMaxInfo(MINMAXINFO* lpMMI)
 void CMainFrame::OnGenerateStart()
 {
 	TRACE("Log: Generate Start\n");
+	m_bRunning = TRUE;
 	PostMessageA(m_wndProperties.GetSafeHwnd(), UM_UPDATEPROPERTY, 0, 0);
 	// TODO: Add your command handler code here
 }
@@ -422,6 +430,7 @@ void CMainFrame::OnGenerateStart()
 void CMainFrame::OnGenerateStop()
 {
 	// TODO: Add your command handler code here
+	m_bRunning = FALSE;
 }
 
 
@@ -466,4 +475,16 @@ void CMainFrame::PostNcDestroy()
 	// TODO: Add your specialized code here and/or call the base class
 
 	CFrameWndEx::PostNcDestroy();
+}
+
+
+void CMainFrame::OnUpdateGenerateStart(CCmdUI* pCmdUI)
+{
+	pCmdUI->Enable(!m_bRunning);
+}
+
+
+void CMainFrame::OnUpdateGenerateStop(CCmdUI* pCmdUI)
+{
+	pCmdUI->Enable(m_bRunning);
 }
