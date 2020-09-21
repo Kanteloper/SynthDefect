@@ -110,6 +110,8 @@ public:
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
 	afx_msg void OnRButtonDown(UINT nFlags, CPoint point);
 	afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
+protected:
+	afx_msg LRESULT OnExecutePipeline(WPARAM wParam, LPARAM lParam);
 };
 
 #ifndef _DEBUG  // debug version in SynthDefectView.cpp
