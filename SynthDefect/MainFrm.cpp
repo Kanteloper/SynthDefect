@@ -38,6 +38,7 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWndEx)
 	ON_COMMAND(ID_GENERATE_STOP, &CMainFrame::OnGenerateStop)
 	ON_UPDATE_COMMAND_UI(ID_GENERATE_START, &CMainFrame::OnUpdateGenerateStart)
 	ON_UPDATE_COMMAND_UI(ID_GENERATE_STOP, &CMainFrame::OnUpdateGenerateStop)
+	ON_MESSAGE(UM_GETPROPERTIES, &CMainFrame::OnGetProperties)
 END_MESSAGE_MAP()
 
 static UINT indicators[] =
@@ -57,7 +58,6 @@ CMainFrame::CMainFrame() noexcept
 	theApp.m_nAppLook = theApp.GetInt(_T("ApplicationLook"), ID_VIEW_APPLOOK_VS_2008);
 }
 
-
 void CMainFrame::OnActivate(UINT nState, CWnd* pWndOther, BOOL bMinimized)
 {
 	CFrameWndEx::OnActivate(nState, pWndOther, bMinimized);
@@ -65,14 +65,12 @@ void CMainFrame::OnActivate(UINT nState, CWnd* pWndOther, BOOL bMinimized)
 	// TODO: Add your message handler code here
 }
 
-
 void CMainFrame::OnActivateApp(BOOL bActive, DWORD dwThreadID)
 {
 	CFrameWndEx::OnActivateApp(bActive, dwThreadID);
 
 	// TODO: Add your message handler code here
 }
-
 
 BOOL CMainFrame::PreCreateWindow(CREATESTRUCT& cs)
 {
@@ -83,7 +81,6 @@ BOOL CMainFrame::PreCreateWindow(CREATESTRUCT& cs)
 
 	return TRUE;
 }
-
 
 int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 {
@@ -202,7 +199,6 @@ BOOL CMainFrame::OnCreateClient(LPCREATESTRUCT lpcs, CCreateContext* pContext)
 	return CFrameWndEx::OnCreateClient(lpcs, pContext);
 }
 
-
 // MainFrameÀÇ Child
 BOOL CMainFrame::CreateDockingWindows()
 {
@@ -230,7 +226,6 @@ BOOL CMainFrame::CreateDockingWindows()
 	SetDockingWindowIcons(theApp.m_bHiColorIcons);
 	return TRUE;
 }
-
 
 void CMainFrame::SetDockingWindowIcons(BOOL bHiColorIcons)
 {
@@ -266,7 +261,6 @@ void CMainFrame::OnViewCustomize()
 	pDlgCust->Create();
 }
 
-
 LRESULT CMainFrame::OnToolbarCreateNew(WPARAM wp,LPARAM lp)
 {
 	LRESULT lres = CFrameWndEx::OnToolbarCreateNew(wp,lp);
@@ -286,7 +280,6 @@ LRESULT CMainFrame::OnToolbarCreateNew(WPARAM wp,LPARAM lp)
 	pUserToolbar->EnableCustomizeButton(TRUE, ID_VIEW_CUSTOMIZE, strCustomize);
 	return lres;
 }
-
 
 void CMainFrame::OnApplicationLook(UINT id)
 {
@@ -359,12 +352,10 @@ void CMainFrame::OnApplicationLook(UINT id)
 	theApp.WriteInt(_T("ApplicationLook"), theApp.m_nAppLook);
 }
 
-
 void CMainFrame::OnUpdateApplicationLook(CCmdUI* pCmdUI)
 {
 	pCmdUI->SetRadio(theApp.m_nAppLook == pCmdUI->m_nID);
 }
-
 
 BOOL CMainFrame::LoadFrame(UINT nIDResource, DWORD dwDefaultStyle, CWnd* pParentWnd, CCreateContext* pContext)
 {
@@ -394,13 +385,11 @@ BOOL CMainFrame::LoadFrame(UINT nIDResource, DWORD dwDefaultStyle, CWnd* pParent
 	return TRUE;
 }
 
-
 void CMainFrame::OnSettingChange(UINT uFlags, LPCTSTR lpszSection)
 {
 	CFrameWndEx::OnSettingChange(uFlags, lpszSection);
 	m_wndOutput.UpdateFonts();
 }
-
 
 void CMainFrame::OnShowWindow(BOOL bShow, UINT nStatus)
 {
@@ -409,7 +398,6 @@ void CMainFrame::OnShowWindow(BOOL bShow, UINT nStatus)
 	// TODO: Add your message handler code here
 }
 
-
 void CMainFrame::OnGetMinMaxInfo(MINMAXINFO* lpMMI)
 {
 	lpMMI->ptMinTrackSize.x = 620;
@@ -417,34 +405,37 @@ void CMainFrame::OnGetMinMaxInfo(MINMAXINFO* lpMMI)
 	CFrameWndEx::OnGetMinMaxInfo(lpMMI);
 }
 
-
 void CMainFrame::OnGenerateStart()
 {
 	TRACE("Log: Generate Start\n");
 	m_bRunning = TRUE;
-	PostMessageA(m_wndProperties.GetSafeHwnd(), UM_UPDATEPROPERTY, 0, 0);
-	// TODO: Add your command handler code here
+	PostMessageA(m_wndProperties.GetSafeHwnd(), UM_UPDATEPROPERTIES, 0, 0);
 }
-
 
 void CMainFrame::OnGenerateStop()
 {
-	// TODO: Add your command handler code here
 	m_bRunning = FALSE;
 }
 
+void CMainFrame::OnUpdateGenerateStart(CCmdUI* pCmdUI)
+{
+	pCmdUI->Enable(!m_bRunning);
+}
+
+void CMainFrame::OnUpdateGenerateStop(CCmdUI* pCmdUI)
+{
+	pCmdUI->Enable(m_bRunning);
+}
 
 CMainFrame::~CMainFrame()
 {
 }
-
 
 void CMainFrame::OnClose()
 {
 	// TODO: Add your message handler code here and/or call default
 	CFrameWndEx::OnClose();
 }
-
 
 BOOL CMainFrame::DestroyWindow()
 {
@@ -453,14 +444,12 @@ BOOL CMainFrame::DestroyWindow()
 	return CFrameWndEx::DestroyWindow();
 }
 
-
 void CMainFrame::OnDestroy()
 {
 	CFrameWndEx::OnDestroy();
 
 	// TODO: Add your message handler code here
 }
-
 
 void CMainFrame::OnNcDestroy()
 {
@@ -469,7 +458,6 @@ void CMainFrame::OnNcDestroy()
 	// TODO: Add your message handler code here
 }
 
-
 void CMainFrame::PostNcDestroy()
 {
 	// TODO: Add your specialized code here and/or call the base class
@@ -477,14 +465,8 @@ void CMainFrame::PostNcDestroy()
 	CFrameWndEx::PostNcDestroy();
 }
 
-
-void CMainFrame::OnUpdateGenerateStart(CCmdUI* pCmdUI)
+afx_msg LRESULT CMainFrame::OnGetProperties(WPARAM wParam, LPARAM lParam)
 {
-	pCmdUI->Enable(!m_bRunning);
-}
-
-
-void CMainFrame::OnUpdateGenerateStop(CCmdUI* pCmdUI)
-{
-	pCmdUI->Enable(m_bRunning);
+	TRACE("Log: Work\n");
+	return 0;
 }

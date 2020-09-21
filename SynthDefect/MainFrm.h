@@ -67,6 +67,8 @@ public:
 	afx_msg void OnGenerateStop();
 	afx_msg void OnUpdateGenerateStart(CCmdUI* pCmdUI);
 	afx_msg void OnUpdateGenerateStop(CCmdUI* pCmdUI);
+protected:
+	afx_msg LRESULT OnGetProperties(WPARAM wParam, LPARAM lParam);
 };
 
 
