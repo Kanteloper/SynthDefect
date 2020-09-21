@@ -54,9 +54,33 @@ CMainFrame::CMainFrame() noexcept
 	theApp.m_nAppLook = theApp.GetInt(_T("ApplicationLook"), ID_VIEW_APPLOOK_VS_2008);
 }
 
-CMainFrame::~CMainFrame()
+
+void CMainFrame::OnActivate(UINT nState, CWnd* pWndOther, BOOL bMinimized)
 {
+	CFrameWndEx::OnActivate(nState, pWndOther, bMinimized);
+
+	// TODO: Add your message handler code here
 }
+
+
+void CMainFrame::OnActivateApp(BOOL bActive, DWORD dwThreadID)
+{
+	CFrameWndEx::OnActivateApp(bActive, dwThreadID);
+
+	// TODO: Add your message handler code here
+}
+
+
+BOOL CMainFrame::PreCreateWindow(CREATESTRUCT& cs)
+{
+	if (!CFrameWndEx::PreCreateWindow(cs))
+		return FALSE;
+	// TODO: Modify the Window class or styles here by modifying
+	//  the CREATESTRUCT cs
+
+	return TRUE;
+}
+
 
 int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 {
@@ -167,14 +191,12 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	return 0;
 }
 
-BOOL CMainFrame::PreCreateWindow(CREATESTRUCT& cs)
-{
-	if( !CFrameWndEx::PreCreateWindow(cs) )
-		return FALSE;
-	// TODO: Modify the Window class or styles here by modifying
-	//  the CREATESTRUCT cs
 
-	return TRUE;
+BOOL CMainFrame::OnCreateClient(LPCREATESTRUCT lpcs, CCreateContext* pContext)
+{
+	// TODO: Add your specialized code here and/or call the base class
+	TRACE(TEXT("CMainFrame::OnCreateClient() - Return\n"));
+	return CFrameWndEx::OnCreateClient(lpcs, pContext);
 }
 
 
@@ -373,69 +395,6 @@ void CMainFrame::OnSettingChange(UINT uFlags, LPCTSTR lpszSection)
 }
 
 
-void CMainFrame::OnClose()
-{
-	// TODO: Add your message handler code here and/or call default
-	CFrameWndEx::OnClose();
-}
-
-
-BOOL CMainFrame::OnCreateClient(LPCREATESTRUCT lpcs, CCreateContext* pContext)
-{
-	// TODO: Add your specialized code here and/or call the base class
-	TRACE(TEXT("CMainFrame::OnCreateClient() - Return\n"));
-	return CFrameWndEx::OnCreateClient(lpcs, pContext);
-}
-
-
-BOOL CMainFrame::DestroyWindow()
-{
-	// TODO: Add your specialized code here and/or call the base class
-
-	return CFrameWndEx::DestroyWindow();
-}
-
-
-void CMainFrame::PostNcDestroy()
-{
-	// TODO: Add your specialized code here and/or call the base class
-
-	CFrameWndEx::PostNcDestroy();
-}
-
-
-void CMainFrame::OnActivate(UINT nState, CWnd* pWndOther, BOOL bMinimized)
-{
-	CFrameWndEx::OnActivate(nState, pWndOther, bMinimized);
-
-	// TODO: Add your message handler code here
-}
-
-
-void CMainFrame::OnActivateApp(BOOL bActive, DWORD dwThreadID)
-{
-	CFrameWndEx::OnActivateApp(bActive, dwThreadID);
-
-	// TODO: Add your message handler code here
-}
-
-
-void CMainFrame::OnDestroy()
-{
-	CFrameWndEx::OnDestroy();
-
-	// TODO: Add your message handler code here
-}
-
-
-void CMainFrame::OnNcDestroy()
-{
-	CFrameWndEx::OnNcDestroy();
-	TRACE(TEXT("CMainFrame::OnNcDestroy() - Return\n"));
-	// TODO: Add your message handler code here
-}
-
-
 void CMainFrame::OnShowWindow(BOOL bShow, UINT nStatus)
 {
 	CFrameWndEx::OnShowWindow(bShow, nStatus);
@@ -462,4 +421,48 @@ void CMainFrame::OnGenerateStart()
 void CMainFrame::OnGenerateStop()
 {
 	// TODO: Add your command handler code here
+}
+
+
+CMainFrame::~CMainFrame()
+{
+}
+
+
+void CMainFrame::OnClose()
+{
+	// TODO: Add your message handler code here and/or call default
+	CFrameWndEx::OnClose();
+}
+
+
+BOOL CMainFrame::DestroyWindow()
+{
+	// TODO: Add your specialized code here and/or call the base class
+
+	return CFrameWndEx::DestroyWindow();
+}
+
+
+void CMainFrame::OnDestroy()
+{
+	CFrameWndEx::OnDestroy();
+
+	// TODO: Add your message handler code here
+}
+
+
+void CMainFrame::OnNcDestroy()
+{
+	CFrameWndEx::OnNcDestroy();
+	TRACE(TEXT("CMainFrame::OnNcDestroy() - Return\n"));
+	// TODO: Add your message handler code here
+}
+
+
+void CMainFrame::PostNcDestroy()
+{
+	// TODO: Add your specialized code here and/or call the base class
+
+	CFrameWndEx::PostNcDestroy();
 }
