@@ -55,5 +55,6 @@ protected:
 	void SetPropListFont();
 
 	int m_nComboHeight;
+	afx_msg LRESULT OnUpdateProperty(WPARAM wParam, LPARAM lParam);
 };
 

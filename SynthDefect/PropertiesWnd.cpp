@@ -34,6 +34,7 @@ BEGIN_MESSAGE_MAP(CPropertiesWnd, CDockablePane)
 	ON_UPDATE_COMMAND_UI(ID_SORTPROPERTIES, OnUpdateSortProperties)
 	ON_WM_SETFOCUS()
 	ON_WM_SETTINGCHANGE()
+	ON_MESSAGE(UM_UPDATEPROPERTY, &CPropertiesWnd::OnUpdateProperty)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -224,4 +225,11 @@ void CPropertiesWnd::SetPropListFont()
 
 	m_wndPropList.SetFont(&m_fntPropList);
 	m_wndObjectCombo.SetFont(&m_fntPropList);
+}
+
+
+afx_msg LRESULT CPropertiesWnd::OnUpdateProperty(WPARAM wParam, LPARAM lParam)
+{
+	TRACE("Log: UPDATEPROPERTY event handler work\n");
+	return 0;
 }
