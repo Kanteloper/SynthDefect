@@ -16,4 +16,10 @@
 #define UM_UPDATEPROPERTIES WM_USER + 100
 #define UM_GETPROPERTIES    WM_USER + 101
 
+struct DefectProperties {
+	int num = 0;
+	// type
+	// size
+};
+
 #endif //PCH_H
