@@ -13,12 +13,6 @@ public:
 	virtual BOOL AllowShowOnList() const { return FALSE; }
 };
 
-struct DefectProperties {
-	int num = 0;
-	// type
-	// size
-};
-
 class CPropertiesWnd : public CDockablePane
 {
 // Construction
