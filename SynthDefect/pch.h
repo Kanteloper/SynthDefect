@@ -14,6 +14,6 @@
 
 // add user-defined Window Messages
 #define UM_UPDATEPROPERTY WM_USER + 100
-
+#define UM_GETPROPERTY    WM_USER + 101
 
 #endif //PCH_H
