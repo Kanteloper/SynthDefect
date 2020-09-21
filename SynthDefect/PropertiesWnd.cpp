@@ -23,6 +23,7 @@ CPropertiesWnd::CPropertiesWnd() noexcept
 	m_pNumber = nullptr;
 	m_pType = nullptr;
 	m_pSize = nullptr;
+	m_hParent = NULL;
 }
 
 CPropertiesWnd::~CPropertiesWnd()
@@ -38,7 +39,7 @@ BEGIN_MESSAGE_MAP(CPropertiesWnd, CDockablePane)
 	ON_UPDATE_COMMAND_UI(ID_SORTPROPERTIES, OnUpdateSortProperties)
 	ON_WM_SETFOCUS()
 	ON_WM_SETTINGCHANGE()
-	ON_MESSAGE(UM_UPDATEPROPERTY, &CPropertiesWnd::OnUpdateProperty)
+	ON_MESSAGE(UM_UPDATEPROPERTIES, &CPropertiesWnd::OnUpdateProperty)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -65,6 +66,8 @@ int CPropertiesWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 {
 	if (CDockablePane::OnCreate(lpCreateStruct) == -1)
 		return -1;
+
+	m_hParent = lpCreateStruct->hwndParent;
 
 	CRect rectDummy;
 	rectDummy.SetRectEmpty();
@@ -138,7 +141,7 @@ void CPropertiesWnd::InitPropList()
 	m_wndPropList.MarkModifiedProperties();
 
 	CMFCPropertyGridProperty* pGroup1 = new CMFCPropertyGridProperty(_T("Defects"));
-	m_pNumber = new CMFCPropertyGridProperty(_T("Number"), (_variant_t) 0, _T("Specifies how many defects you want to make"));
+	m_pNumber = new CMFCPropertyGridProperty(_T("Number"), (_variant_t)_T("0"), _T("Specifies how many defects you want to make"));
 	pGroup1->AddSubItem(m_pNumber);
 	m_pType = new CMFCPropertyGridProperty(_T("Type"), _T("Dialog Frame"), _T("One of: None, Thin, Resizable, or Dialog Frame"));
 	m_pType->AddOption(_T("None"));
@@ -220,9 +223,13 @@ void CPropertiesWnd::SetPropListFont()
 afx_msg LRESULT CPropertiesWnd::OnUpdateProperty(WPARAM wParam, LPARAM lParam)
 {
 	TRACE("Log: UPDATEPROPERTY event handler work\n");
-	if (m_pNumber->IsModified()) {
-
-
+	DefectProperties def_props;
+	if (m_pNumber->IsModified())
+	{
+		COleVariant num = m_pNumber->GetValue();
+		def_props.num = _wtoi(num.bstrVal);
 	}
+
+	PostMessageA(m_hParent, UM_GETPROPERTIES, 0, 0);
 	return 0;
 }
