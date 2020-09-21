@@ -230,6 +230,9 @@ afx_msg LRESULT CPropertiesWnd::OnUpdateProperty(WPARAM wParam, LPARAM lParam)
 		def_props->num = _wtoi(num.bstrVal);
 	}
 
-	PostMessageA(m_hParent, UM_GETPROPERTIES, reinterpret_cast<WPARAM>(def_props), 0);
+	if (m_pNumber->IsModified())
+		PostMessageA(m_hParent, UM_GETPROPERTIES, reinterpret_cast<WPARAM>(def_props), 0);
+	else
+		AfxMessageBox(_T("There are no updated properties."));
 	return 0;
 }
