@@ -7,6 +7,7 @@
 #include "SynthDefect.h"
 
 #include "MainFrm.h"
+#include <iostream>
 
 #ifdef _DEBUG
 #define new DEBUG_NEW		// Assist in finding memory leaks, https://docs.microsoft.com/en-us/previous-versions/visualstudio/visual-studio-2010/tz7sxz99(v=vs.100)
@@ -427,6 +428,14 @@ void CMainFrame::OnUpdateGenerateStop(CCmdUI* pCmdUI)
 	pCmdUI->Enable(m_bRunning);
 }
 
+afx_msg LRESULT CMainFrame::OnGetProperties(WPARAM wParam, LPARAM lParam)
+{
+	DefectProperties* def_props = reinterpret_cast<DefectProperties*>(wParam);
+	std::cout << def_props->num << std::endl;
+	delete def_props;
+	return 0;
+}
+
 CMainFrame::~CMainFrame()
 {
 }
@@ -463,10 +472,4 @@ void CMainFrame::PostNcDestroy()
 	// TODO: Add your specialized code here and/or call the base class
 
 	CFrameWndEx::PostNcDestroy();
-}
-
-afx_msg LRESULT CMainFrame::OnGetProperties(WPARAM wParam, LPARAM lParam)
-{
-	TRACE("Log: Work\n");
-	return 0;
 }
