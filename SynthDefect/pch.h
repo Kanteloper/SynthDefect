@@ -12,9 +12,13 @@
 #include "GLRoutine.h"
 #include "GlobMyProc.h"
 
-// add user-defined Window Messages
-#define UM_UPDATEPROPERTIES WM_USER + 100
-#define UM_GETPROPERTIES    WM_USER + 101
+// add user-defined Window Messages for PropertiesWindow
+#define UM_UPDATE_PROPERTIES WM_USER + 100
+
+// add user-defined Window Messages for MainFrame
+#define UM_GET_PROPERTIES    WM_USER + 200
+#define UM_GENERATE_ERROR     WM_USER + 201
+
 
 struct DefectProperties {
 	int num = 0;
