@@ -14,9 +14,9 @@ public:
 };
 
 struct DefectProperties {
-	int num;
-	std::string type;
-	float size;
+	int num = 0;
+	// type
+	// size
 };
 
 class CPropertiesWnd : public CDockablePane
@@ -28,10 +28,11 @@ public:
 	void AdjustLayout();
 
 // Attributes
-private:
+private: 
 	CMFCPropertyGridProperty* m_pNumber;
 	CMFCPropertyGridProperty* m_pType;
 	CMFCPropertyGridProperty* m_pSize;
+	HWND m_hParent;							// MainFrame
 
 public:
 	void SetVSDotNetLook(BOOL bSet)
