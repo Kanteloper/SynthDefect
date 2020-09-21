@@ -48,6 +48,9 @@
 #define IDS_EDIT_MENU                   306
 #define ID_GENERATE_STOP                32777
 #define ID_GENERATE_START               32778
+#define MENU_BAR						0x0000
+#define TOOL_BAR						0x800A
+#define TOOL_BAR_1						0x8009
 
 // Next default values for new objects
 // 
