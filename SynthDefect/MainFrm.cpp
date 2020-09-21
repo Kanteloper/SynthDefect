@@ -413,7 +413,8 @@ void CMainFrame::OnGetMinMaxInfo(MINMAXINFO* lpMMI)
 
 void CMainFrame::OnGenerateStart()
 {
-	TRACE("Log: Work");
+	TRACE("Log: Generate Start\n");
+	PostMessageA(m_wndProperties.GetSafeHwnd(), UM_UPDATEPROPERTY, 0, 0);
 	// TODO: Add your command handler code here
 }
 
