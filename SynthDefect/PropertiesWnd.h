@@ -1,5 +1,6 @@
 
 #pragma once
+#include <string>
 
 class CPropertiesToolBar : public CMFCToolBar
 {
@@ -12,6 +13,12 @@ public:
 	virtual BOOL AllowShowOnList() const { return FALSE; }
 };
 
+struct DefectProperties {
+	int num;
+	std::string type;
+	float size;
+};
+
 class CPropertiesWnd : public CDockablePane
 {
 // Construction
@@ -21,6 +28,11 @@ public:
 	void AdjustLayout();
 
 // Attributes
+private:
+	CMFCPropertyGridProperty* pNumber;
+	CMFCPropertyGridProperty* pType;
+	CMFCPropertyGridProperty* pSize;
+
 public:
 	void SetVSDotNetLook(BOOL bSet)
 	{
