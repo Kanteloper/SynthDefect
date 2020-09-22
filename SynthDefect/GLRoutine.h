@@ -36,7 +36,10 @@ const GLfloat CAMERA_X = 0.0f;
 const GLfloat CAMERA_Y = 0.0f;
 const GLfloat CAMERA_Z = 40.0f;
 
-// Ray casting
+
+/******************* Constants for Ray Picking *******************/
+
+const float MAX_DISTANCE = 100000.0f;
 const GLfloat RAY_OFFSET = -1.03f;
 const GLfloat PICK_R = 1.0f;
 const GLfloat PICK_G = 0.68f;
