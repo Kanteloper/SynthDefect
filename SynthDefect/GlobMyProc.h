@@ -2,9 +2,8 @@
 
 #include <string>
 
-/******************* Constants for Ray Picking *******************/
-
-const float MAX_DISTANCE = 100000.0f;
+/******************* Constants for Initial Setting *******************/
+#define DEFECT_BASE_PATH "../data/base.obj"
 
 std::string ConvertStdString(LPCTSTR target);
 std::string RetrieveCode(const char* filePath);
