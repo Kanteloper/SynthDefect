@@ -42,6 +42,8 @@ CSynthDefectDoc::~CSynthDefectDoc()
 {
 	if (m_model)
 		delete m_model;
+	if (m_base)
+		delete m_base;
 }
 
 /// <summary>
