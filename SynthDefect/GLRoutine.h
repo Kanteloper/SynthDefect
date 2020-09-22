@@ -20,9 +20,9 @@ const GLfloat NEAR_PLANE = 0.5f;
 const GLfloat FAR_PLANE = 100.0f;
 
 // Zoom
-const GLfloat MAX_ZOOM = 180.0f;
-const GLfloat MIN_ZOOM = 5.0f;
-const GLfloat ZOOM_OFFSET = 4.0f;
+const GLfloat MIN_ZOOM = 180.0f;
+const GLfloat MAX_ZOOM = 1.0f;
+const GLfloat ZOOM_OFFSET = 2.0f;
 const GLfloat FOV = 45.0f;
 
 // Rotation
