@@ -27,6 +27,7 @@ private:
 	CShader m_modelShader;
 	CBackground* m_back = nullptr;
 	CModel* m_model = nullptr;
+	CModel* m_base = nullptr;
 	float m_angleX;
 	float m_angleY;
 
