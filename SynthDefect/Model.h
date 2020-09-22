@@ -15,7 +15,8 @@ class CModel
 	// Constructor
 public:
 	CModel::CModel();
-	CModel::CModel(LPCTSTR filePath);
+	CModel::CModel(LPCTSTR const& filePath);
+	CModel::CModel(std::string const& filePath);
 
 	// Attributes
 public:
@@ -38,6 +39,7 @@ public:
 
 private:
 	void LoadModel(LPCTSTR const& pathName);
+	void LoadBase(std::string const& pathName);
 	void ProcessNode(const aiNode* node, const aiScene* scene);
 	CMesh ProcessMesh(const aiMesh* mesh, const aiScene* scene);
 	void FindMinMaxVertex(glm::vec3 const& vertex_pos);
