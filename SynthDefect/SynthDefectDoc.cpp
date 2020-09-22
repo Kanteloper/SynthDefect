@@ -32,15 +32,17 @@ END_MESSAGE_MAP()
 
 CSynthDefectDoc::CSynthDefectDoc() noexcept
 {
-	// TODO: add one-time construction code here
+	m_model = nullptr;
+	m_base = nullptr;
+	m_bLoad = FALSE;
+	m_bInitModel = TRUE;
 }
-
 
 CSynthDefectDoc::~CSynthDefectDoc()
 {
-	delete m_model;
+	if (m_model)
+		delete m_model;
 }
-
 
 /// <summary>
 /// Called by the framework as part of the File 'New' command
@@ -55,11 +57,19 @@ BOOL CSynthDefectDoc::OnNewDocument()
 	if (!CDocument::OnNewDocument())
 		return FALSE;
 
-	m_model = nullptr;
+	if (!m_bLoad)
+	{
+		m_base = new CModel(DEFECT_BASE_PATH);	// the grid base mesh
+	}
+	else
+	{
+		m_bLoad = FALSE;
+		delete m_model;
+		m_model = nullptr;
+	}
 
 	return TRUE;
 }
-
 
 /// <summary>
 /// Get the reference of View object in Document
@@ -74,7 +84,6 @@ CView* CSynthDefectDoc::GetChildView()
 	return target;
 }
 
-
 /// <summary>
 /// Called by the framework as part of the File 'Open' command
 /// </summary>
@@ -86,13 +95,20 @@ BOOL CSynthDefectDoc::OnOpenDocument(LPCTSTR lpszPathName)
 	if (!CDocument::OnOpenDocument(lpszPathName))
 		return FALSE;
 
-	// load model
-	m_model = new CModel(lpszPathName);
+	m_bLoad = TRUE;
+	if (m_bInitModel)
+	{
+		m_bInitModel = FALSE;
+		m_model = new CModel(lpszPathName);
+	}
+	else
+	{
+		delete m_model;
+		m_model = new CModel(lpszPathName);
+	}
 
 	return TRUE;
 }
-
-
 
 // CSynthDefectDoc serialization - not used
 void CSynthDefectDoc::Serialize(CArchive& ar)
