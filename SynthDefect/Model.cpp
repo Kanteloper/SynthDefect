@@ -11,14 +11,17 @@ CModel::CModel()
 	m_min = glm::vec3(0.0f, 0.0f, 0.0f);
 }
 
-
-CModel::CModel(LPCTSTR filePath)
+CModel::CModel(LPCTSTR const& filePath)
 { 
 	m_max = glm::vec3(0.0f, 0.0f, 0.0f);
 	m_min = glm::vec3(0.0f, 0.0f, 0.0f);
 	LoadModel(filePath);
 }
 
+CModel::CModel(std::string const& filePath)
+{
+	LoadBase(filePath);
+}
 
 /// <summary>
 /// Load selected object file
@@ -38,11 +41,28 @@ void CModel::LoadModel(LPCTSTR const& pathName)
 		TRACE(import.GetErrorString());
 		return;
 	}
-
   	ProcessNode(scene->mRootNode, scene);
 }
 
+/// <summary>
+/// 
+/// </summary>
+/// <param name="pathName"></param>
+void CModel::LoadBase(std::string const& pathName)
+{
+	Assimp::Importer import;
+	const aiScene* scene = import.ReadFile(pathName,
+		aiProcess_CalcTangentSpace |
+		aiProcess_Triangulate |
+		aiProcess_ValidateDataStructure);
 
+	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
+	{
+		TRACE(import.GetErrorString());
+		return;
+	}
+	ProcessNode(scene->mRootNode, scene);
+}
 
 /// <summary>
 /// Draw the model, and thus all its meshes
@@ -55,7 +75,6 @@ void CModel::DrawModel()
 		m_meshes[i].Draw();
 	}
 }
-
 
 /// <summary>
 /// Process a node in Assimp's structure in a recursive way
@@ -78,7 +97,6 @@ void CModel::ProcessNode(const aiNode* node, const aiScene* scene)
 		ProcessNode(node->mChildren[i], scene);
 	}
 }
-
 
 /// <summary>
 /// Translate an aiMesh object of Assimp to a mesh object to be albe to render using OpenGL
@@ -171,7 +189,6 @@ CMesh CModel::ProcessMesh(const aiMesh* mesh, const aiScene* scene)
 	return CMesh(faces, vertices, indices);
 }
 
-
 /// <summary>
 /// Search and Save the max and min value of each coordinate
 /// </summary>
@@ -186,7 +203,6 @@ void CModel::FindMinMaxVertex(glm::vec3 const& vertex_pos)
 	m_min.z = glm::min(m_min.z, vertex_pos.z);
 }
 
-
 /// <summary>
 /// Check whether the texture coordinates is existed or not in aiMesh structure
 /// </summary>
@@ -199,7 +215,6 @@ BOOL CModel::IsTexCoordsExisted(const aiMesh* mesh)
 	else
 		return FALSE;
 }
-
 
 /// <summary>
 /// Check normal vectors are existed
@@ -214,7 +229,6 @@ BOOL CModel::IsNormalsExisted(const aiMesh* mesh)
 		return FALSE;
 }
 
-
 /// <summary>
 /// Check Tangent vectors are existed
 /// </summary>
@@ -227,7 +241,6 @@ BOOL CModel::IsTangentsExisted(const aiMesh* mesh)
 	else
 		return FALSE;
 }
-
 
 /// <summary>
 /// Check BiTangent vectors are existed
@@ -242,7 +255,6 @@ BOOL CModel::IsBiTangentsExisted(const aiMesh* mesh)
 		return FALSE;;
 }
 
-
 /// <summary>
 /// Retrieve faces of a model
 /// </summary>
@@ -252,7 +264,6 @@ std::vector<aiFace> CModel::GetFacesFromModel() const
 	return m_meshes.at(0).GetFaces();
 }
 
-
 /// <summary>
 /// Retrieve vertices of a model
 /// </summary>
@@ -261,7 +272,6 @@ std::vector<Vertex> CModel::GetVerticesFromModel() const
 {
 	return  m_meshes.at(0).GetVertices();
 }
-
 
 /// <summary>
 /// Calculate and Retrieve the centroid of the loaded model
@@ -274,7 +284,6 @@ glm::vec3 CModel::GetModelCentroid() const
 	float centerZ = (m_max.z + m_min.z) / 2.0f;
 	return glm::vec3(centerX, centerY, centerZ);
 }
-
 
 /// <summary>
 /// Calculate the scale factor for fitting the loaded model into veiwport
@@ -290,7 +299,6 @@ float CModel::GetModelScaleFactor(glm::vec3 const& cam_pos, glm::vec3 const& cen
 	return r_max / r;
 }
 
-
 /// <summary>
 /// Update the mesh of the loaded model
 /// </summary>
@@ -298,7 +306,6 @@ void CModel::UpdateModel(std::vector<Vertex> vertices)
 {
 	m_meshes.at(0).Update(vertices);
 }
-
 
 CModel::~CModel()
 {
