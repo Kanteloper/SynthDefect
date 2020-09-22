@@ -16,9 +16,12 @@ protected: // create from serialization only
 
 // Attributes
 private:
-	CView* pView = nullptr;
+	BOOL m_bLoad;					// the flag for checking the model is loaded
+	BOOL m_bInitModel;				// the flag for checking the model is loaded at first
+
 public:
-	CModel* m_model = nullptr;
+	CModel* m_model;				// the loaded model
+	CModel* m_base;					// the base mesh of synthetic defect
 
 // Overrides
 public:
