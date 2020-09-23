@@ -28,6 +28,11 @@ struct DefectProperties {
 	// size
 };
 
+struct PointCloudProperties {
+	int num = 0;
+	// type
+	// size
+};
 
 std::string ConvertStdString(LPCTSTR target);
 std::string RetrieveCode(const char* filePath);
