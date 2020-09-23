@@ -22,16 +22,11 @@
 
 /******************* Structure for Properties *******************/
 
-struct DefectProperties {
-	int num = 0;
+struct Properties {
+	int numOfDefects = 0;
 	// type
 	// size
-};
-
-struct PointCloudProperties {
-	int num = 0;
-	// type
-	// size
+	int numOfPoints = 0;
 };
 
 std::string ConvertStdString(LPCTSTR target);
