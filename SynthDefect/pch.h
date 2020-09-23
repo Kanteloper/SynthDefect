@@ -12,25 +12,4 @@
 #include "GLRoutine.h"
 #include "GlobMyProc.h"
 
-/*********** User-Define Window Messages ***********/
-
-// For PropertiesWindow
-#define UM_UPDATE_PROPERTIES	WM_USER + 100
-
-// For MainFrame
-#define UM_GET_PROPERTIES		WM_USER + 200
-#define UM_GENERATE_ERROR		WM_USER + 201
-
-// For View
-#define UM_EXECUTE_PIPELINE		WM_USER + 300
-
-
-
-
-struct DefectProperties {
-	int num = 0;
-	// type
-	// size
-};
-
 #endif //PCH_H
