@@ -434,7 +434,6 @@ afx_msg LRESULT CMainFrame::OnGetProperties(WPARAM wParam, LPARAM lParam)
 	CView* cur_child_view = GetChildView();
 	if (cur_child_view)
 		PostMessageA(cur_child_view->GetSafeHwnd(), UM_EXECUTE_PIPELINE, reinterpret_cast<WPARAM>(def_props), 0);
-	delete def_props;
 	return 0;
 }
 
@@ -443,7 +442,6 @@ afx_msg LRESULT CMainFrame::OnGenerateError(WPARAM wParam, LPARAM lParam)
 	m_bRunning = FALSE;
 	return 0;
 }
-
 
 /// <summary>
 /// Get the reference of View object in MainFrame
