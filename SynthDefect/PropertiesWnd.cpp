@@ -23,6 +23,7 @@ CPropertiesWnd::CPropertiesWnd() noexcept
 	m_pNumber = nullptr;
 	m_pType = nullptr;
 	m_pSize = nullptr;
+	m_pPoints = nullptr;
 	m_hParent = NULL;
 }
 
@@ -215,16 +216,23 @@ void CPropertiesWnd::SetPropListFont()
 
 afx_msg LRESULT CPropertiesWnd::OnUpdateProperty(WPARAM wParam, LPARAM lParam)
 {
-	DefectProperties* def_props = new DefectProperties();
-	if (m_pNumber->IsModified())
-	{
-		COleVariant num = m_pNumber->GetValue();
-		def_props->num = _wtoi(num.bstrVal);
-	}
+	Properties* props = new Properties();
 
 	if (m_pNumber->IsModified())
 	{
-		PostMessageA(m_hParent, UM_GET_PROPERTIES, reinterpret_cast<WPARAM>(def_props), 0);
+		COleVariant num = m_pNumber->GetValue();
+		props->numOfDefects = _wtoi(num.bstrVal);
+	}
+
+	if (m_pPoints->IsModified())
+	{
+		COleVariant num = m_pPoints->GetValue();
+		props->numOfPoints = _wtoi(num.bstrVal);
+	}
+
+	if (m_pNumber->IsModified() || m_pPoints->IsModified())
+	{
+		PostMessageA(m_hParent, UM_GET_PROPERTIES, reinterpret_cast<WPARAM>(props), 0);
 	}
 	else
 	{
