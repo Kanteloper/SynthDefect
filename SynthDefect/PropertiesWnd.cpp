@@ -156,15 +156,8 @@ void CPropertiesWnd::InitPropList()
 	m_wndPropList.AddProperty(pGroup1);
 
 	CMFCPropertyGridProperty* pGroup2 = new CMFCPropertyGridProperty(_T("Point Clouds"));
-
-	LOGFONT lf;
-	CFont* font = CFont::FromHandle((HFONT) GetStockObject(DEFAULT_GUI_FONT));
-	font->GetLogFont(&lf);
-
-	_tcscpy_s(lf.lfFaceName, _T("Arial"));
-
-	pGroup2->AddSubItem(new CMFCPropertyGridFontProperty(_T("Font"), lf, CF_EFFECTS | CF_SCREENFONTS, _T("Specifies the default font for the window")));
-	pGroup2->AddSubItem(new CMFCPropertyGridProperty(_T("Use System Font"), (_variant_t) true, _T("Specifies that the window uses MS Shell Dlg font")));
+	m_pPoints = new CMFCPropertyGridProperty(_T("Number"), (_variant_t)_T("0"), _T("Specifies how many points you want to sample from the model"));
+	pGroup2->AddSubItem(m_pPoints);
 
 	m_wndPropList.AddProperty(pGroup2);
 

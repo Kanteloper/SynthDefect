@@ -26,6 +26,7 @@ private:
 	CMFCPropertyGridProperty* m_pNumber;
 	CMFCPropertyGridProperty* m_pType;
 	CMFCPropertyGridProperty* m_pSize;
+	CMFCPropertyGridProperty* m_pPoints;
 	HWND m_hParent;							// MainFrame
 
 public:
