@@ -24,6 +24,12 @@ private:
 	// implements
 public:
 	void Execute();
+	void DoPositioning();
+	void DoScaling();
+	void DoDeforming();
+	void DoModeling();
+	void DoSampling();
+
 	~CPipeline();
 };
 
