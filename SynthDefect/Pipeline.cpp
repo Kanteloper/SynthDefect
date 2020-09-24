@@ -11,10 +11,19 @@ CPipeline::CPipeline()
 }
 
 /// <summary>
-/// 
+/// Execute five pupelines for generating point clouds with synthetic defects
 /// </summary>
 void CPipeline::Execute()
 {
+	DoPositioning();
+}
+
+/// <summary>
+/// 
+/// </summary>
+void CPipeline::DoPositioning()
+{
+
 }
 
 CPipeline::~CPipeline()
