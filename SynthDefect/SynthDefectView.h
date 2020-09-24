@@ -18,6 +18,9 @@ public:
 	float m_viewWidth;
 	float m_viewHeight;
 private:
+	/* Handle */
+	HWND m_hMainFrm;
+
 	/* Flag */
 	BOOL m_bInitGL = TRUE;
 	BOOL m_bWireframe = FALSE;
