@@ -27,7 +27,7 @@ private:
 	CMFCPropertyGridProperty* m_pType;
 	CMFCPropertyGridProperty* m_pSize;
 	CMFCPropertyGridProperty* m_pPoints;
-	HWND m_hParent;							// MainFrame
+	HWND m_hMainFrm;							// MainFrame
 
 public:
 	void SetVSDotNetLook(BOOL bSet)

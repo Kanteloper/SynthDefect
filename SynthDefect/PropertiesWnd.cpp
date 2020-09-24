@@ -24,7 +24,7 @@ CPropertiesWnd::CPropertiesWnd() noexcept
 	m_pType = nullptr;
 	m_pSize = nullptr;
 	m_pPoints = nullptr;
-	m_hParent = NULL;
+	m_hMainFrm = NULL;
 }
 
 CPropertiesWnd::~CPropertiesWnd()
@@ -68,7 +68,7 @@ int CPropertiesWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	if (CDockablePane::OnCreate(lpCreateStruct) == -1)
 		return -1;
 
-	m_hParent = lpCreateStruct->hwndParent;
+	m_hMainFrm = lpCreateStruct->hwndParent;
 
 	CRect rectDummy;
 	rectDummy.SetRectEmpty();
@@ -232,12 +232,12 @@ afx_msg LRESULT CPropertiesWnd::OnUpdateProperty(WPARAM wParam, LPARAM lParam)
 
 	if (m_pNumber->IsModified() || m_pPoints->IsModified())
 	{
-		PostMessageA(m_hParent, UM_GET_PROPERTIES, reinterpret_cast<WPARAM>(props), 0);
+		PostMessageA(m_hMainFrm, UM_GET_PROPERTIES, reinterpret_cast<WPARAM>(props), 0);
 	}
 	else
 	{
 		AfxMessageBox(_T("There are no updated properties."));
-		PostMessageA(m_hParent, UM_GENERATE_ERROR, 0, 0);
+		PostMessageA(m_hMainFrm, UM_GENERATE_ERROR, 0, 0);
 	}
 	return 0;
 }
