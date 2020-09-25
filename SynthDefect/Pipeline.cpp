@@ -2,6 +2,7 @@
 #include "Pipeline.h"
 
 #include <glm/gtx/string_cast.hpp>
+#include <cuda_runtime.h>
 #include <iostream>
 #include <random>
 
@@ -38,11 +39,15 @@ void CPipeline::DoPositioning()
 	{
 		// calculate the centroid of A face
 		glm::vec3 face_center = GetTriangleCentroid(m_faces[random_indices.at(i)]);
-		std::cout << glm::to_string(face_center) << std::endl;
+		glm::mat4 trans = GetTranslateMatrix(face_center);
+		
+
+		std::cout << glm::to_string(trans) << std::endl;
+
+		// rotation 
+
 	}
 	// calculate the origin of base mesh
-
-
 
 }
 
@@ -58,6 +63,22 @@ glm::vec3 CPipeline::GetTriangleCentroid(aiFace const& f)
 	glm::vec3 C = m_vertices[f.mIndices[2]].Position;
 	return glm::vec3((A.x + B.x + C.x) / 3.0f, (A.y + B.y + C.y) / 3.0f, (A.z + B.z + C.z) / 3.0f);
 }
+
+/// <summary>
+/// Calculate the Translation Matrix to specific position p
+/// </summary>
+/// <param name="p"> the position to translate </param>
+/// <returns> Translation matrix to the position p </returns>
+glm::mat4 CPipeline::GetTranslateMatrix(glm::vec3 const& p)
+{
+	glm::mat4 result(1.0f);
+	result[3].x = p.x;
+	result[3].y = p.y;
+	result[3].z = p.z;
+	return result;
+}
+
+
 
 CPipeline::~CPipeline()
 {

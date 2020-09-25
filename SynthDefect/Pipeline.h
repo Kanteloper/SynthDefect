@@ -29,14 +29,17 @@ private:
 
 
 	// implements
-public:
-	void Execute();
+private:
 	void DoPositioning();
 	glm::vec3 GetTriangleCentroid(aiFace const& f);
+	glm::mat4 GetTranslateMatrix(glm::vec3 const& p);
 	void DoScaling();
 	void DoDeforming();
 	void DoModeling();
 	void DoSampling();
+
+public:
+	void Execute();
 
 	~CPipeline();
 };
