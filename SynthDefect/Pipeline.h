@@ -31,8 +31,8 @@ private:
 	// implements
 private:
 	void DoPositioning();
-	glm::vec3 GetTriangleCentroid(aiFace const& f);
-	glm::mat4 GetTranslateMatrix(glm::vec3 const& p);
+	glm::vec3 CalculateTriangleCentroid(aiFace const& f);
+	glm::mat4 CalculatePositionMatrix(glm::mat4 const& m, aiFace const& f);
 	void DoScaling();
 	void DoDeforming();
 	void DoModeling();

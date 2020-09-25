@@ -2,6 +2,7 @@
 #include "Pipeline.h"
 
 #include <glm/gtx/string_cast.hpp>
+#include <glm/gtx/normal.hpp>
 #include <cuda_runtime.h>
 #include <iostream>
 #include <random>
@@ -29,26 +30,20 @@ void CPipeline::DoPositioning()
 	std::vector<int> random_indices;
 	std::random_device rd;
 	std::mt19937_64 gen(rd());
-	std::uniform_int_distribution<int> dis(0, m_pickIndices.size() - 1);
-
+	std::uniform_int_distribution<int> dis(0, (int)(m_pickIndices.size() - 1));
 	// select faces that user picks randomly
 	for (int i = 0; i < m_numOfDefects; i++)
 		random_indices.push_back(m_pickIndices.at(dis(gen)));
 
 	for (int i = 0; i < random_indices.size(); i++)
 	{
-		// calculate the centroid of A face
-		glm::vec3 face_center = GetTriangleCentroid(m_faces[random_indices.at(i)]);
-		glm::mat4 trans = GetTranslateMatrix(face_center);
-		
+		aiFace random_face = m_faces[random_indices.at(i)];
+		glm::mat4 position_matrix = CalculatePositionMatrix(glm::mat4(1.0f), random_face);
+		std::cout << glm::to_string(position_matrix) << std::endl;
 
-		std::cout << glm::to_string(trans) << std::endl;
-
-		// rotation 
+		// multiply pisition matrix for each vertex
 
 	}
-	// calculate the origin of base mesh
-
 }
 
 /// <summary>
@@ -56,7 +51,7 @@ void CPipeline::DoPositioning()
 /// </summary>
 /// <param name="f"> A face among faces that selected randomly </param>
 /// <returns> the centroid of the triangle(face) </returns>
-glm::vec3 CPipeline::GetTriangleCentroid(aiFace const& f)
+glm::vec3 CPipeline::CalculateTriangleCentroid(aiFace const& f)
 {
 	glm::vec3 A = m_vertices[f.mIndices[0]].Position;
 	glm::vec3 B = m_vertices[f.mIndices[1]].Position;
@@ -65,20 +60,27 @@ glm::vec3 CPipeline::GetTriangleCentroid(aiFace const& f)
 }
 
 /// <summary>
-/// Calculate the Translation Matrix to specific position p
+/// 
 /// </summary>
-/// <param name="p"> the position to translate </param>
-/// <returns> Translation matrix to the position p </returns>
-glm::mat4 CPipeline::GetTranslateMatrix(glm::vec3 const& p)
+/// <param name="m"></param>
+/// <param name="v"></param>
+/// <param name="f"></param>
+/// <returns></returns>
+glm::mat4 CPipeline::CalculatePositionMatrix(glm::mat4 const& m, aiFace const& f)
 {
-	glm::mat4 result(1.0f);
-	result[3].x = p.x;
-	result[3].y = p.y;
-	result[3].z = p.z;
+	glm::mat4 result(m);
+	glm::vec3 face_center = CalculateTriangleCentroid(f);
+	glm::vec3 face_normal = glm::triangleNormal(m_vertices[f.mIndices[0]].Position, m_vertices[f.mIndices[1]].Position, m_vertices[f.mIndices[2]].Position);
+	std::cout << "face normal: " << glm::to_string(face_normal) << std::endl;
+	// the normal of grid base mesh
+	// the normla of randomly picked face
+
+
+	// rotation
+	result = glm::translate(result, face_center);
+
 	return result;
 }
-
-
 
 CPipeline::~CPipeline()
 {
