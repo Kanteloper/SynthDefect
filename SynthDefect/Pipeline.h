@@ -12,10 +12,12 @@ class CPipeline
 public:
 	CPipeline();
 	CPipeline(Properties const& props, std::vector<int> const& indices, CModel* model, CModel* base)
-		: m_numOfDefects(props.numOfDefects), m_pickIndices(indices), m_model(model), m_base(base) 
+		: m_numOfDefects(props.numOfDefects), m_pickIndices(indices), m_model(model), m_base(base)
 	{
-		m_faces = m_model->GetFacesFromModel();
-		m_vertices = m_model->GetVerticesFromModel();
+		m_modelFaces = m_model->GetFacesFromModel();
+		m_baseFaces = m_base->GetFacesFromModel();
+		m_modelVertices = m_model->GetVerticesFromModel();
+		m_baseVertices = m_base->GetVerticesFromModel();
 	}
 	
 	// Attributes
@@ -24,15 +26,16 @@ private:
 	std::vector<int> m_pickIndices;
 	CModel* m_model;
 	CModel* m_base;
-	std::vector<aiFace> m_faces;
-	std::vector<Vertex> m_vertices;
-
+	std::vector<aiFace> m_modelFaces;
+	std::vector<Vertex> m_modelVertices;
+	std::vector<aiFace> m_baseFaces;
+	std::vector<Vertex> m_baseVertices;
 
 	// implements
 private:
 	void DoPositioning();
-	glm::vec3 CalculateTriangleCentroid(aiFace const& f);
 	glm::mat4 CalculatePositionMatrix(glm::mat4 const& m, aiFace const& f);
+	glm::vec3 CalculateTriangleCentroid(glm::vec3 const& A, glm::vec3 const& B, glm::vec3 const& C);
 	void DoScaling();
 	void DoDeforming();
 	void DoModeling();
