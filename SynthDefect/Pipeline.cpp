@@ -3,7 +3,6 @@
 
 #include <glm/gtx/string_cast.hpp>
 #include <glm/gtx/normal.hpp>
-#include <cuda_runtime.h>
 #include <iostream>
 #include <random>
 
@@ -40,9 +39,17 @@ void CPipeline::DoPositioning()
 	{
 		aiFace random_face = m_modelFaces[random_indices.at(i)];
 		glm::mat4 position_matrix = CalculatePositionMatrix(glm::mat4(1.0f), random_face);
-		std::cout << glm::to_string(position_matrix) << std::endl;
 
-		// multiply pisition matrix for each vertex using cuda
+
+		// multiply pisition matrix for each vertex of grid base mesh
+		for (int i = 0; i < m_baseFaces.size(); i++)
+		{
+			aiFace base_face = m_baseFaces.at(i);
+			m_baseVertices[base_face.mIndices[0]].Position = position_matrix * glm::vec4(m_baseVertices[base_face.mIndices[0]].Position, 1.0);
+			m_baseVertices[base_face.mIndices[1]].Position = position_matrix * glm::vec4(m_baseVertices[base_face.mIndices[1]].Position, 1.0);
+			m_baseVertices[base_face.mIndices[2]].Position = position_matrix * glm::vec4(m_baseVertices[base_face.mIndices[2]].Position, 1.0);
+			m_base->UpdateModel(m_baseVertices);
+		}
 	}
 }
 
