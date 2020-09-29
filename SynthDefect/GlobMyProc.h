@@ -23,7 +23,6 @@
 /******************* Structure for Properties *******************/
 
 struct Properties {
-	int numOfDefects = 0;
 	// type
 	// size
 	int numOfPoints = 0;
