@@ -20,7 +20,6 @@ static char THIS_FILE[]=__FILE__;
 CPropertiesWnd::CPropertiesWnd() noexcept
 {
 	m_nComboHeight = 0;
-	m_pNumber = nullptr;
 	m_pType = nullptr;
 	m_pSize = nullptr;
 	m_pPoints = nullptr;
@@ -142,8 +141,6 @@ void CPropertiesWnd::InitPropList()
 	m_wndPropList.MarkModifiedProperties();
 
 	CMFCPropertyGridProperty* pGroup1 = new CMFCPropertyGridProperty(_T("Defects"));
-	m_pNumber = new CMFCPropertyGridProperty(_T("Number"), (_variant_t)_T("0"), _T("Specifies how many defects you want to make"));
-	pGroup1->AddSubItem(m_pNumber);
 	m_pType = new CMFCPropertyGridProperty(_T("Type"), _T("Dialog Frame"), _T("One of: None, Thin, Resizable, or Dialog Frame"));
 	m_pType->AddOption(_T("None"));
 	m_pType->AddOption(_T("Thin"));
@@ -218,19 +215,13 @@ afx_msg LRESULT CPropertiesWnd::OnUpdateProperty(WPARAM wParam, LPARAM lParam)
 {
 	Properties* props = new Properties();
 
-	if (m_pNumber->IsModified())
-	{
-		COleVariant num = m_pNumber->GetValue();
-		props->numOfDefects = _wtoi(num.bstrVal);
-	}
-
 	if (m_pPoints->IsModified())
 	{
 		COleVariant num = m_pPoints->GetValue();
 		props->numOfPoints = _wtoi(num.bstrVal);
 	}
 
-	if (m_pNumber->IsModified() || m_pPoints->IsModified())
+	if (m_pPoints->IsModified())
 	{
 		PostMessageA(m_hMainFrm, UM_GET_PROPERTIES, reinterpret_cast<WPARAM>(props), 0);
 	}

@@ -23,7 +23,6 @@ public:
 
 // Attributes
 private: 
-	CMFCPropertyGridProperty* m_pNumber;
 	CMFCPropertyGridProperty* m_pType;
 	CMFCPropertyGridProperty* m_pSize;
 	CMFCPropertyGridProperty* m_pPoints;
