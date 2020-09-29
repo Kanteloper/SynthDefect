@@ -69,9 +69,9 @@ glm::mat4 CPipeline::CalculatePositionMatrix(glm::mat4 const& m, aiFace const& f
 	float angle = glm::acos(glm::dot(face_normal, base_normal));
 	glm::vec3 axis = glm::normalize(glm::cross(face_normal, base_normal));
 
-	// Transformation for Positioning : Translation -> Rotation
+	// Transformation for Positioning : Rotation -> Translation
 	result = glm::translate(result, face_center);
-	result = glm::rotate(result, angle, axis);
+	result = glm::rotate(result, -angle, axis);
 	return result;
 }
 
