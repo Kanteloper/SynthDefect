@@ -141,11 +141,10 @@ void CPropertiesWnd::InitPropList()
 	m_wndPropList.MarkModifiedProperties();
 
 	CMFCPropertyGridProperty* pGroup1 = new CMFCPropertyGridProperty(_T("Defects"));
-	m_pType = new CMFCPropertyGridProperty(_T("Type"), _T("Dialog Frame"), _T("One of: None, Thin, Resizable, or Dialog Frame"));
-	m_pType->AddOption(_T("None"));
-	m_pType->AddOption(_T("Thin"));
-	m_pType->AddOption(_T("Resizable"));
-	m_pType->AddOption(_T("Dialog Frame"));
+	m_pType = new CMFCPropertyGridProperty(_T("Type"), _T("Dialog Frame"), _T("One of: Open Hole, Pipe, or Caved Surface"));
+	m_pType->AddOption(_T("Open Hole"));
+	m_pType->AddOption(_T("Pipe"));
+	m_pType->AddOption(_T("Caved Surface"));
 	m_pType->AllowEdit(FALSE);
 	pGroup1->AddSubItem(m_pType);
 	m_pSize = new CMFCPropertyGridProperty(_T("Size"), (_variant_t)_T("0.0"), _T("Specifies the text that will be displayed in the window's title bar"));
@@ -215,13 +214,25 @@ afx_msg LRESULT CPropertiesWnd::OnUpdateProperty(WPARAM wParam, LPARAM lParam)
 {
 	Properties* props = new Properties();
 
+	if (m_pType->IsModified())
+	{
+		COleVariant type = m_pType->GetValue();
+		props->type = type.bstrVal;
+	}
+
+	if (m_pSize->IsModified())
+	{
+		COleVariant num = m_pSize->GetValue();
+		props->size = _wtof(num.bstrVal);
+	}
+
 	if (m_pPoints->IsModified())
 	{
 		COleVariant num = m_pPoints->GetValue();
 		props->numOfPoints = _wtoi(num.bstrVal);
 	}
 
-	if (m_pPoints->IsModified())
+	if (m_pType->IsModified() || m_pSize->IsModified() ||  m_pPoints->IsModified())
 	{
 		PostMessageA(m_hMainFrm, UM_GET_PROPERTIES, reinterpret_cast<WPARAM>(props), 0);
 	}
