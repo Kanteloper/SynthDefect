@@ -10,7 +10,6 @@ CPipeline::CPipeline()
 {
 	m_base = nullptr;
 	m_model = nullptr;
-	m_numOfDefects = 0;
 }
 
 /// <summary>
@@ -26,30 +25,22 @@ void CPipeline::Execute()
 /// </summary>
 void CPipeline::DoPositioning()
 {
-	std::vector<int> random_indices;
 	std::random_device rd;
 	std::mt19937_64 gen(rd());
 	std::uniform_int_distribution<int> dis(0, (int)(m_pickIndices.size() - 1));
 
 	// select faces that user picks randomly
-	for (int i = 0; i < m_numOfDefects; i++)
-		random_indices.push_back(m_pickIndices.at(dis(gen)));
+	aiFace random_face = m_modelFaces[m_pickIndices.at(dis(gen))];
+	glm::mat4 position_matrix = CalculatePositionMatrix(glm::mat4(1.0f), random_face);
 
-	for (int i = 0; i < random_indices.size(); i++)
+	// multiply pisition matrix for each vertex of grid base mesh
+	for (int i = 0; i < m_baseFaces.size(); i++)
 	{
-		aiFace random_face = m_modelFaces[random_indices.at(i)];
-		glm::mat4 position_matrix = CalculatePositionMatrix(glm::mat4(1.0f), random_face);
-
-
-		// multiply pisition matrix for each vertex of grid base mesh
-		for (int i = 0; i < m_baseFaces.size(); i++)
-		{
-			aiFace base_face = m_baseFaces.at(i);
-			m_baseVertices[base_face.mIndices[0]].Position = position_matrix * glm::vec4(m_baseVertices[base_face.mIndices[0]].Position, 1.0);
-			m_baseVertices[base_face.mIndices[1]].Position = position_matrix * glm::vec4(m_baseVertices[base_face.mIndices[1]].Position, 1.0);
-			m_baseVertices[base_face.mIndices[2]].Position = position_matrix * glm::vec4(m_baseVertices[base_face.mIndices[2]].Position, 1.0);
-			m_base->UpdateModel(m_baseVertices);
-		}
+		aiFace base_face = m_baseFaces.at(i);
+		m_baseVertices[base_face.mIndices[0]].Position = position_matrix * glm::vec4(m_baseVertices[base_face.mIndices[0]].Position, 1.0);
+		m_baseVertices[base_face.mIndices[1]].Position = position_matrix * glm::vec4(m_baseVertices[base_face.mIndices[1]].Position, 1.0);
+		m_baseVertices[base_face.mIndices[2]].Position = position_matrix * glm::vec4(m_baseVertices[base_face.mIndices[2]].Position, 1.0);
+		m_base->UpdateModel(m_baseVertices);
 	}
 }
 
