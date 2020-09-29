@@ -141,7 +141,7 @@ void CPropertiesWnd::InitPropList()
 	m_wndPropList.MarkModifiedProperties();
 
 	CMFCPropertyGridProperty* pGroup1 = new CMFCPropertyGridProperty(_T("Defects"));
-	m_pType = new CMFCPropertyGridProperty(_T("Type"), _T("Dialog Frame"), _T("One of: Open Hole, Pipe, or Caved Surface"));
+	m_pType = new CMFCPropertyGridProperty(_T("Type"), _T("None"), _T("One of: Open Hole, Pipe, or Caved Surface"));
 	m_pType->AddOption(_T("Open Hole"));
 	m_pType->AddOption(_T("Pipe"));
 	m_pType->AddOption(_T("Caved Surface"));
