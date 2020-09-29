@@ -23,8 +23,8 @@
 /******************* Structure for Properties *******************/
 
 struct Properties {
-	// type
-	// size
+	wchar_t* type = nullptr;
+	float size = 0.0f;
 	int numOfPoints = 0;
 };
 
