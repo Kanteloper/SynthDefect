@@ -24,7 +24,9 @@
 
 struct Properties {
 	wchar_t* type = nullptr;
-	float size = 0.0f;
+	float width = 0.0f;
+	float height = 0.0f;
+	float depth = 0.0f;
 	int numOfPoints = 0;
 };
 
