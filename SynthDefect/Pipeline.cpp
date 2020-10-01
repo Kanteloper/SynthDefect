@@ -8,6 +8,9 @@
 
 CPipeline::CPipeline()
 {
+	m_width = 0.0f;
+	m_height = 0.0f;
+	m_depth = 0.0f;
 	m_base = nullptr;
 	m_model = nullptr;
 }
@@ -18,6 +21,8 @@ CPipeline::CPipeline()
 void CPipeline::Execute()
 {
 	DoPositioning();
+	// DoDeforming();
+	DoScaling();
 }
 
 /// <summary>
@@ -69,7 +74,6 @@ glm::mat4 CPipeline::CalculatePositionMatrix(glm::mat4 const& m, aiFace const& f
 	float angle = glm::acos(glm::dot(face_normal, base_normal));
 	glm::vec3 axis = glm::normalize(glm::cross(face_normal, base_normal));
 
-	// Transformation for Positioning : Rotation -> Translation
 	result = glm::translate(result, face_center);
 	result = glm::rotate(result, -angle, axis);
 	return result;
@@ -85,6 +89,21 @@ glm::mat4 CPipeline::CalculatePositionMatrix(glm::mat4 const& m, aiFace const& f
 glm::vec3 CPipeline::CalculateTriangleCentroid(glm::vec3 const& A, glm::vec3 const& B, glm::vec3 const& C)
 {
 	return glm::vec3((A.x + B.x + C.x) / 3.0f, (A.y + B.y + C.y) / 3.0f, (A.z + B.z + C.z) / 3.0f);
+}
+
+/// <summary>
+/// 
+/// </summary>
+void CPipeline::DoDeforming()
+{
+}
+
+/// <summary>
+/// Scale the grid base mesh that is deformed among values user inputs
+/// </summary>
+void CPipeline::DoScaling()
+{
+
 }
 
 

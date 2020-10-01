@@ -14,6 +14,9 @@ public:
 	CPipeline(Properties const& props, std::vector<int> const& indices, CModel* model, CModel* base)
 		: m_pickIndices(indices), m_model(model), m_base(base)
 	{
+		m_width = props.width;
+		m_height = props.height;
+		m_depth = props.depth;
 		m_modelFaces = m_model->GetFacesFromModel();
 		m_baseFaces = m_base->GetFacesFromModel();
 		m_modelVertices = m_model->GetVerticesFromModel();
@@ -22,6 +25,9 @@ public:
 	
 	// Attributes
 private:
+	float m_width;
+	float m_height;
+	float m_depth;
 	std::vector<int> m_pickIndices;
 	CModel* m_model;
 	CModel* m_base;
@@ -35,8 +41,8 @@ private:
 	void DoPositioning();
 	glm::mat4 CalculatePositionMatrix(glm::mat4 const& m, aiFace const& f);
 	glm::vec3 CalculateTriangleCentroid(glm::vec3 const& A, glm::vec3 const& B, glm::vec3 const& C);
-	void DoScaling();
 	void DoDeforming();
+	void DoScaling();
 	void DoModeling();
 	void DoSampling();
 
