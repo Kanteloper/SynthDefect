@@ -43,6 +43,7 @@ private:
 	glm::vec3 CalculateTriangleCentroid(glm::vec3 const& A, glm::vec3 const& B, glm::vec3 const& C);
 	void DoDeforming();
 	void DoScaling();
+	glm::mat4 CalculateScaleMatrix(glm::mat4 const& m);
 	void DoModeling();
 	void DoSampling();
 
