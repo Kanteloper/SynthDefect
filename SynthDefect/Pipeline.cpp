@@ -96,6 +96,7 @@ glm::vec3 CPipeline::CalculateTriangleCentroid(glm::vec3 const& A, glm::vec3 con
 /// </summary>
 void CPipeline::DoDeforming()
 {
+
 }
 
 /// <summary>
@@ -103,7 +104,27 @@ void CPipeline::DoDeforming()
 /// </summary>
 void CPipeline::DoScaling()
 {
+	glm::mat4 scale_matrix = CalculateScaleMatrix(glm::mat4(1.0f));
+	for (int i = 0; i < m_baseFaces.size(); i++)
+	{
+		aiFace base_face = m_baseFaces.at(i);
+		m_baseVertices[base_face.mIndices[0]].Position = scale_matrix * glm::vec4(m_baseVertices[base_face.mIndices[0]].Position, 1.0);
+		m_baseVertices[base_face.mIndices[1]].Position = scale_matrix * glm::vec4(m_baseVertices[base_face.mIndices[1]].Position, 1.0);
+		m_baseVertices[base_face.mIndices[2]].Position = scale_matrix * glm::vec4(m_baseVertices[base_face.mIndices[2]].Position, 1.0);
+		m_base->UpdateModel(m_baseVertices);
+	}
+}
 
+/// <summary>
+/// Calculate Transformation Matrix for Differential Scaling
+/// </summary>
+/// <param name="m"> Identity matrix </param>
+/// <returns> 4 x 4 Matrix for Scaling </returns>
+glm::mat4 CPipeline::CalculateScaleMatrix(glm::mat4 const& m)
+{
+	glm::mat4 result(m);
+	result = glm::scale(result, glm::vec3(m_width, m_height, m_depth));
+	return result;
 }
 
 
