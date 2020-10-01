@@ -21,7 +21,9 @@ CPropertiesWnd::CPropertiesWnd() noexcept
 {
 	m_nComboHeight = 0;
 	m_pType = nullptr;
-	m_pSize = nullptr;
+	m_pWidth = nullptr;
+	m_pHeight = nullptr;
+	m_pDepth = nullptr;
 	m_pPoints = nullptr;
 	m_hMainFrm = NULL;
 }
@@ -141,18 +143,30 @@ void CPropertiesWnd::InitPropList()
 	m_wndPropList.MarkModifiedProperties();
 
 	CMFCPropertyGridProperty* pGroup1 = new CMFCPropertyGridProperty(_T("Defects"));
+
+	// The type of defects
 	m_pType = new CMFCPropertyGridProperty(_T("Type"), _T("None"), _T("One of: Open Hole, Pipe, or Caved Surface"));
 	m_pType->AddOption(_T("Open Hole"));
 	m_pType->AddOption(_T("Pipe"));
 	m_pType->AddOption(_T("Caved Surface"));
 	m_pType->AllowEdit(FALSE);
 	pGroup1->AddSubItem(m_pType);
-	m_pSize = new CMFCPropertyGridProperty(_T("Size"), (_variant_t)_T("0.0"), _T("Specifies the text that will be displayed in the window's title bar"));
-	pGroup1->AddSubItem(m_pSize);
-
 	m_wndPropList.AddProperty(pGroup1);
 
+	// The size of defects
+	CMFCPropertyGridProperty* pSize = new CMFCPropertyGridProperty(_T("Size"), 0, TRUE);
+	m_pWidth = new CMFCPropertyGridProperty(_T("Width"), (_variant_t)1.0f, _T("Specifies the synthetic defect's width (Default unit = cm)"));
+	pSize->AddSubItem(m_pWidth);
+	m_pHeight = new CMFCPropertyGridProperty(_T("Height"), (_variant_t)1.0f, _T("Specifies the synthetic defect's height (Default unit = cm)"));
+	pSize->AddSubItem(m_pHeight);
+	m_pDepth = new CMFCPropertyGridProperty(_T("Depth"), (_variant_t)1.0f, _T("Specifies the synthetic defect's depth (Default unit = cm)"));
+	pSize->AddSubItem(m_pDepth);
+	m_wndPropList.AddProperty(pSize);
+
+
 	CMFCPropertyGridProperty* pGroup2 = new CMFCPropertyGridProperty(_T("Point Clouds"));
+
+	// The number of points
 	m_pPoints = new CMFCPropertyGridProperty(_T("Number"), (_variant_t)_T("0"), _T("Specifies how many points you want to sample from the model"));
 	pGroup2->AddSubItem(m_pPoints);
 
@@ -220,19 +234,13 @@ afx_msg LRESULT CPropertiesWnd::OnUpdateProperty(WPARAM wParam, LPARAM lParam)
 		props->type = type.bstrVal;
 	}
 
-	if (m_pSize->IsModified())
-	{
-		COleVariant num = m_pSize->GetValue();
-		props->size = _wtof(num.bstrVal);
-	}
-
 	if (m_pPoints->IsModified())
 	{
 		COleVariant num = m_pPoints->GetValue();
 		props->numOfPoints = _wtoi(num.bstrVal);
 	}
 
-	if (m_pType->IsModified() || m_pSize->IsModified() ||  m_pPoints->IsModified())
+	if (m_pType->IsModified() || m_pPoints->IsModified())
 	{
 		PostMessageA(m_hMainFrm, UM_GET_PROPERTIES, reinterpret_cast<WPARAM>(props), 0);
 	}
