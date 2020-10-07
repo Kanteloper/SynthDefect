@@ -307,6 +307,24 @@ void CModel::UpdateModel(std::vector<Vertex> vertices)
 	m_meshes.at(0).Update(vertices);
 }
 
+/// <summary>
+/// Retrieve minimum value of coordinates in Bounding box for model
+/// </summary>
+/// <returns> vector of minimum value of coordinates in Bounding box </returns>
+glm::vec3 CModel::GetBoundingBoxMinValue() const
+{
+	return m_min;
+}
+
+/// <summary>
+/// Retrieve maximum value of coordinates in Bounding box for model
+/// </summary>
+/// <returns> vector of maximum value of coordinates in Bounding box </returns>
+glm::vec3 CModel::GetBoundingBoxMaxValue() const
+{
+	return m_max;
+}
+
 CModel::~CModel()
 {
 }
