@@ -20,12 +20,11 @@ public:
 
 	// Attributes
 public:
-	glm::vec3 m_max;	// max value of coordinates
-	glm::vec3 m_min;	// min value of coordinates
 
 private:
-	// model data
-	std::vector<CMesh> m_meshes;
+	std::vector<CMesh> m_meshes;	// model data
+	glm::vec3 m_max;				// max value of coordinates
+	glm::vec3 m_min;				// min value of coordinates
 
 	// Impelementation
 public:
@@ -35,6 +34,8 @@ public:
 	glm::vec3 GetModelCentroid() const;
 	float GetModelScaleFactor(glm::vec3 const& cam_pos, glm::vec3 const& center) const;
 	void UpdateModel(std::vector<Vertex> vertices);
+	glm::vec3 GetBoundingBoxMinValue() const;
+	glm::vec3 GetBoundingBoxMaxValue() const;
 	~CModel();
 
 private:
