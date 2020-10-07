@@ -82,6 +82,7 @@ private:
 	void ChangePickedFaceColor(int index, glm::vec4 const& color);
 	BOOL IsPicked(int index);
 	int FindDuplicatedFace(int index);
+	void TestDeformation(CModel* model);
 
 public:
 	virtual ~CSynthDefectView();
