@@ -19,6 +19,9 @@
 // For View
 #define UM_EXECUTE_PIPELINE		WM_USER + 300
 
+/******************* Constants for Pipelines *******************/
+
+
 
 /******************* Structure for Properties *******************/
 
