@@ -4,6 +4,7 @@
 #include "pch.h"
 #include "Model.h"
 #include <string>
+#include <assimp/Exporter.hpp>
 
 CModel::CModel() 
 {
@@ -30,18 +31,50 @@ CModel::CModel(std::string const& filePath)
 /// <returns> TRUE if load success, FALSE on failure </returns>
 void CModel::LoadModel(LPCTSTR const& pathName)
 {
-	Assimp::Importer import;
-	const aiScene* scene = import.ReadFile(ConvertStdString(pathName),
+	Assimp::Importer importer;
+	path = ConvertStdString(pathName);
+	const aiScene* model_scene = importer.ReadFile(path,
 		aiProcess_CalcTangentSpace |
 		aiProcess_Triangulate |
 		aiProcess_ValidateDataStructure);
 
-	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
+	if (!model_scene || model_scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !model_scene->mRootNode)
 	{
-		TRACE(import.GetErrorString());
+		TRACE(importer.GetErrorString());
 		return;
 	}
-  	ProcessNode(scene->mRootNode, scene);
+  	ProcessNode(model_scene->mRootNode, model_scene);
+}
+
+
+/// <summary>
+/// 
+/// </summary>
+/// <param name="mesh"></param>
+/// <param name="scene"></param>
+void CModel::SaveModel()
+{
+	Assimp::Exporter exporter;
+	Assimp::Importer importer;
+
+	const aiScene* model_scene = importer.ReadFile(path,
+		aiProcess_CalcTangentSpace |
+		aiProcess_Triangulate |
+		aiProcess_ValidateDataStructure);
+
+	if (!model_scene || model_scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !model_scene->mRootNode)
+	{
+		TRACE(importer.GetErrorString());
+		return;
+	}
+
+	const aiNode* node = model_scene->mRootNode;
+	for (unsigned int i = 0; i < node->mNumChildren; i++)
+	{
+		SaveNode(node->mChildren[i], model_scene);
+	}
+
+	exporter.Export(model_scene, "obj", "D:\\Project\\Research\\SynthDefect\\test\\test.obj");
 }
 
 /// <summary>
@@ -50,15 +83,15 @@ void CModel::LoadModel(LPCTSTR const& pathName)
 /// <param name="pathName"></param>
 void CModel::LoadBase(std::string const& pathName)
 {
-	Assimp::Importer import;
-	const aiScene* scene = import.ReadFile(pathName,
+	Assimp::Importer importer;
+	const aiScene* scene = importer.ReadFile(pathName,
 		aiProcess_CalcTangentSpace |
 		aiProcess_Triangulate |
 		aiProcess_ValidateDataStructure);
 
 	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 	{
-		TRACE(import.GetErrorString());
+		TRACE(importer.GetErrorString());
 		return;
 	}
 	ProcessNode(scene->mRootNode, scene);
@@ -95,6 +128,32 @@ void CModel::ProcessNode(const aiNode* node, const aiScene* scene)
 	for (unsigned int i = 0; i < node->mNumChildren; i++)
 	{
 		ProcessNode(node->mChildren[i], scene);
+	}
+}
+
+/// <summary>
+/// 
+/// </summary>
+/// <param name="node"></param>
+/// <param name="scene"></param>
+void CModel::SaveNode(const aiNode* node, const aiScene* scene)
+{
+	for (unsigned int i = 0; i < node->mNumMeshes; i++)
+	{
+		// the node object only contains indices to index the actual objects in the scene
+		// the scene contains all the data, node is just to keep stuff organized
+		aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
+		for (unsigned int i = 0; i < mesh->mNumVertices; i++)
+		{
+			mesh->mVertices[i].x = GetVerticesFromModel().at(i).Position.x;
+			mesh->mVertices[i].y = GetVerticesFromModel().at(i).Position.y;
+			mesh->mVertices[i].z = GetVerticesFromModel().at(i).Position.z;
+		}
+	}
+	// then do the same for each of its children
+	for (unsigned int i = 0; i < node->mNumChildren; i++)
+	{
+		SaveNode(node->mChildren[i], scene);
 	}
 }
 
