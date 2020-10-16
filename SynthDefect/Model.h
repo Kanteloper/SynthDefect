@@ -25,10 +25,12 @@ private:
 	std::vector<CMesh> m_meshes;	// model data
 	glm::vec3 m_max;				// max value of coordinates
 	glm::vec3 m_min;				// min value of coordinates
+	std::string path;
 
 	// Impelementation
 public:
 	void DrawModel();
+	void SaveModel();
 	std::vector<aiFace> GetFacesFromModel() const;
 	std::vector<Vertex> GetVerticesFromModel() const;
 	glm::vec3 GetModelCentroid() const;
@@ -42,6 +44,7 @@ private:
 	void LoadModel(LPCTSTR const& pathName);
 	void LoadBase(std::string const& pathName);
 	void ProcessNode(const aiNode* node, const aiScene* scene);
+	void SaveNode(const aiNode* node, const aiScene* scene);
 	CMesh ProcessMesh(const aiMesh* mesh, const aiScene* scene);
 	void FindMinMaxVertex(glm::vec3 const& vertex_pos);
 	BOOL IsTexCoordsExisted(const aiMesh* mesh);
