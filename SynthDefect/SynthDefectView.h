@@ -83,6 +83,7 @@ private:
 	BOOL IsPicked(int index);
 	int FindDuplicatedFace(int index);
 	void TestDeformation(CModel* model);
+	float Bernstein(int i, int m, float t, std::array<float, 12> const& nv, int n, int k);
 
 public:
 	virtual ~CSynthDefectView();
