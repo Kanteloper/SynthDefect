@@ -36,6 +36,7 @@ void CModel::LoadModel(LPCTSTR const& pathName)
 	const aiScene* model_scene = importer.ReadFile(path,
 		aiProcess_CalcTangentSpace |
 		aiProcess_Triangulate |
+		aiProcess_JoinIdenticalVertices |
 		aiProcess_ValidateDataStructure);
 
 	if (!model_scene || model_scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !model_scene->mRootNode)
@@ -87,6 +88,7 @@ void CModel::LoadBase(std::string const& pathName)
 	const aiScene* scene = importer.ReadFile(pathName,
 		aiProcess_CalcTangentSpace |
 		aiProcess_Triangulate |
+		aiProcess_JoinIdenticalVertices |
 		aiProcess_ValidateDataStructure);
 
 	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
