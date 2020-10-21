@@ -61,6 +61,7 @@ void CModel::SaveModel()
 	const aiScene* model_scene = importer.ReadFile(path,
 		aiProcess_CalcTangentSpace |
 		aiProcess_Triangulate |
+		aiProcess_JoinIdenticalVertices |
 		aiProcess_ValidateDataStructure);
 
 	if (!model_scene || model_scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !model_scene->mRootNode)
