@@ -27,8 +27,7 @@ CModel::CModel(std::string const& filePath)
 /// <summary>
 /// Load selected object file
 /// </summary>
-/// <param name="pathName">: the path of selected file </param>
-/// <returns> TRUE if load success, FALSE on failure </returns>
+/// <param name="pathName">: The path of selected OBJ file </param>
 void CModel::LoadModel(LPCTSTR const& pathName)
 {
 	Assimp::Importer importer;
@@ -36,7 +35,6 @@ void CModel::LoadModel(LPCTSTR const& pathName)
 	const aiScene* model_scene = importer.ReadFile(path,
 		aiProcess_CalcTangentSpace |
 		aiProcess_Triangulate |
-		aiProcess_JoinIdenticalVertices |
 		aiProcess_ValidateDataStructure);
 
 	if (!model_scene || model_scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !model_scene->mRootNode)
@@ -80,9 +78,9 @@ void CModel::SaveModel()
 }
 
 /// <summary>
-/// 
+/// Load grid formed mesh for defect patch
 /// </summary>
-/// <param name="pathName"></param>
+/// <param name="pathName"> The path of default grid mesh OBJ file </param>
 void CModel::LoadBase(std::string const& pathName)
 {
 	Assimp::Importer importer;
