@@ -373,7 +373,15 @@ void CModel::UpdateModel(std::vector<Vertex> vertices)
 /// <returns> vector of minimum value of coordinates in Bounding box </returns>
 glm::vec3 CModel::GetBoundingBoxMinValue() const
 {
-	return m_min;
+	glm::vec3 min = glm::vec3(1000.0f, 1000.0f, 1000.0f);
+	std::vector<Vertex> v = GetVerticesFromModel();
+	for (int i = 0; i < v.size(); i++)
+	{
+		min.x = glm::min(min.x, v[i].Position.x);
+		min.y = glm::min(min.y, v[i].Position.y);
+		min.z = glm::min(min.z, v[i].Position.z);
+	}
+	return min;
 }
 
 /// <summary>
