@@ -14,6 +14,7 @@ public:
 	CPipeline(Properties const& props, std::vector<int> const& indices, CModel* model, CModel* base)
 		: m_pickIndices(indices), m_model(model), m_base(base)
 	{
+		m_type = props.type;
 		m_width = props.width;
 		m_height = props.height;
 		m_depth = props.depth;
@@ -25,6 +26,7 @@ public:
 	
 	// Attributes
 private:
+	int m_type;
 	float m_width;
 	float m_height;
 	float m_depth;
