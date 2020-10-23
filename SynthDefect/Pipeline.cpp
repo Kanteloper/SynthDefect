@@ -8,6 +8,7 @@
 
 CPipeline::CPipeline()
 {
+	m_type = 0;
 	m_width = 0.0f;
 	m_height = 0.0f;
 	m_depth = 0.0f;
@@ -20,13 +21,22 @@ CPipeline::CPipeline()
 /// </summary>
 void CPipeline::Execute()
 {
+	/*for (int i = 0; i < m_baseVertices.size(); i++)
+	{
+		std::cout << "before: (" << m_baseVertices[i].Position.x << ", " << m_baseVertices[i].Position.y << ", " << m_baseVertices[i].Position.z << ") " << std::endl;
+	}*/
 	DoPositioning();
-	// DoDeforming();
-	DoScaling();
+	for (int i = 0; i < m_baseVertices.size(); i++)
+	{
+		std::cout << "after: (" << m_baseVertices[i].Position.x << ", " << m_baseVertices[i].Position.y << ", " << m_baseVertices[i].Position.z << ") " << std::endl;
+	}
+	DoDeforming();
+	
+	// DoScaling();
 }
 
 /// <summary>
-/// Locate the grid base mesh to the face thata selected randomly among faces user picks
+/// Locate the grid base mesh to the face that selected randomly among faces user picks
 /// </summary>
 void CPipeline::DoPositioning()
 {
@@ -39,12 +49,9 @@ void CPipeline::DoPositioning()
 	glm::mat4 position_matrix = CalculatePositionMatrix(glm::mat4(1.0f), random_face);
 
 	// multiply pisition matrix for each vertex of grid base mesh
-	for (int i = 0; i < m_baseFaces.size(); i++)
+	for (int i = 0; i < m_baseVertices.size(); i++)
 	{
-		aiFace base_face = m_baseFaces.at(i);
-		m_baseVertices[base_face.mIndices[0]].Position = position_matrix * glm::vec4(m_baseVertices[base_face.mIndices[0]].Position, 1.0);
-		m_baseVertices[base_face.mIndices[1]].Position = position_matrix * glm::vec4(m_baseVertices[base_face.mIndices[1]].Position, 1.0);
-		m_baseVertices[base_face.mIndices[2]].Position = position_matrix * glm::vec4(m_baseVertices[base_face.mIndices[2]].Position, 1.0);
+		m_baseVertices[i].Position = position_matrix * glm::vec4(m_baseVertices[i].Position, 1.0);
 		m_base->UpdateModel(m_baseVertices);
 	}
 }
@@ -92,11 +99,16 @@ glm::vec3 CPipeline::CalculateTriangleCentroid(glm::vec3 const& A, glm::vec3 con
 }
 
 /// <summary>
-/// 
+/// Deform the grid base mesh to fit the feature of each defect
 /// </summary>
 void CPipeline::DoDeforming()
 {
-
+	// construct lattice space
+	glm::vec3 lattice_origin = m_base->GetBoundingBoxMinValue();
+	std::cout << "lattice origin: " << glm::to_string(lattice_origin) << std::endl;
+	glm::vec3 S_axis = glm::vec3(2.4f, 0.0f, 0.0f);
+	glm::vec3 T_axis = glm::vec3(0.0f, 2.4f, 0.0f);
+	glm::vec3 U_axis = glm::vec3(0.0f, 0.0f, 2.4f);
 }
 
 /// <summary>
