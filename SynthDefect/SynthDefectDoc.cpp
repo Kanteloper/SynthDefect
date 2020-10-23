@@ -59,15 +59,17 @@ BOOL CSynthDefectDoc::OnNewDocument()
 	if (!CDocument::OnNewDocument())
 		return FALSE;
 
-	if (!m_bLoad)
+	if (!m_bLoad)	// when program is executed at first
 	{
-		m_base = new CModel(DEFECT_BASE_PATH);	// the grid base mesh
+		m_base = new CModel(DEFECT_BASE_PATH);
 	}
 	else
 	{
 		m_bLoad = FALSE;
 		delete m_model;
 		m_model = nullptr;
+		delete m_base;
+		m_base = new CModel(DEFECT_BASE_PATH);
 	}
 
 	return TRUE;
