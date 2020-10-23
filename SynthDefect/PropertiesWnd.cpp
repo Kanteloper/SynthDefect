@@ -6,6 +6,7 @@
 #include "Resource.h"
 #include "MainFrm.h"
 #include "SynthDefect.h"
+#include <string>
 #include <iostream>
 
 #ifdef _DEBUG
@@ -232,7 +233,16 @@ afx_msg LRESULT CPropertiesWnd::OnUpdateProperty(WPARAM wParam, LPARAM lParam)
 	{
 		IsPropertiesModified = TRUE;
 		COleVariant type = m_pType->GetValue();
-		props->type = type.bstrVal;
+		std::wstring selected_type(type.bstrVal);
+		std::wstring type_name = L"Open Hole";
+		if (selected_type == type_name)
+			props->type = 1;
+		type_name = L"Pipe";
+		if (selected_type == type_name)
+			props->type = 2;
+		type_name = L"Caved Surface";
+		if (selected_type == type_name)
+			props->type = 3;
 	}
 
 	if (m_pWidth->IsModified())
