@@ -253,7 +253,7 @@ afx_msg LRESULT CPropertiesWnd::OnUpdateProperty(WPARAM wParam, LPARAM lParam)
 	{
 		IsPropertiesModified = TRUE;
 		COleVariant depth = m_pDepth->GetValue();
-		props->height = (float)depth.dblVal;
+		props->depth = (float)depth.dblVal;
 	}
 
 	if (m_pPoints->IsModified())
