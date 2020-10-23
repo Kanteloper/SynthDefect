@@ -155,11 +155,11 @@ void CPropertiesWnd::InitPropList()
 
 	// The size of defects
 	CMFCPropertyGridProperty* pSize = new CMFCPropertyGridProperty(_T("Size"), 0, TRUE);
-	m_pWidth = new CMFCPropertyGridProperty(_T("Width"), (_variant_t)1.0, _T("Specifies the synthetic defect's width (Default unit = cm)"));
+	m_pWidth = new CMFCPropertyGridProperty(_T("Width"), (_variant_t)0.0, _T("Specifies the synthetic defect's width (Default unit = cm)"));
 	pSize->AddSubItem(m_pWidth);
-	m_pHeight = new CMFCPropertyGridProperty(_T("Height"), (_variant_t)1.0, _T("Specifies the synthetic defect's height (Default unit = cm)"));
+	m_pHeight = new CMFCPropertyGridProperty(_T("Height"), (_variant_t)0.0, _T("Specifies the synthetic defect's height (Default unit = cm)"));
 	pSize->AddSubItem(m_pHeight);
-	m_pDepth = new CMFCPropertyGridProperty(_T("Depth"), (_variant_t)1.0, _T("Specifies the synthetic defect's depth (Default unit = cm)"));
+	m_pDepth = new CMFCPropertyGridProperty(_T("Depth"), (_variant_t)0.0, _T("Specifies the synthetic defect's depth (Default unit = cm)"));
 	pSize->AddSubItem(m_pDepth);
 	m_wndPropList.AddProperty(pSize);
 
