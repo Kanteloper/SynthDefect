@@ -43,12 +43,14 @@ private:
 
 	// implements
 private:
+	glm::mat4 CalculatePositionMatrix(glm::mat4 const& m, aiFace const& f);
+	glm::vec3 CalculateTriangleCentroid(glm::vec3 const& A, glm::vec3 const& B, glm::vec3 const& C);
 	void DoDeforming();
 	std::array<glm::vec3, 36> InitControlPoints(glm::vec3 const& origin, int type);
 	std::array<std::array<float, 3>, 4> InitWeight(int type);
+	void DeformGridBase(glm::vec3 const& origin, int type, std::array<glm::vec3, 36> const& cp, std::array<std::array<float, 3>, 4> const& w);
+	float Bernstein(int i, int m, float t, std::array<float, 10> const& nv, int n);
 	void DoPositioning(glm::mat4 const& pm);
-	glm::mat4 CalculatePositionMatrix(glm::mat4 const& m, aiFace const& f);
-	glm::vec3 CalculateTriangleCentroid(glm::vec3 const& A, glm::vec3 const& B, glm::vec3 const& C);
 	void DoScaling();
 	glm::mat4 CalculateScaleMatrix(glm::mat4 const& m);
 	void DoModeling();
