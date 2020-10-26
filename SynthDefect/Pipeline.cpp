@@ -25,21 +25,6 @@ void CPipeline::Execute()
 	{
 		std::cout << "before: (" << m_baseVertices[i].Position.x << ", " << m_baseVertices[i].Position.y << ", " << m_baseVertices[i].Position.z << ") " << std::endl;
 	}*/
-	DoPositioning();
-	for (int i = 0; i < m_baseVertices.size(); i++)
-	{
-		std::cout << "after: (" << m_baseVertices[i].Position.x << ", " << m_baseVertices[i].Position.y << ", " << m_baseVertices[i].Position.z << ") " << std::endl;
-	}
-	DoDeforming();
-	
-	// DoScaling();
-}
-
-/// <summary>
-/// Locate the grid base mesh to the face that selected randomly among faces user picks
-/// </summary>
-void CPipeline::DoPositioning()
-{
 	std::random_device rd;
 	std::mt19937_64 gen(rd());
 	std::uniform_int_distribution<int> dis(0, (int)(m_pickIndices.size() - 1));
@@ -48,10 +33,231 @@ void CPipeline::DoPositioning()
 	aiFace random_face = m_modelFaces[m_pickIndices.at(dis(gen))];
 	glm::mat4 position_matrix = CalculatePositionMatrix(glm::mat4(1.0f), random_face);
 
+	DoDeforming();
+	DoPositioning(position_matrix);
+	//for (int i = 0; i < m_baseVertices.size(); i++)
+	//{
+	//	std::cout << "after: (" << m_baseVertices[i].Position.x << ", " << m_baseVertices[i].Position.y << ", " << m_baseVertices[i].Position.z << ") " << std::endl;
+	//}
+
+	// DoScaling();
+}
+
+/// <summary>
+/// Deform the grid base mesh to fit the feature of each defect
+/// </summary>
+
+void CPipeline::DoDeforming()
+{
+	// construct lattice space
+	glm::vec3 origin = m_base->GetBoundingBoxMinValue();
+	std::cout << "lattice origin: " << glm::to_string(origin) << std::endl;
+
+	// Initiate control points
+	std::array<glm::vec3, 36> control_points = InitControlPoints(origin, m_type);
+	/*for (int i = 0; i < control_points.size(); i++)
+	{
+		std::cout << glm::to_string(control_points[i]) << std::endl;
+	}*/
+}
+
+/// <summary>
+/// 
+/// </summary>
+/// <param name="origin"></param>
+/// <returns></returns>
+std::array<glm::vec3, 36> CPipeline::InitControlPoints(glm::vec3 const& origin, int type)
+{
+	SAxis s_axis;
+	TAxis t_axis;
+	UAxis u_axis;
+	std::array < glm::vec3, 36> cp_array;
+	std::random_device rd;
+	std::mt19937_64 gen(rd());
+
+	float max_mid = 0.0f;
+	float min_mid = 0.0f;
+	float max_side = 0.0f;
+	float min_side = 0.0f;
+	switch (type)
+	{
+	case 1:
+		max_mid = MAX_OPEN_HOLE_Y;
+		min_mid = MIN_OPEN_HOLE_Y;
+		break;
+	case 2:
+		max_mid = MAX_PIPE_MID_Y;
+		min_mid = MIN_PIPE_MID_Y;
+		max_side = MAX_PIPE_SIDE_Y;
+		min_side = MIN_PIPE_SIDE_Y;
+		break;
+	case 3:
+		max_mid = MAX_CAVED_SURFACE_MID_Y;
+		min_mid = MIN_CAVED_SURFACE_MID_Y;
+		max_side = MAX_CAVED_SURFACE_SIDE_Y;
+		min_side = MIN_CAVED_SURFACE_SIDE_Y;
+		break;
+	}
+
+	std::uniform_real_distribution<float> mid_cp_y(min_mid, max_mid);
+	std::uniform_real_distribution<float> side_cp_y(min_side, max_side);
+
+	// (0, 0, 0) <= (i,j,k) <= (0, 0, 5)
+	cp_array[0].x = origin.x + ((0.0f / s_axis.order) * s_axis.axis.x);
+	cp_array[0].y = origin.y + ((0.0f / t_axis.order) * t_axis.axis.y);
+	cp_array[0].z = origin.z + ((0.0f / u_axis.order) * u_axis.axis.z);
+	cp_array[1].x = origin.x + ((0.0f / s_axis.order) * s_axis.axis.x);
+	cp_array[1].y = origin.y + ((0.0f / t_axis.order) * t_axis.axis.y);
+	cp_array[1].z = origin.z + ((1.0f / u_axis.order) * u_axis.axis.z);
+	cp_array[2].x = origin.x + ((0.0f / s_axis.order) * s_axis.axis.x);
+	cp_array[2].y = origin.y + ((0.0f / t_axis.order) * t_axis.axis.y);
+	cp_array[2].z = origin.z + ((2.0f / u_axis.order) * u_axis.axis.z);
+	cp_array[3].x = origin.x + ((0.0f / s_axis.order) * s_axis.axis.x);
+	cp_array[3].y = origin.y + ((0.0f / t_axis.order) * t_axis.axis.y);
+	cp_array[3].z = origin.z + ((3.0f / u_axis.order) * u_axis.axis.z);
+	cp_array[4].x = origin.x + ((0.0f / s_axis.order) * s_axis.axis.x);
+	cp_array[4].y = origin.y + ((0.0f / t_axis.order) * t_axis.axis.y);
+	cp_array[4].z = origin.z + ((4.0f / u_axis.order) * u_axis.axis.z);
+	cp_array[5].x = origin.x + ((0.0f / s_axis.order) * s_axis.axis.x);
+	cp_array[5].y = origin.y + ((0.0f / t_axis.order) * t_axis.axis.y);
+	cp_array[5].z = origin.z + ((5.0f / u_axis.order) * u_axis.axis.z);
+
+	// (1, 0, 0) <= (i,j,k) <= (1, 0, 5)
+	cp_array[6].x = origin.x + ((1.0f / s_axis.order) * s_axis.axis.x);
+	cp_array[6].y = origin.y + ((0.0f / t_axis.order) * t_axis.axis.y);
+	cp_array[6].z = origin.z + ((0.0f / u_axis.order) * u_axis.axis.z);
+	cp_array[7].x = origin.x + ((1.0f / s_axis.order) * s_axis.axis.x);
+	cp_array[7].y = origin.y + ((0.0f / t_axis.order) * t_axis.axis.y);
+	cp_array[7].z = origin.z + ((1.0f / u_axis.order) * u_axis.axis.z);
+	/************************************************************************/
+	// key control point -> (i, j , k) = (1, 0, 2)
+	cp_array[8].x = origin.x + ((1.0f / s_axis.order) * s_axis.axis.x);
+	cp_array[8].y = origin.y + ((side_cp_y(gen) / t_axis.order) * t_axis.axis.y);
+	cp_array[8].z = origin.z + ((2.0f / u_axis.order) * u_axis.axis.z);
+	// key control point -> (i, j , k) = (1, 0, 3)
+	cp_array[9].x = origin.x + ((1.0f / s_axis.order) * s_axis.axis.x);
+	cp_array[9].y = origin.y + ((side_cp_y(gen) / t_axis.order) * t_axis.axis.y);
+	cp_array[9].z = origin.z + ((3.0f / u_axis.order) * u_axis.axis.z);
+	/************************************************************************/
+	cp_array[10].x = origin.x + ((1.0f / s_axis.order) * s_axis.axis.x);
+	cp_array[10].y = origin.y + ((0.0f / t_axis.order) * t_axis.axis.y);
+	cp_array[10].z = origin.z + ((4.0f / u_axis.order) * u_axis.axis.z);
+	cp_array[11].x = origin.x + ((1.0f / s_axis.order) * s_axis.axis.x);
+	cp_array[11].y = origin.y + ((0.0f / t_axis.order) * t_axis.axis.y);
+	cp_array[11].z = origin.z + ((5.0f / u_axis.order) * u_axis.axis.z);
+
+	// (2, 0, 0) <= (i,j,k) <= (2, 0, 5)
+	cp_array[12].x = origin.x + ((2.0f / s_axis.order) * s_axis.axis.x);
+	cp_array[12].y = origin.y + ((0.0f / t_axis.order) * t_axis.axis.y);
+	cp_array[12].z = origin.z + ((0.0f / u_axis.order) * u_axis.axis.z);
+	cp_array[13].x = origin.x + ((2.0f / s_axis.order) * s_axis.axis.x);
+	cp_array[13].y = origin.y + ((0.0f / t_axis.order) * t_axis.axis.y);
+	cp_array[13].z = origin.z + ((1.0f / u_axis.order) * u_axis.axis.z);
+	/************************************************************************/
+	// key control point -> (i, j , k) = (2, 0, 2)  
+	cp_array[14].x = origin.x + ((2.0f / s_axis.order) * s_axis.axis.x);
+	cp_array[14].y = origin.y + ((mid_cp_y(gen) / t_axis.order) * t_axis.axis.y);
+	cp_array[14].z = origin.z + ((2.0f / u_axis.order) * u_axis.axis.z);
+	// key control point -> (i, j , k) = (2, 0, 3)
+	cp_array[15].x = origin.x + ((2.0f / s_axis.order) * s_axis.axis.x);
+	cp_array[15].y = origin.y + ((mid_cp_y(gen) / t_axis.order) * t_axis.axis.y);
+	cp_array[15].z = origin.z + ((3.0f / u_axis.order) * u_axis.axis.z);
+	/************************************************************************/
+	cp_array[16].x = origin.x + ((2.0f / s_axis.order) * s_axis.axis.x);
+	cp_array[16].y = origin.y + ((0.0f / t_axis.order) * t_axis.axis.y);
+	cp_array[16].z = origin.z + ((4.0f / u_axis.order) * u_axis.axis.z);
+	cp_array[17].x = origin.x + ((2.0f / s_axis.order) * s_axis.axis.x);
+	cp_array[17].y = origin.y + ((0.0f / t_axis.order) * t_axis.axis.y);
+	cp_array[17].z = origin.z + ((5.0f / u_axis.order) * u_axis.axis.z);
+
+	// (3, 0, 0) <= (i,j,k) <= (3, 0, 5)
+	cp_array[18].x = origin.x + ((3.0f / s_axis.order) * s_axis.axis.x);
+	cp_array[18].y = origin.y + ((0.0f / t_axis.order) * t_axis.axis.y);
+	cp_array[18].z = origin.z + ((0.0f / u_axis.order) * u_axis.axis.z);
+	cp_array[19].x = origin.x + ((3.0f / s_axis.order) * s_axis.axis.x);
+	cp_array[19].y = origin.y + ((0.0f / t_axis.order) * t_axis.axis.y);
+	cp_array[19].z = origin.z + ((1.0f / u_axis.order) * u_axis.axis.z);
+	/************************************************************************/
+	// key control point -> (i, j , k) = (3, 0, 2)
+	cp_array[20].x = origin.x + ((3.0f / s_axis.order) * s_axis.axis.x);
+	cp_array[20].y = origin.y + ((mid_cp_y(gen) / t_axis.order) * t_axis.axis.y);
+	cp_array[20].z = origin.z + ((2.0f / u_axis.order) * u_axis.axis.z);
+	// key control point -> (i, j , k) = (3, 0, 3)
+	cp_array[21].x = origin.x + ((3.0f / s_axis.order) * s_axis.axis.x);
+	cp_array[21].y = origin.y + ((mid_cp_y(gen) / t_axis.order) * t_axis.axis.y);
+	cp_array[21].z = origin.z + ((3.0f / u_axis.order) * u_axis.axis.z);
+	/************************************************************************/
+	cp_array[22].x = origin.x + ((3.0f / s_axis.order) * s_axis.axis.x);
+	cp_array[22].y = origin.y + ((0.0f / t_axis.order) * t_axis.axis.y);
+	cp_array[22].z = origin.z + ((4.0f / u_axis.order) * u_axis.axis.z);
+	cp_array[23].x = origin.x + ((3.0f / s_axis.order) * s_axis.axis.x);
+	cp_array[23].y = origin.y + ((0.0f / t_axis.order) * t_axis.axis.y);
+	cp_array[23].z = origin.z + ((5.0f / u_axis.order) * u_axis.axis.z);
+
+	// (4, 0, 0) <= (i,j,k) <= (4, 0, 5)
+	cp_array[24].x = origin.x + ((4.0f / s_axis.order) * s_axis.axis.x);
+	cp_array[24].y = origin.y + ((0.0f / t_axis.order) * t_axis.axis.y);
+	cp_array[24].z = origin.z + ((0.0f / u_axis.order) * u_axis.axis.z);
+	cp_array[25].x = origin.x + ((4.0f / s_axis.order) * s_axis.axis.x);
+	cp_array[25].y = origin.y + ((0.0f / t_axis.order) * t_axis.axis.y);
+	cp_array[25].z = origin.z + ((1.0f / u_axis.order) * u_axis.axis.z);
+	/************************************************************************/
+	// key control point -> (i, j , k) = (4, 0, 2)
+	cp_array[26].x = origin.x + ((4.0f / s_axis.order) * s_axis.axis.x);
+	cp_array[26].y = origin.y + ((side_cp_y(gen) / t_axis.order) * t_axis.axis.y);
+	cp_array[26].z = origin.z + ((2.0f / u_axis.order) * u_axis.axis.z);
+	// key control point -> (i, j , k) = (4, 0, 3)
+	cp_array[27].x = origin.x + ((4.0f / s_axis.order) * s_axis.axis.x);
+	cp_array[27].y = origin.y + ((side_cp_y(gen) / t_axis.order) * t_axis.axis.y);
+	cp_array[27].z = origin.z + ((3.0f / u_axis.order) * u_axis.axis.z);
+	/************************************************************************/
+	cp_array[28].x = origin.x + ((4.0f / s_axis.order) * s_axis.axis.x);
+	cp_array[28].y = origin.y + ((0.0f / t_axis.order) * t_axis.axis.y);
+	cp_array[28].z = origin.z + ((4.0f / u_axis.order) * u_axis.axis.z);
+	cp_array[29].x = origin.x + ((4.0f / s_axis.order) * s_axis.axis.x);
+	cp_array[29].y = origin.y + ((0.0f / t_axis.order) * t_axis.axis.y);
+	cp_array[29].z = origin.z + ((5.0f / u_axis.order) * u_axis.axis.z);
+
+	// (5, 0, 0) <= (i,j,k) <= (5, 0, 5)
+	cp_array[30].x = origin.x + ((5.0f / s_axis.order) * s_axis.axis.x);
+	cp_array[30].y = origin.y + ((0.0f / t_axis.order) * t_axis.axis.y);
+	cp_array[30].z = origin.z + ((0.0f / u_axis.order) * u_axis.axis.z);
+	cp_array[31].x = origin.x + ((5.0f / s_axis.order) * s_axis.axis.x);
+	cp_array[31].y = origin.y + ((0.0f / t_axis.order) * t_axis.axis.y);
+	cp_array[31].z = origin.z + ((1.0f / u_axis.order) * u_axis.axis.z);
+	cp_array[32].x = origin.x + ((5.0f / s_axis.order) * s_axis.axis.x);
+	cp_array[32].y = origin.y + ((0.0f / t_axis.order) * t_axis.axis.y);
+	cp_array[32].z = origin.z + ((2.0f / u_axis.order) * u_axis.axis.z);
+	cp_array[33].x = origin.x + ((5.0f / s_axis.order) * s_axis.axis.x);
+	cp_array[33].y = origin.y + ((0.0f / t_axis.order) * t_axis.axis.y);
+	cp_array[33].z = origin.z + ((3.0f / u_axis.order) * u_axis.axis.z);
+	cp_array[34].x = origin.x + ((5.0f / s_axis.order) * s_axis.axis.x);
+	cp_array[34].y = origin.y + ((0.0f / t_axis.order) * t_axis.axis.y);
+	cp_array[34].z = origin.z + ((4.0f / u_axis.order) * u_axis.axis.z);
+	cp_array[35].x = origin.x + ((5.0f / s_axis.order) * s_axis.axis.x);
+	cp_array[35].y = origin.y + ((0.0f / t_axis.order) * t_axis.axis.y);
+	cp_array[35].z = origin.z + ((5.0f / u_axis.order) * u_axis.axis.z);
+
+	return cp_array;
+}
+
+/// <summary>
+/// Locate the grid base mesh to the face that selected randomly among faces user picks
+/// </summary>
+void CPipeline::DoPositioning(glm::mat4 const& pm)
+{
+	//std::random_device rd;
+	//std::mt19937_64 gen(rd());
+	//std::uniform_int_distribution<int> dis(0, (int)(m_pickIndices.size() - 1));
+
+	//// select faces that user picks randomly
+	//aiFace random_face = m_modelFaces[m_pickIndices.at(dis(gen))];
+	//glm::mat4 position_matrix = CalculatePositionMatrix(glm::mat4(1.0f), random_face);
+
 	// multiply pisition matrix for each vertex of grid base mesh
 	for (int i = 0; i < m_baseVertices.size(); i++)
 	{
-		m_baseVertices[i].Position = position_matrix * glm::vec4(m_baseVertices[i].Position, 1.0);
+		m_baseVertices[i].Position = pm * glm::vec4(m_baseVertices[i].Position, 1.0);
 		m_base->UpdateModel(m_baseVertices);
 	}
 }
@@ -96,19 +302,6 @@ glm::mat4 CPipeline::CalculatePositionMatrix(glm::mat4 const& m, aiFace const& f
 glm::vec3 CPipeline::CalculateTriangleCentroid(glm::vec3 const& A, glm::vec3 const& B, glm::vec3 const& C)
 {
 	return glm::vec3((A.x + B.x + C.x) / 3.0f, (A.y + B.y + C.y) / 3.0f, (A.z + B.z + C.z) / 3.0f);
-}
-
-/// <summary>
-/// Deform the grid base mesh to fit the feature of each defect
-/// </summary>
-void CPipeline::DoDeforming()
-{
-	// construct lattice space
-	glm::vec3 lattice_origin = m_base->GetBoundingBoxMinValue();
-	std::cout << "lattice origin: " << glm::to_string(lattice_origin) << std::endl;
-	glm::vec3 S_axis = glm::vec3(2.4f, 0.0f, 0.0f);
-	glm::vec3 T_axis = glm::vec3(0.0f, 2.4f, 0.0f);
-	glm::vec3 U_axis = glm::vec3(0.0f, 0.0f, 2.4f);
 }
 
 /// <summary>
