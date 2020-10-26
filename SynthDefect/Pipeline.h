@@ -7,21 +7,7 @@
 #include <array>
 #include "Model.h"
 
-struct SAxis {
-	glm::vec3 axis = glm::vec3(S_AXIS_SIZE, 0.0f, 0.0f);
-	int order = S_ORDER;
-	int degree = S_DEGREE;
-};
-struct TAxis {
-	glm::vec3 axis = glm::vec3(0.0f, T_AXIS_SIZE, 0.0f);
-	int order = T_ORDER;
-	int degree = T_DEGREE;
-};
-struct UAxis {
-	glm::vec3 axis = glm::vec3(0.0f, 0.0f, U_AXIS_SIZE);
-	int order = U_ORDER;
-	int degree = U_DEGREE;
-};
+
 
 class CPipeline
 {
@@ -59,6 +45,7 @@ private:
 private:
 	void DoDeforming();
 	std::array<glm::vec3, 36> InitControlPoints(glm::vec3 const& origin, int type);
+	std::array<std::array<float, 3>, 4> InitWeight(int type);
 	void DoPositioning(glm::mat4 const& pm);
 	glm::mat4 CalculatePositionMatrix(glm::mat4 const& m, aiFace const& f);
 	glm::vec3 CalculateTriangleCentroid(glm::vec3 const& A, glm::vec3 const& B, glm::vec3 const& C);

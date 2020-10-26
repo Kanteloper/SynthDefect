@@ -1,11 +1,11 @@
 #pragma once
 
 #include <string>
+#include <array>
 
 /******************* Constants for Initial Setting *******************/
 
 #define DEFECT_BASE_PATH "../data/base.obj"
-
 
 /******************* User-Defined Window Messages *******************/
 
@@ -18,31 +18,6 @@
 
 // For View
 #define UM_EXECUTE_PIPELINE		WM_USER + 300
-
-/******************* Constants for Pipelines *******************/
-
-// Deformation - lattice space
-const int S_ORDER = 6;
-const int S_DEGREE = 3;
-const float S_AXIS_SIZE = 2.4f;
-const int T_ORDER = 1;
-const int T_DEGREE = 1;
-const float T_AXIS_SIZE = 2.4f;
-const int U_ORDER = 6;
-const int U_DEGREE = 3;
-const float U_AXIS_SIZE = 2.4f;
-
-// Deformation - Key control points of each defect
-const float MAX_OPEN_HOLE_Y = -0.1f;
-const float MIN_OPEN_HOLE_Y = -0.5f;
-const float MAX_PIPE_MID_Y = -0.5f;
-const float MIN_PIPE_MID_Y = -1.0f;
-const float MAX_PIPE_SIDE_Y = -0.1f;
-const float MIN_PIPE_SIDE_Y = -0.5f;
-const float MAX_CAVED_SURFACE_MID_Y = -0.1f;
-const float MIN_CAVED_SURFACE_MID_Y = -0.15f;
-const float MAX_CAVED_SURFACE_SIDE_Y = -0.05f;
-const float MIN_CAVED_SURFACE_SIDE_Y = -0.1f;
 
 /******************* Structure for Properties *******************/
 

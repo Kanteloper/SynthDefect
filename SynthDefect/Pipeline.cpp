@@ -6,6 +6,61 @@
 #include <iostream>
 #include <random>
 
+/******************* Constants *******************/
+
+// Deformation - lattice space
+const int S_ORDER = 6;
+const int S_DEGREE = 3;
+const float S_AXIS_SIZE = 2.4f;
+const int T_ORDER = 1;
+const int T_DEGREE = 1;
+const float T_AXIS_SIZE = 2.4f;
+const int U_ORDER = 6;
+const int U_DEGREE = 3;
+const float U_AXIS_SIZE = 2.4f;
+
+// Deformation - Key control points of each defect
+const float MAX_OPEN_HOLE_Y = -0.1f;
+const float MIN_OPEN_HOLE_Y = -0.5f;
+const float MAX_PIPE_MID_Y = -0.5f;
+const float MIN_PIPE_MID_Y = -1.0f;
+const float MAX_PIPE_SIDE_Y = -0.1f;
+const float MIN_PIPE_SIDE_Y = -0.5f;
+const float MAX_CAVED_SURFACE_MID_Y = -0.1f;
+const float MIN_CAVED_SURFACE_MID_Y = -0.15f;
+const float MAX_CAVED_SURFACE_SIDE_Y = -0.05f;
+const float MIN_CAVED_SURFACE_SIDE_Y = -0.1f;
+
+// Deformation - Knot vectors
+const std::array<float, 10> U = { 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 2.0f, 2.5f, 2.5f, 2.5f, 2.5f };
+const std::array<float, 10> W = { 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 2.0f, 2.5f, 2.5f, 2.5f, 2.5f };
+
+// Deformation - Weights
+const float MAX_OPEN_HOLE_WEIGHT = 2.0f;
+const float MIN_OPEN_HOLE_WEIGHT = 0.0f;
+const float MAX_PIPE_WEIGHT = 2.0f;
+const float MIN_PIPE_WEIGHT = 0.3f;
+const float MAX_CAVED_SURFACE_WEIGHT = 3.0f;
+const float MIN_CAVED_SURFACE_WEIGHT = 1.0f;
+
+/******************* Structures *******************/
+
+struct SAxis {
+	glm::vec3 axis = glm::vec3(S_AXIS_SIZE, 0.0f, 0.0f);
+	int order = S_ORDER;
+	int degree = S_DEGREE;
+};
+struct TAxis {
+	glm::vec3 axis = glm::vec3(0.0f, T_AXIS_SIZE, 0.0f);
+	int order = T_ORDER;
+	int degree = T_DEGREE;
+};
+struct UAxis {
+	glm::vec3 axis = glm::vec3(0.0f, 0.0f, U_AXIS_SIZE);
+	int order = U_ORDER;
+	int degree = U_DEGREE;
+};
+
 CPipeline::CPipeline()
 {
 	m_type = 0;
@@ -46,7 +101,6 @@ void CPipeline::Execute()
 /// <summary>
 /// Deform the grid base mesh to fit the feature of each defect
 /// </summary>
-
 void CPipeline::DoDeforming()
 {
 	// construct lattice space
@@ -59,13 +113,20 @@ void CPipeline::DoDeforming()
 	{
 		std::cout << glm::to_string(control_points[i]) << std::endl;
 	}*/
+
+	// Initiate Weights
+	std::array<std::array<float, 3>, 4> weight = InitWeight(m_type);
+
+	// Deform
+
 }
 
 /// <summary>
-/// 
+/// Initiate control points of grid base mesh
 /// </summary>
-/// <param name="origin"></param>
-/// <returns></returns>
+/// <param name="origin"> The origin of lattice space </param>
+/// <param name="type"> The type of defect </param>
+/// <returns> Array fo 36 control points </returns>
 std::array<glm::vec3, 36> CPipeline::InitControlPoints(glm::vec3 const& origin, int type)
 {
 	SAxis s_axis;
@@ -81,17 +142,17 @@ std::array<glm::vec3, 36> CPipeline::InitControlPoints(glm::vec3 const& origin, 
 	float min_side = 0.0f;
 	switch (type)
 	{
-	case 1:
+	case 1:	// Open Hole
 		max_mid = MAX_OPEN_HOLE_Y;
 		min_mid = MIN_OPEN_HOLE_Y;
 		break;
-	case 2:
+	case 2:	// Pipe
 		max_mid = MAX_PIPE_MID_Y;
 		min_mid = MIN_PIPE_MID_Y;
 		max_side = MAX_PIPE_SIDE_Y;
 		min_side = MIN_PIPE_SIDE_Y;
 		break;
-	case 3:
+	case 3:	// Caved Surface
 		max_mid = MAX_CAVED_SURFACE_MID_Y;
 		min_mid = MIN_CAVED_SURFACE_MID_Y;
 		max_side = MAX_CAVED_SURFACE_SIDE_Y;
@@ -239,6 +300,44 @@ std::array<glm::vec3, 36> CPipeline::InitControlPoints(glm::vec3 const& origin, 
 	cp_array[35].z = origin.z + ((5.0f / u_axis.order) * u_axis.axis.z);
 
 	return cp_array;
+}
+
+/// <summary>
+/// Initiate Weight value for Key control points
+/// </summary>
+/// <returns> Array of weight value for key control points (x, y, z) </returns>
+std::array<std::array<float, 3>, 4> CPipeline::InitWeight(int type)
+{
+	std::array<std::array<float, 3>, 4> result;
+	std::random_device rd;
+	std::mt19937_64 gen(rd());
+
+	float max_val = 0.0f;
+	float min_val = 0.0f;
+	switch (type)
+	{
+	case 1:	// Open Hole
+		max_val = MAX_OPEN_HOLE_WEIGHT;
+		min_val = MIN_OPEN_HOLE_WEIGHT;
+		break;
+	case 2:	// Pipe
+		max_val = MAX_PIPE_WEIGHT;
+		min_val = MIN_PIPE_WEIGHT;
+		break;
+	case 3:	// Caved Surface
+		max_val = MAX_CAVED_SURFACE_WEIGHT;
+		min_val = MIN_CAVED_SURFACE_WEIGHT;
+		break;
+	}
+
+	std::uniform_real_distribution<float> cp_w(min_val, max_val);
+	result = {{
+		{cp_w(gen), cp_w(gen), cp_w(gen)},
+		{cp_w(gen), cp_w(gen), cp_w(gen)},
+		{cp_w(gen), cp_w(gen), cp_w(gen)},
+		{cp_w(gen), cp_w(gen), cp_w(gen)}
+	}};
+	return result;
 }
 
 /// <summary>
