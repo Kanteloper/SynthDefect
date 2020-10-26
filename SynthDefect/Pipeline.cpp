@@ -105,6 +105,8 @@ void CPipeline::Execute()
 
 	DoScaling();
 
+	DoModeling();
+
 }
 
 /// <summary>
@@ -657,20 +659,12 @@ void CPipeline::DoPositioning(glm::mat4 const& pm)
 void CPipeline::DoScaling()
 {
 	glm::mat4 scale_matrix = CalculateScaleMatrix(glm::mat4(1.0f));
-	m_baseVertices = m_base->GetVerticesFromModel();
 	for (int i = 0; i < m_baseVertices.size(); i++)
 	{
-		std::cout << "after: (" << m_baseVertices[i].Position.x << ", " << m_baseVertices[i].Position.y << ", " << m_baseVertices[i].Position.z << ") " << std::endl;
-	}
-
-	for (int i = 0; i < m_baseFaces.size(); i++)
-	{
-		aiFace base_face = m_baseFaces.at(i);
-		m_baseVertices[base_face.mIndices[0]].Position = scale_matrix * glm::vec4(m_baseVertices[base_face.mIndices[0]].Position, 1.0);
-		m_baseVertices[base_face.mIndices[1]].Position = scale_matrix * glm::vec4(m_baseVertices[base_face.mIndices[1]].Position, 1.0);
-		m_baseVertices[base_face.mIndices[2]].Position = scale_matrix * glm::vec4(m_baseVertices[base_face.mIndices[2]].Position, 1.0);
+		m_baseVertices[i].Position = scale_matrix * glm::vec4(m_baseVertices[i].Position, 1.0);
 		m_base->UpdateModel(m_baseVertices);
 	}
+	m_baseVertices = m_base->GetVerticesFromModel();
 }
 
 /// <summary>
@@ -685,6 +679,12 @@ glm::mat4 CPipeline::CalculateScaleMatrix(glm::mat4 const& m)
 	return result;
 }
 
+/// <summary>
+/// 
+/// </summary>
+void CPipeline::DoModeling()
+{
+}
 
 CPipeline::~CPipeline()
 {
