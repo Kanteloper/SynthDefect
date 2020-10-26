@@ -76,26 +76,77 @@ CPipeline::CPipeline()
 /// </summary>
 void CPipeline::Execute()
 {
-	/*for (int i = 0; i < m_baseVertices.size(); i++)
-	{
-		std::cout << "before: (" << m_baseVertices[i].Position.x << ", " << m_baseVertices[i].Position.y << ", " << m_baseVertices[i].Position.z << ") " << std::endl;
-	}*/
+	// select faces that user picks randomly
 	std::random_device rd;
 	std::mt19937_64 gen(rd());
 	std::uniform_int_distribution<int> dis(0, (int)(m_pickIndices.size() - 1));
-
-	// select faces that user picks randomly
 	aiFace random_face = m_modelFaces[m_pickIndices.at(dis(gen))];
+
 	glm::mat4 position_matrix = CalculatePositionMatrix(glm::mat4(1.0f), random_face);
 
+	//for (int i = 0; i < m_baseVertices.size(); i++)
+	//{
+	//	std::cout << "before: (" << m_baseVertices[i].Position.x << ", " << m_baseVertices[i].Position.y << ", " << m_baseVertices[i].Position.z << ") " << std::endl;
+	//}
+
 	DoDeforming();
+
+	/*for (int i = 0; i < m_baseVertices.size(); i++)
+	{
+		std::cout << "before positioning: (" << m_baseVertices[i].Position.x << ", " << m_baseVertices[i].Position.y << ", " << m_baseVertices[i].Position.z << ") " << std::endl;
+	}*/
+
 	DoPositioning(position_matrix);
+
 	//for (int i = 0; i < m_baseVertices.size(); i++)
 	//{
 	//	std::cout << "after: (" << m_baseVertices[i].Position.x << ", " << m_baseVertices[i].Position.y << ", " << m_baseVertices[i].Position.z << ") " << std::endl;
 	//}
 
-	// DoScaling();
+	DoScaling();
+
+}
+
+/// <summary>
+/// Calculate Transformation Matrix for Positioining
+/// </summary>
+/// <param name="m"> Identity matrix </param>
+/// <param name="f"> the face that randomly select </param>
+/// <returns> 4 x 4 Matrix for Positioning </returns>
+glm::mat4 CPipeline::CalculatePositionMatrix(glm::mat4 const& m, aiFace const& f)
+{
+	glm::mat4 result(m);
+	glm::vec3 face_A = m_modelVertices[f.mIndices[0]].Position;
+	glm::vec3 face_B = m_modelVertices[f.mIndices[1]].Position;
+	glm::vec3 face_C = m_modelVertices[f.mIndices[2]].Position;
+
+	aiFace base_face = m_baseFaces[0];											// pick one face between any faces
+	glm::vec3 base_A = m_baseVertices[base_face.mIndices[0]].Position;
+	glm::vec3 base_B = m_baseVertices[base_face.mIndices[1]].Position;
+	glm::vec3 base_C = m_baseVertices[base_face.mIndices[2]].Position;
+
+	glm::vec3 face_center = CalculateTriangleCentroid(face_A, face_B, face_C);
+	glm::vec3 face_normal = glm::triangleNormal(face_A, face_B, face_C);
+	glm::vec3 base_normal = glm::triangleNormal(base_A, base_B, base_C);
+
+	float angle = glm::acos(glm::dot(face_normal, base_normal));
+	glm::vec3 axis = glm::normalize(glm::cross(face_normal, base_normal));
+
+	result = glm::translate(result, face_center);
+	result = glm::rotate(result, -angle, axis);
+	return result;
+}
+
+/// <summary>
+/// Calculate the centroid of Triangles
+/// </summary>
+/// <param name="A"> first point of a face </param>
+/// <param name="B"> second point of a face </param>
+/// <param name="C"> third point of a face </param>
+/// <returns> the centroid of the triangle(face) </returns>
+glm::vec3 CPipeline::CalculateTriangleCentroid(glm::vec3 const& A, glm::vec3 const& B, glm::vec3 const& C)
+{
+	return glm::vec3((A.x + B.x + C.x) / 3.0f, (A.y + B.y + C.y) / 3.0f, (A.z + B.z + C.z) / 3.0f);
 }
 
 /// <summary>
@@ -109,16 +160,12 @@ void CPipeline::DoDeforming()
 
 	// Initiate control points
 	std::array<glm::vec3, 36> control_points = InitControlPoints(origin, m_type);
-	/*for (int i = 0; i < control_points.size(); i++)
-	{
-		std::cout << glm::to_string(control_points[i]) << std::endl;
-	}*/
 
 	// Initiate Weights
 	std::array<std::array<float, 3>, 4> weight = InitWeight(m_type);
 
 	// Deform
-
+	DeformGridBase(origin, m_type, control_points, weight);
 }
 
 /// <summary>
@@ -341,6 +388,248 @@ std::array<std::array<float, 3>, 4> CPipeline::InitWeight(int type)
 }
 
 /// <summary>
+/// Deformate the grid base mesh using NFFD
+/// </summary>
+/// <param name="origin"> The origin of FFD space </param>
+/// <param name="type"> The type of synthetic defect </param>
+/// <param name="cp"> The array of control points </param>
+/// <param name="w"> The array of weight value </param>
+void CPipeline::DeformGridBase(glm::vec3 const& origin, int type, std::array<glm::vec3, 36> const& cp, std::array<std::array<float, 3>, 4> const& w)
+{
+	SAxis s_axis;
+	TAxis t_axis;
+	UAxis u_axis;
+	std::vector<Vertex> vertices = m_base->GetVerticesFromModel();
+	for (int idx = 0; idx < vertices.size(); idx++)
+	{
+		// convert a vertex in world coordinates of m_base to local coordinates of lattice space
+		float s = ((vertices[idx].Position.x - origin.x) / s_axis.axis.x) * (s_axis.order - s_axis.degree);
+		float u = ((vertices[idx].Position.z - origin.z) / u_axis.axis.z) * (u_axis.order - u_axis.degree);
+
+		int cur_cp = 0;
+		float s_axis_bp = 0.0f;
+		float u_axis_bp = 0.0f;
+		glm::vec3 ffd1 = glm::vec3(0.0f, 0.0f, 0.0f);
+		glm::vec3 ffd2 = glm::vec3(0.0f, 0.0f, 0.0f);
+		glm::vec3 bottom_ffd1 = glm::vec3(0.0f, 0.0f, 0.0f);
+		glm::vec3 bottom_ffd2 = glm::vec3(0.0f, 0.0f, 0.0f);
+
+		// change object point of grid base mesh usfing NFFD
+		for (int i = 0; i < s_axis.order; i++)
+		{
+			ffd2 = glm::vec3(0.0f, 0.0f, 0.0f);
+			bottom_ffd2 = glm::vec3(0.0f, 0.0f, 0.0f);
+			for (int k = 0; k < u_axis.order; k++)
+			{
+				switch (type)
+				{
+				case 1:	// Open Hole
+					if (i == 2 && k == 2)
+					{
+						u_axis_bp = Bernstein(k, u_axis.degree, u, W, u_axis.order);
+						ffd2.x += u_axis_bp * w[0][0] * cp[cur_cp].x;
+						ffd2.y += u_axis_bp * w[0][1] * cp[cur_cp].y;
+						ffd2.z += u_axis_bp * w[0][2] * cp[cur_cp].z;
+						bottom_ffd2.x += u_axis_bp * w[0][0];
+						bottom_ffd2.y += u_axis_bp * w[0][1];
+						bottom_ffd2.z += u_axis_bp * w[0][2];
+					}
+					else if (i == 2 && k == 3)
+					{
+						u_axis_bp = Bernstein(k, u_axis.degree, u, W, u_axis.order);
+						ffd2.x += u_axis_bp * w[1][0] * cp[cur_cp].x;
+						ffd2.y += u_axis_bp * w[1][1] * cp[cur_cp].y;
+						ffd2.z += u_axis_bp * w[1][2] * cp[cur_cp].z;
+						bottom_ffd2.x += u_axis_bp * w[1][0];
+						bottom_ffd2.y += u_axis_bp * w[1][1];
+						bottom_ffd2.z += u_axis_bp * w[1][2];
+					}
+					else if (i == 3 && k == 2)
+					{
+						u_axis_bp = Bernstein(k, u_axis.degree, u, W, u_axis.order);
+						ffd2.x += u_axis_bp * w[2][0] * cp[cur_cp].x;
+						ffd2.y += u_axis_bp * w[2][1] * cp[cur_cp].y;
+						ffd2.z += u_axis_bp * w[2][2] * cp[cur_cp].z;
+						bottom_ffd2.x += u_axis_bp * w[2][0];
+						bottom_ffd2.y += u_axis_bp * w[2][1];
+						bottom_ffd2.z += u_axis_bp * w[2][2];
+					}
+					else if (i == 3 && k == 3)
+					{
+						u_axis_bp = Bernstein(k, u_axis.degree, u, W, u_axis.order);
+						ffd2.x += u_axis_bp * w[3][0] * cp[cur_cp].x;
+						ffd2.y += u_axis_bp * w[3][1] * cp[cur_cp].y;
+						ffd2.z += u_axis_bp * w[3][2] * cp[cur_cp].z;
+						bottom_ffd2.x += u_axis_bp * w[3][0];
+						bottom_ffd2.y += u_axis_bp * w[3][1];
+						bottom_ffd2.z += u_axis_bp * w[3][2];
+					}
+					else
+					{
+						u_axis_bp = Bernstein(k, u_axis.degree, u, W, u_axis.order);
+						ffd2.x += u_axis_bp * cp[cur_cp].x;
+						ffd2.y += u_axis_bp * cp[cur_cp].y;
+						ffd2.z += u_axis_bp * cp[cur_cp].z;
+						bottom_ffd2.x += u_axis_bp;
+						bottom_ffd2.y += u_axis_bp;
+						bottom_ffd2.z += u_axis_bp;
+					}
+					break;
+
+				case 2:	// Pipe
+					if (i == 2 && k == 2)
+					{
+						u_axis_bp = Bernstein(k, u_axis.degree, u, W, u_axis.order);
+						ffd2.x += u_axis_bp * w[0][0] * cp[cur_cp].x;
+						ffd2.y += u_axis_bp * w[0][1] * cp[cur_cp].y;
+						ffd2.z += u_axis_bp * w[0][2] * cp[cur_cp].z;
+						bottom_ffd2.x += u_axis_bp * w[0][0];
+						bottom_ffd2.y += u_axis_bp * w[0][1];
+						bottom_ffd2.z += u_axis_bp * w[0][2];
+					}
+					else if (i == 2 && k == 3)
+					{
+						u_axis_bp = Bernstein(k, u_axis.degree, u, W, u_axis.order);
+						ffd2.x += u_axis_bp * w[1][0] * cp[cur_cp].x;
+						ffd2.y += u_axis_bp * w[1][1] * cp[cur_cp].y;
+						ffd2.z += u_axis_bp * w[1][2] * cp[cur_cp].z;
+						bottom_ffd2.x += u_axis_bp * w[1][0];
+						bottom_ffd2.y += u_axis_bp * w[1][1];
+						bottom_ffd2.z += u_axis_bp * w[1][2];
+					}
+					else if (i == 3 && k == 2)
+					{
+						u_axis_bp = Bernstein(k, u_axis.degree, u, W, u_axis.order);
+						ffd2.x += u_axis_bp * w[2][0] * cp[cur_cp].x;
+						ffd2.y += u_axis_bp * w[2][1] * cp[cur_cp].y;
+						ffd2.z += u_axis_bp * w[2][2] * cp[cur_cp].z;
+						bottom_ffd2.x += u_axis_bp * w[2][0];
+						bottom_ffd2.y += u_axis_bp * w[2][1];
+						bottom_ffd2.z += u_axis_bp * w[2][2];
+					}
+					else if (i == 3 && k == 3)
+					{
+						u_axis_bp = Bernstein(k, u_axis.degree, u, W, u_axis.order);
+						ffd2.x += u_axis_bp * w[3][0] * cp[cur_cp].x;
+						ffd2.y += u_axis_bp * w[3][1] * cp[cur_cp].y;
+						ffd2.z += u_axis_bp * w[3][2] * cp[cur_cp].z;
+						bottom_ffd2.x += u_axis_bp * w[3][0];
+						bottom_ffd2.y += u_axis_bp * w[3][1];
+						bottom_ffd2.z += u_axis_bp * w[3][2];
+					}
+					else
+					{
+						u_axis_bp = Bernstein(k, u_axis.degree, u, W, u_axis.order);
+						ffd2.x += u_axis_bp * cp[cur_cp].x;
+						ffd2.y += u_axis_bp * cp[cur_cp].y;
+						ffd2.z += u_axis_bp * cp[cur_cp].z;
+						bottom_ffd2.x += u_axis_bp;
+						bottom_ffd2.y += u_axis_bp;
+						bottom_ffd2.z += u_axis_bp;
+					}
+					break;
+
+				case 3:	// Caved Surface
+					if (i == 1 && k == 2)
+					{
+						u_axis_bp = Bernstein(k, u_axis.degree, u, W, u_axis.order);
+						ffd2.x += u_axis_bp * w[0][0] * cp[cur_cp].x;
+						ffd2.y += u_axis_bp * w[0][1] * cp[cur_cp].y;
+						ffd2.z += u_axis_bp * w[0][2] * cp[cur_cp].z;
+						bottom_ffd2.x += u_axis_bp * w[0][0];
+						bottom_ffd2.y += u_axis_bp * w[0][1];
+						bottom_ffd2.z += u_axis_bp * w[0][2];
+					}
+					else if (i == 1 && k == 3)
+					{
+						u_axis_bp = Bernstein(k, u_axis.degree, u, W, u_axis.order);
+						ffd2.x += u_axis_bp * w[1][0] * cp[cur_cp].x;
+						ffd2.y += u_axis_bp * w[1][1] * cp[cur_cp].y;
+						ffd2.z += u_axis_bp * w[1][2] * cp[cur_cp].z;
+						bottom_ffd2.x += u_axis_bp * w[1][0];
+						bottom_ffd2.y += u_axis_bp * w[1][1];
+						bottom_ffd2.z += u_axis_bp * w[1][2];
+					}
+					else if (i == 4 && k == 2)
+					{
+						u_axis_bp = Bernstein(k, u_axis.degree, u, W, u_axis.order);
+						ffd2.x += u_axis_bp * w[2][0] * cp[cur_cp].x;
+						ffd2.y += u_axis_bp * w[2][1] * cp[cur_cp].y;
+						ffd2.z += u_axis_bp * w[2][2] * cp[cur_cp].z;
+						bottom_ffd2.x += u_axis_bp * w[2][0];
+						bottom_ffd2.y += u_axis_bp * w[2][1];
+						bottom_ffd2.z += u_axis_bp * w[2][2];
+					}
+					else if (i == 4 && k == 3)
+					{
+						u_axis_bp = Bernstein(k, u_axis.degree, u, W, u_axis.order);
+						ffd2.x += u_axis_bp * w[3][0] * cp[cur_cp].x;
+						ffd2.y += u_axis_bp * w[3][1] * cp[cur_cp].y;
+						ffd2.z += u_axis_bp * w[3][2] * cp[cur_cp].z;
+						bottom_ffd2.x += u_axis_bp * w[3][0];
+						bottom_ffd2.y += u_axis_bp * w[3][1];
+						bottom_ffd2.z += u_axis_bp * w[3][2];
+					}
+					else
+					{
+						u_axis_bp = Bernstein(k, u_axis.degree, u, W, u_axis.order);
+						ffd2.x += u_axis_bp * cp[cur_cp].x;
+						ffd2.y += u_axis_bp * cp[cur_cp].y;
+						ffd2.z += u_axis_bp * cp[cur_cp].z;
+						bottom_ffd2.x += u_axis_bp;
+						bottom_ffd2.y += u_axis_bp;
+						bottom_ffd2.z += u_axis_bp;
+					}
+					break;
+				}
+				cur_cp++;
+			}
+			u_axis_bp = Bernstein(i, s_axis.degree, s, U, s_axis.order);
+			ffd1.x += u_axis_bp * ffd2.x;
+			ffd1.y += u_axis_bp * ffd2.y;
+			ffd1.z += u_axis_bp * ffd2.z;
+			bottom_ffd1.x += (u_axis_bp * bottom_ffd2.x);
+			bottom_ffd1.y += (u_axis_bp * bottom_ffd2.y);
+			bottom_ffd1.z += (u_axis_bp * bottom_ffd2.z);
+		}
+		if (bottom_ffd1 != glm::vec3(0.0f, 0.0f, 0.0f))
+			vertices[idx].Position = ffd1 / bottom_ffd1;
+	}
+
+	// Update deformed points
+	m_base->UpdateModel(vertices);
+	m_baseVertices = m_base->GetVerticesFromModel();
+}
+
+/// <summary>
+/// Calculate B-Splie basis function
+/// </summary>
+/// <param name="i"> Index </param>
+/// <param name="m"> Degree </param>
+/// <param name="t"> Point of grid base mesh in FFD box coordinate system (s, t, u) </param>
+/// <param name="uv"> Unit vector </param>
+/// <param name="n"> Order </param>
+/// <param name="k"> Total Degree </param>
+/// <returns> The value of B-Spline basis function </returns>
+float CPipeline::Bernstein(int i, int m, float t, std::array<float, 10> const& nv, int n)
+{
+	// base condition
+	if (m == 0)
+	{
+		if ((nv[i] <= t && t < nv[(long long)i + 1]) && (0 <= t && t < 2.5f))
+			return 1.0f;
+		else
+			return 0.0f;
+	}
+
+	if ((nv[i] != nv[(long long)i + m]) && (nv[(long long)i + 1] != nv[(long long)i + (long long)m + 1]))
+		return ((t - nv[i]) / (nv[(long long)i + (long long)m] - nv[i])) * Bernstein(i, m - 1, t, nv, n) +
+		((nv[(long long)i + (long long)m + 1] - t) / (nv[(long long)i + (long long)m + 1] - nv[(long long)i + 1])) * Bernstein(i + 1, m - 1, t, nv, n);
+	else
+		return 0.0f;
+}
+
+/// <summary>
 /// Locate the grid base mesh to the face that selected randomly among faces user picks
 /// </summary>
 void CPipeline::DoPositioning(glm::mat4 const& pm)
@@ -359,48 +648,7 @@ void CPipeline::DoPositioning(glm::mat4 const& pm)
 		m_baseVertices[i].Position = pm * glm::vec4(m_baseVertices[i].Position, 1.0);
 		m_base->UpdateModel(m_baseVertices);
 	}
-}
-
-/// <summary>
-/// Calculate Transformation Matrix for Positioining
-/// </summary>
-/// <param name="m"> Identity matrix </param>
-/// <param name="f"> the face that randomly select </param>
-/// <returns> 4 x 4 Matrix for Positioning </returns>
-glm::mat4 CPipeline::CalculatePositionMatrix(glm::mat4 const& m, aiFace const& f)
-{
-	glm::mat4 result(m);
-	glm::vec3 face_A = m_modelVertices[f.mIndices[0]].Position;
-	glm::vec3 face_B = m_modelVertices[f.mIndices[1]].Position;
-	glm::vec3 face_C = m_modelVertices[f.mIndices[2]].Position;
-
-	aiFace base_face = m_baseFaces[0];											// pick one face between any faces
-	glm::vec3 base_A = m_baseVertices[base_face.mIndices[0]].Position;
-	glm::vec3 base_B = m_baseVertices[base_face.mIndices[1]].Position;
-	glm::vec3 base_C = m_baseVertices[base_face.mIndices[2]].Position;
-
-	glm::vec3 face_center = CalculateTriangleCentroid(face_A, face_B, face_C);
-	glm::vec3 face_normal = glm::triangleNormal(face_A, face_B, face_C);
-	glm::vec3 base_normal = glm::triangleNormal(base_A, base_B, base_C);
-
-	float angle = glm::acos(glm::dot(face_normal, base_normal));
-	glm::vec3 axis = glm::normalize(glm::cross(face_normal, base_normal));
-
-	result = glm::translate(result, face_center);
-	result = glm::rotate(result, -angle, axis);
-	return result;
-}
-
-/// <summary>
-/// Calculate the centroid of Triangles
-/// </summary>
-/// <param name="A"> first point of a face </param>
-/// <param name="B"> second point of a face </param>
-/// <param name="C"> third point of a face </param>
-/// <returns> the centroid of the triangle(face) </returns>
-glm::vec3 CPipeline::CalculateTriangleCentroid(glm::vec3 const& A, glm::vec3 const& B, glm::vec3 const& C)
-{
-	return glm::vec3((A.x + B.x + C.x) / 3.0f, (A.y + B.y + C.y) / 3.0f, (A.z + B.z + C.z) / 3.0f);
+	m_baseVertices = m_base->GetVerticesFromModel();
 }
 
 /// <summary>
@@ -409,6 +657,12 @@ glm::vec3 CPipeline::CalculateTriangleCentroid(glm::vec3 const& A, glm::vec3 con
 void CPipeline::DoScaling()
 {
 	glm::mat4 scale_matrix = CalculateScaleMatrix(glm::mat4(1.0f));
+	m_baseVertices = m_base->GetVerticesFromModel();
+	for (int i = 0; i < m_baseVertices.size(); i++)
+	{
+		std::cout << "after: (" << m_baseVertices[i].Position.x << ", " << m_baseVertices[i].Position.y << ", " << m_baseVertices[i].Position.z << ") " << std::endl;
+	}
+
 	for (int i = 0; i < m_baseFaces.size(); i++)
 	{
 		aiFace base_face = m_baseFaces.at(i);
