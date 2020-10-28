@@ -1,11 +1,12 @@
 
-// Pipeline.h : Interface of Pipelice class
+// Pipeline.h : Interface of CPipelice class
 
 #pragma once
 
 #include <vector>
 #include <array>
 #include "Model.h"
+#include "Base.h"
 
 
 
@@ -14,7 +15,7 @@ class CPipeline
 	// Constructor
 public:
 	CPipeline();
-	CPipeline(Properties const& props, std::vector<int> const& indices, CModel* model, CModel* base)
+	CPipeline(Properties const& props, std::vector<int> const& indices, CModel* model, CBase* base)
 		: m_pickIndices(indices), m_model(model), m_base(base)
 	{
 		m_type = props.type;
@@ -35,7 +36,7 @@ private:
 	float m_depth;
 	std::vector<int> m_pickIndices;
 	CModel* m_model;
-	CModel* m_base;
+	CBase* m_base;
 	std::vector<aiFace> m_modelFaces;
 	std::vector<Vertex> m_modelVertices;
 	std::vector<aiFace> m_baseFaces;
