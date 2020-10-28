@@ -1,5 +1,5 @@
 
-// Model.h : Interface of Model class
+// Model.h : Interface of CModel class
 
 #pragma once
 
@@ -16,11 +16,8 @@ class CModel
 public:
 	CModel::CModel();
 	CModel::CModel(LPCTSTR const& filePath);
-	CModel::CModel(std::string const& filePath);
 
 	// Attributes
-public:
-
 private:
 	std::vector<CMesh> m_meshes;	// model data
 	glm::vec3 m_max;				// max value of coordinates
@@ -30,7 +27,7 @@ private:
 	// Impelementation
 public:
 	void DrawModel();
-	void SaveModel();
+	virtual void ExportOBJ(std::string const& fileName);
 	std::vector<aiFace> GetFacesFromModel() const;
 	std::vector<Vertex> GetVerticesFromModel() const;
 	glm::vec3 GetModelCentroid() const;
@@ -40,10 +37,11 @@ public:
 	glm::vec3 GetBoundingBoxMaxValue() const;
 	~CModel();
 
+protected:
+	void ProcessNode(const aiNode* node, const aiScene* scene);
+
 private:
 	void LoadModel(LPCTSTR const& pathName);
-	void LoadBase(std::string const& pathName);
-	void ProcessNode(const aiNode* node, const aiScene* scene);
 	void SaveNode(const aiNode* node, const aiScene* scene);
 	CMesh ProcessMesh(const aiMesh* mesh, const aiScene* scene);
 	void FindMinMaxVertex(glm::vec3 const& vertex_pos);
