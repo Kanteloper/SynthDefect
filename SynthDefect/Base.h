@@ -12,9 +12,12 @@ public:
 	CBase(std::string const& filePath);
 
 	// Attributes
+private:
+	std::string path;
 
 	// Implements
 public:
+	virtual void ExportOBJ(std::string const& fileName);
 	~CBase();
 
 private:
