@@ -39,10 +39,10 @@ public:
 
 protected:
 	void ProcessNode(const aiNode* node, const aiScene* scene);
+	void SaveNode(const aiNode* node, const aiScene* scene);
 
 private:
 	void LoadModel(LPCTSTR const& pathName);
-	void SaveNode(const aiNode* node, const aiScene* scene);
 	CMesh ProcessMesh(const aiMesh* mesh, const aiScene* scene);
 	void FindMinMaxVertex(glm::vec3 const& vertex_pos);
 	BOOL IsTexCoordsExisted(const aiMesh* mesh);
