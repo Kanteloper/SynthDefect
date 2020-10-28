@@ -19,11 +19,6 @@ CModel::CModel(LPCTSTR const& filePath)
 	LoadModel(filePath);
 }
 
-CModel::CModel(std::string const& filePath)
-{
-	LoadBase(filePath);
-}
-
 /// <summary>
 /// Load selected object file
 /// </summary>
@@ -45,13 +40,11 @@ void CModel::LoadModel(LPCTSTR const& pathName)
   	ProcessNode(model_scene->mRootNode, model_scene);
 }
 
-
 /// <summary>
-/// 
+/// Export mesh file to OBJ file format
 /// </summary>
-/// <param name="mesh"></param>
-/// <param name="scene"></param>
-void CModel::SaveModel()
+/// <param name="fileName"> The desired file name </param>
+void CModel::ExportOBJ(std::string const& fileName)
 {
 	Assimp::Exporter exporter;
 	Assimp::Importer importer;
@@ -74,28 +67,7 @@ void CModel::SaveModel()
 		SaveNode(node->mChildren[i], model_scene);
 	}
 
-	exporter.Export(model_scene, "obj", "D:\\Project\\Research\\SynthDefect\\test\\test.obj");
-}
-
-/// <summary>
-/// Load grid formed mesh for defect patch
-/// </summary>
-/// <param name="pathName"> The path of default grid mesh OBJ file </param>
-void CModel::LoadBase(std::string const& pathName)
-{
-	Assimp::Importer importer;
-	const aiScene* scene = importer.ReadFile(pathName,
-		aiProcess_CalcTangentSpace |
-		aiProcess_Triangulate |
-		aiProcess_JoinIdenticalVertices |
-		aiProcess_ValidateDataStructure);
-
-	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
-	{
-		TRACE(importer.GetErrorString());
-		return;
-	}
-	ProcessNode(scene->mRootNode, scene);
+	exporter.Export(model_scene, "obj", "D:\\Project\\Research\\SynthDefect\\test\\" + fileName + ".obj");
 }
 
 /// <summary>
