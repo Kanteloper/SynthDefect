@@ -67,7 +67,7 @@ void CModel::ExportOBJ(std::string const& fileName)
 		SaveNode(node->mChildren[i], model_scene);
 	}
 
-	exporter.Export(model_scene, "obj", "D:\\Project\\Research\\SynthDefect\\test\\" + fileName + ".obj");
+	exporter.Export(model_scene, "obj", "..\\test\\" + fileName + ".obj");
 }
 
 /// <summary>
