@@ -3,8 +3,21 @@
 
 #include <glm/gtx/string_cast.hpp>
 #include <glm/gtx/normal.hpp>
+#include <CGAL/Exact_predicates_exact_constructions_kernel.h>
+#include <CGAL/Polyhedron_3.h>
+#include <CGAL/Surface_mesh.h>
+#include <CGAL/Nef_polyhedron_3.h>
+#include <CGAL/boost/graph/convert_nef_polyhedron_to_polygon_mesh.h>
+#include <CGAL/IO/OBJ_reader.h>
 #include <iostream>
+#include <fstream>
 #include <random>
+
+typedef CGAL::Exact_predicates_inexact_constructions_kernel Inexact_kernel;
+typedef CGAL::Exact_predicates_exact_constructions_kernel Exact_kernel;
+typedef CGAL::Polyhedron_3<Exact_kernel> Polyhedron;
+typedef CGAL::Surface_mesh<Exact_kernel::Point_3> Surface_mesh;
+typedef CGAL::Nef_polyhedron_3<Exact_kernel> Nef_polyhedron;
 
 /******************* Constants *******************/
 
@@ -105,7 +118,9 @@ void CPipeline::Execute()
 
 	DoScaling();
 
-	DoModeling();
+	m_base->ExportOBJ("synth_defect");
+
+	//DoModeling();
 
 }
 
@@ -680,10 +695,28 @@ glm::mat4 CPipeline::CalculateScaleMatrix(glm::mat4 const& m)
 }
 
 /// <summary>
-/// 
+/// Process difference bool operation between loaded model and synthetic defect using CSG
 /// </summary>
 void CPipeline::DoModeling()
 {
+	std::vector<Exact_kernel::Point_3> points;
+	std::vector<std::vector<std::size_t> > faces;
+
+	// Read OBJ file
+	std::ifstream in("..\\test\\synth_defect.obj");
+	if (!in || !CGAL::read_OBJ(in, points, faces))
+	{
+		return;
+	}
+
+	// Save to Surface_mesh
+	Surface_mesh sm;
+	namespace PMP = CGAL::Polygon_mesh_processing;
+	PMP::orient_polygon_soup(points, faces);
+	PMP::polygon_soup_to_polygon_mesh(points, faces, sm);
+
+	// Convert Surface_mesh to Polyhedron
+
 }
 
 CPipeline::~CPipeline()
