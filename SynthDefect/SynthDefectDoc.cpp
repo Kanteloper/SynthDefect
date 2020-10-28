@@ -61,7 +61,7 @@ BOOL CSynthDefectDoc::OnNewDocument()
 
 	if (!m_bLoad)	// when program is executed at first
 	{
-		m_base = new CModel(DEFECT_BASE_PATH);
+		m_base = new CBase(DEFECT_BASE_PATH);
 	}
 	else
 	{
@@ -69,7 +69,7 @@ BOOL CSynthDefectDoc::OnNewDocument()
 		delete m_model;
 		m_model = nullptr;
 		delete m_base;
-		m_base = new CModel(DEFECT_BASE_PATH);
+		m_base = new CBase(DEFECT_BASE_PATH);
 	}
 
 	return TRUE;

@@ -6,6 +6,7 @@
 #pragma once
 
 #include "Model.h"
+#include "Base.h"
 
 
 class CSynthDefectDoc : public CDocument
@@ -21,7 +22,7 @@ private:
 
 public:
 	CModel* m_model;				// the loaded model
-	CModel* m_base;					// the base mesh of synthetic defect
+	CBase* m_base;					// the base mesh of synthetic defect
 
 // Overrides
 public:
