@@ -38,25 +38,25 @@ void CBase::ExportOBJ(std::string const& fileName)
 	Assimp::Exporter exporter;
 	Assimp::Importer importer;
 
-	const aiScene* model_scene = importer.ReadFile(path,
+	const aiScene* base_scene = importer.ReadFile(path,
 		aiProcess_CalcTangentSpace |
 		aiProcess_Triangulate |
 		aiProcess_JoinIdenticalVertices |
 		aiProcess_ValidateDataStructure);
 
-	if (!model_scene || model_scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !model_scene->mRootNode)
+	if (!base_scene || base_scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !base_scene->mRootNode)
 	{
 		TRACE(importer.GetErrorString());
 		return;
 	}
 
-	const aiNode* node = model_scene->mRootNode;
+	const aiNode* node = base_scene->mRootNode;
 	for (unsigned int i = 0; i < node->mNumChildren; i++)
 	{
-		SaveNode(node->mChildren[i], model_scene);
+		SaveNode(node->mChildren[i], base_scene);
 	}
-
-	exporter.Export(model_scene, "obj", "..\\test\\" + fileName + ".obj");
+	
+	exporter.Export(base_scene, "obj", "..\\test\\" + fileName + ".obj");
 }
 
 CBase::~CBase()
