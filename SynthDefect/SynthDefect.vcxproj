@@ -207,6 +207,7 @@
     <ClInclude Include="GLRoutine.h" />
     <ClInclude Include="MainFrm.h" />
     <ClInclude Include="Mesh.h" />
+    <ClInclude Include="MeshLib.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="OutputWnd.h" />
     <ClInclude Include="pch.h" />
