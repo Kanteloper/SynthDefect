@@ -56,7 +56,7 @@ void CBase::ExportOBJ(std::string const& fileName)
 		SaveNode(node->mChildren[i], base_scene);
 	}
 	
-	exporter.Export(base_scene, "obj", "..\\test\\" + fileName + ".obj");
+	exporter.Export(base_scene, "obj", "..\\data\\defect\\" + fileName + ".obj");
 }
 
 CBase::~CBase()
