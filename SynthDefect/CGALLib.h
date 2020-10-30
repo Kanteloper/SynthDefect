@@ -29,14 +29,20 @@ public:
 		typedef typename HDS::Vertex Vertex;
 		typedef typename Vertex::Point Point;
 		for (size_t i = 0; i < m_vertices.size(); ++i)
+		{
 			B.add_vertex(Point(m_vertices[i].Position.x, m_vertices[i].Position.y, m_vertices[i].Position.z));
+		}
 
-		B.begin_facet();
+		for (size_t i = 0; i < m_faces.size(); ++i)
+		{
+			aiFace face = m_faces[i];
+			B.begin_facet();
+			B.add_vertex_to_facet(face.mIndices[0]);
+			B.add_vertex_to_facet(face.mIndices[1]);
+			B.add_vertex_to_facet(face.mIndices[2]);
+			B.end_facet();
+		}
 
-		for (size_t i = 0; i < m_vertices.size(); ++i)
-			B.add_vertex_to_facet(i);
-
-		B.end_facet();
 		B.end_surface();
 	}
 
