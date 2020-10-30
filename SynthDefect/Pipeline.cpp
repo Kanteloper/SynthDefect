@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "Pipeline.h"
+#include "MeshLib.h"
 
 #include <glm/gtx/string_cast.hpp>
 #include <glm/gtx/normal.hpp>
@@ -118,9 +119,7 @@ void CPipeline::Execute()
 
 	DoScaling();
 
-	m_base->ExportOBJ("synth_defect");
-
-	//DoModeling();
+	DoModeling();
 
 }
 
@@ -699,23 +698,16 @@ glm::mat4 CPipeline::CalculateScaleMatrix(glm::mat4 const& m)
 /// </summary>
 void CPipeline::DoModeling()
 {
-	std::vector<Exact_kernel::Point_3> points;
-	std::vector<std::vector<std::size_t> > faces;
+	// Export model, grid base mesh to OBJ file
+	m_model->ExportOBJ("source");
+	m_base->ExportOBJ("synth_defect");
 
-	// Read OBJ file
-	std::ifstream in("..\\test\\synth_defect.obj");
-	if (!in || !CGAL::read_OBJ(in, points, faces))
-	{
-		return;
-	}
+	// Save to Polyhedron
+	Polyhedron poly_model, poly_base;
+	MeshLib::IO::ImportOBJ("..\\test\\source.obj", &poly_model);
+	MeshLib::IO::ImportOBJ("..\\test\\synth_defect.obj", &poly_base);
 
-	// Save to Surface_mesh
-	Surface_mesh sm;
-	namespace PMP = CGAL::Polygon_mesh_processing;
-	PMP::orient_polygon_soup(points, faces);
-	PMP::polygon_soup_to_polygon_mesh(points, faces, sm);
-
-	// Convert Surface_mesh to Polyhedron
+	// Difference operation
 
 }
 
