@@ -1,24 +1,11 @@
 #include "pch.h"
 #include "Pipeline.h"
-#include "MeshLib.h"
 
 #include <glm/gtx/string_cast.hpp>
 #include <glm/gtx/normal.hpp>
-#include <CGAL/Exact_predicates_exact_constructions_kernel.h>
-#include <CGAL/Polyhedron_3.h>
-#include <CGAL/Surface_mesh.h>
-#include <CGAL/Nef_polyhedron_3.h>
-#include <CGAL/boost/graph/convert_nef_polyhedron_to_polygon_mesh.h>
-#include <CGAL/IO/OBJ_reader.h>
 #include <iostream>
-#include <fstream>
 #include <random>
-
-typedef CGAL::Exact_predicates_inexact_constructions_kernel Inexact_kernel;
-typedef CGAL::Exact_predicates_exact_constructions_kernel Exact_kernel;
-typedef CGAL::Polyhedron_3<Exact_kernel> Polyhedron;
-typedef CGAL::Surface_mesh<Exact_kernel::Point_3> Surface_mesh;
-typedef CGAL::Nef_polyhedron_3<Exact_kernel> Nef_polyhedron;
+#include <time.h>
 
 /******************* Constants *******************/
 
@@ -102,6 +89,10 @@ void CPipeline::Execute()
 	//{
 	//	std::cout << "before: (" << m_baseVertices[i].Position.x << ", " << m_baseVertices[i].Position.y << ", " << m_baseVertices[i].Position.z << ") " << std::endl;
 	//}
+	clock_t start, end;
+	double result = 0.0f;
+
+	start = clock();
 
 	DoDeforming();
 
@@ -121,6 +112,9 @@ void CPipeline::Execute()
 
 	DoModeling();
 
+	end = clock();
+	result = (double)end - start;
+	std::cout << "execution time: " << result << "ms" << std::endl;
 }
 
 /// <summary>
@@ -182,6 +176,7 @@ void CPipeline::DoDeforming()
 
 	// Deform
 	DeformGridBase(origin, m_type, control_points, weight);
+	m_baseVertices = m_base->GetVerticesFromModel();
 }
 
 /// <summary>
@@ -614,7 +609,6 @@ void CPipeline::DeformGridBase(glm::vec3 const& origin, int type, std::array<glm
 
 	// Update deformed points
 	m_base->UpdateModel(vertices);
-	m_baseVertices = m_base->GetVerticesFromModel();
 }
 
 /// <summary>
@@ -698,18 +692,31 @@ glm::mat4 CPipeline::CalculateScaleMatrix(glm::mat4 const& m)
 /// </summary>
 void CPipeline::DoModeling()
 {
-	// Export model, grid base mesh to OBJ file
-	m_model->ExportOBJ("source");
-	m_base->ExportOBJ("synth_defect");
+	// Save vertices, facets of model and grid base mesh to Polyhedron_3 data structure
+	Polyhedron poly_model = InitPolyhedron(m_modelVertices, m_modelFaces);
+	Polyhedron poly_base = InitPolyhedron(m_baseVertices, m_baseFaces);
 
-	// Save to Polyhedron
-	Polyhedron poly_model, poly_base;
-	MeshLib::IO::ImportOBJ("..\\test\\source.obj", &poly_model);
-	MeshLib::IO::ImportOBJ("..\\test\\synth_defect.obj", &poly_base);
+	//// Save to Polyhedron
 
 	// Difference operation
 
 }
+
+/// <summary>
+/// 
+/// </summary>
+/// <param name="vertices"></param>
+/// <param name="facets"></param>
+/// <returns></returns>
+Polyhedron CPipeline::InitPolyhedron(std::vector<Vertex> const& vertices, std::vector<aiFace> const& facets)
+{
+	Polyhedron poly;
+	BuildPolyhedron<HalfedgeDS> builder(vertices, facets);
+	poly.delegate(builder);
+	CGAL_assertion(poly.is_valid());
+	return poly;
+}
+
 
 CPipeline::~CPipeline()
 {
