@@ -202,6 +202,7 @@
     <ClInclude Include="Background.h" />
     <ClInclude Include="Base.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="CGALLib.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="GlobMyProc.h" />
     <ClInclude Include="GLRoutine.h" />
