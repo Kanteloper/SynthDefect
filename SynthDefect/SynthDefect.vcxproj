@@ -119,6 +119,7 @@
       <AdditionalIncludeDirectories>D:\Project\Research\SynthDefect\vcpkg\installed\x64-windows\include;../include;$(VCInstallDir)Auxiliary\VS\UnitTest\include</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>
       </DisableSpecificWarnings>
+      <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
