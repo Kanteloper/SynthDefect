@@ -5,7 +5,7 @@
 
 /******************* Constants for Initial Setting *******************/
 
-#define DEFECT_BASE_PATH "../data/base.obj"
+#define DEFECT_BASE_PATH "../data/defect/base/base.obj"
 
 /******************* User-Defined Window Messages *******************/
 
