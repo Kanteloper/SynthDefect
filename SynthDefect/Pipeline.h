@@ -7,7 +7,6 @@
 #include <array>
 #include "Model.h"
 #include "Base.h"
-#include "CGALLib.h"
 
 class CPipeline
 {
@@ -54,7 +53,6 @@ private:
 	void DoScaling();
 	glm::mat4 CalculateScaleMatrix(glm::mat4 const& m);
 	void DoModeling();
-	Polyhedron InitPolyhedron(std::vector<Vertex> const& vertices, std::vector<aiFace> const& facets);
 	void DoSampling();
 
 public:

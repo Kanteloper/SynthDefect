@@ -3,9 +3,11 @@
 
 #include <glm/gtx/string_cast.hpp>
 #include <glm/gtx/normal.hpp>
+#include <fstream>
 #include <iostream>
 #include <random>
 #include <time.h>
+#include <igl/AABB.h>
 
 /******************* Constants *******************/
 
@@ -83,6 +85,11 @@ void CPipeline::Execute()
 	std::uniform_int_distribution<int> dis(0, (int)(m_pickIndices.size() - 1));
 	aiFace random_face = m_modelFaces[m_pickIndices.at(dis(gen))];
 
+	//for (int i = 0; i < random_face.mNumIndices; ++i)
+	//{
+	//	std::cout << glm::to_string(m_modelVertices[random_face.mIndices[i]].Position) << std::endl;
+	//}
+
 	glm::mat4 position_matrix = CalculatePositionMatrix(glm::mat4(1.0f), random_face);
 
 	//for (int i = 0; i < m_baseVertices.size(); i++)
@@ -94,6 +101,11 @@ void CPipeline::Execute()
 
 	start = clock();
 
+	/*for (int i = 0; i < m_baseVertices.size(); i++)
+	{
+		std::cout << "before deforming: (" << m_baseVertices[i].Position.x << ", " << m_baseVertices[i].Position.y << ", " << m_baseVertices[i].Position.z << ") " << std::endl;
+	}*/
+
 	DoDeforming();
 
 	/*for (int i = 0; i < m_baseVertices.size(); i++)
@@ -103,12 +115,32 @@ void CPipeline::Execute()
 
 	DoPositioning(position_matrix);
 
-	//for (int i = 0; i < m_baseVertices.size(); i++)
-	//{
-	//	std::cout << "after: (" << m_baseVertices[i].Position.x << ", " << m_baseVertices[i].Position.y << ", " << m_baseVertices[i].Position.z << ") " << std::endl;
-	//}
+	/*for (int i = 0; i < m_baseVertices.size(); i++)
+	{
+		std::cout << "before scaling: (" << m_baseVertices[i].Position.x << ", " << m_baseVertices[i].Position.y << ", " << m_baseVertices[i].Position.z << ") " << std::endl;
+	}*/
+
+	//glm::vec3 face_A = m_modelVertices[random_face.mIndices[0]].Position;
+	//glm::vec3 face_B = m_modelVertices[random_face.mIndices[1]].Position;
+	//glm::vec3 face_C = m_modelVertices[random_face.mIndices[2]].Position;
+
+	//glm::vec3 face_normal = glm::triangleNormal(face_A, face_B, face_C);
+	//std::cout << "face normal: " << glm::to_string(face_normal) << std::endl;
+
+	//aiFace base_face = m_baseFaces[0];											// pick one face between any faces
+	//glm::vec3 base_A = m_baseVertices[base_face.mIndices[0]].Position;
+	//glm::vec3 base_B = m_baseVertices[base_face.mIndices[1]].Position;
+	//glm::vec3 base_C = m_baseVertices[base_face.mIndices[2]].Position;
+
+	//glm::vec3 base_normal = glm::triangleNormal(base_A, base_B, base_C);
+	//std::cout << "base normal: " << glm::to_string(base_normal) << std::endl;
 
 	DoScaling();
+
+	/*for (int i = 0; i < m_baseVertices.size(); i++)
+	{
+		std::cout << "after scaling: (" << m_baseVertices[i].Position.x << ", " << m_baseVertices[i].Position.y << ", " << m_baseVertices[i].Position.z << ") " << std::endl;
+	}*/
 
 	DoModeling();
 
@@ -166,7 +198,6 @@ void CPipeline::DoDeforming()
 {
 	// construct lattice space
 	glm::vec3 origin = m_base->GetBoundingBoxMinValue();
-	std::cout << "lattice origin: " << glm::to_string(origin) << std::endl;
 
 	// Initiate control points
 	std::array<glm::vec3, 36> control_points = InitControlPoints(origin, m_type);
@@ -692,31 +723,8 @@ glm::mat4 CPipeline::CalculateScaleMatrix(glm::mat4 const& m)
 /// </summary>
 void CPipeline::DoModeling()
 {
-	// Save vertices, facets of model and grid base mesh to Polyhedron_3 data structure
-	Polyhedron poly_model = InitPolyhedron(m_modelVertices, m_modelFaces);
-	Polyhedron poly_base = InitPolyhedron(m_baseVertices, m_baseFaces);
-
-	//// Save to Polyhedron
-
-	// Difference operation
-
+	// Save to Surface_mesh
 }
-
-/// <summary>
-/// 
-/// </summary>
-/// <param name="vertices"></param>
-/// <param name="facets"></param>
-/// <returns></returns>
-Polyhedron CPipeline::InitPolyhedron(std::vector<Vertex> const& vertices, std::vector<aiFace> const& facets)
-{
-	Polyhedron poly;
-	BuildPolyhedron<HalfedgeDS> builder(vertices, facets);
-	poly.delegate(builder);
-	CGAL_assertion(poly.is_valid());
-	return poly;
-}
-
 
 CPipeline::~CPipeline()
 {
