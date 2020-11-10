@@ -114,7 +114,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_WINDOWS;_DEBUG;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <AdditionalIncludeDirectories>D:\Project\Research\SynthDefect\vcpkg\installed\x64-windows\include;../include;$(VCInstallDir)Auxiliary\VS\UnitTest\include</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>
@@ -203,7 +203,6 @@
     <ClInclude Include="Background.h" />
     <ClInclude Include="Base.h" />
     <ClInclude Include="Camera.h" />
-    <ClInclude Include="CGALLib.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="GlobMyProc.h" />
     <ClInclude Include="GLRoutine.h" />
