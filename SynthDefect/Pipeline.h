@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include <Eigen/Dense>
 #include <vector>
 #include <array>
 #include "Model.h"
@@ -53,6 +54,8 @@ private:
 	void DoScaling();
 	glm::mat4 CalculateScaleMatrix(glm::mat4 const& m);
 	void DoModeling();
+	BOOL ConvertEigenMatrixForVertex(Eigen::PlainObjectBase<Eigen::MatrixXd> &target, std::vector<Vertex> const& source);
+	void ConvertEigenMatrixForFace(Eigen::PlainObjectBase<Eigen::MatrixXi> &target, std::vector<aiFace> const& source);
 	void DoSampling();
 
 public:
