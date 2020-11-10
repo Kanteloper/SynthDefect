@@ -7,7 +7,7 @@
 #include <iostream>
 #include <random>
 #include <time.h>
-#include <igl/AABB.h>
+#include <igl/readOFF.h>
 
 /******************* Constants *******************/
 
@@ -723,7 +723,61 @@ glm::mat4 CPipeline::CalculateScaleMatrix(glm::mat4 const& m)
 /// </summary>
 void CPipeline::DoModeling()
 {
-	// Save to Surface_mesh
+	// std::vector<Vertex> -> std::vector<std::vector<float>>
+	// std::vector<aiFace> -> std::vector<std::vector<int>>
+	Eigen::MatrixXd modelV, baseV;
+	if (!ConvertEigenMatrixForVertex(modelV, m_modelVertices) && !ConvertEigenMatrixForVertex(baseV, m_baseVertices))
+	{
+		TRACE("Error: Failed to convert Eigen Matrix\n");
+		return;
+	}
+
+	Eigen::MatrixXi modelF, baseF;
+	ConvertEigenMatrixForFace(modelF, m_modelFaces);
+	ConvertEigenMatrixForFace(baseF, m_baseFaces);
+
+
+	// Load a mesh in OFF format
+	//Eigen::MatrixXd V;
+	//Eigen::MatrixXi F;
+	//std::cout << igl::readOFF("../data/cube.off", V, F) << std::endl;
+}
+
+/// <summary>
+/// 
+/// </summary>
+/// <param name="target"></param>
+/// <param name="source"></param>
+BOOL CPipeline::ConvertEigenMatrixForVertex(Eigen::PlainObjectBase<Eigen::MatrixXd>& target, std::vector<Vertex> const& source)
+{
+	std::vector<std::vector<float>> tmp;
+	tmp.clear();
+	tmp.resize(source.size());
+	for (int i = 0; i < source.size(); ++i)
+	{
+		std::vector<float> vertex;
+		vertex.resize(3);
+		vertex[0] = source[i].Position.x;
+		vertex[1] = source[i].Position.y;
+		vertex[2] = source[i].Position.z;
+		tmp[i] = vertex;
+	}
+
+	bool success = igl::list_to_matrix(tmp, target);
+	if (!success)
+		return FALSE;
+
+	return TRUE;
+}
+
+/// <summary>
+/// 
+/// </summary>
+/// <param name="target"></param>
+/// <param name="source"></param>
+void CPipeline::ConvertEigenMatrixForFace(Eigen::PlainObjectBase<Eigen::MatrixXi>& target, std::vector<aiFace> const& source)
+{
+
 }
 
 CPipeline::~CPipeline()
