@@ -156,11 +156,11 @@ void CPropertiesWnd::InitPropList()
 
 	// The size of defects
 	CMFCPropertyGridProperty* pSize = new CMFCPropertyGridProperty(_T("Size"), 0, TRUE);
-	m_pWidth = new CMFCPropertyGridProperty(_T("Width"), (_variant_t)0.0, _T("Specifies the synthetic defect's width (Default unit = cm)"));
+	m_pWidth = new CMFCPropertyGridProperty(_T("Width"), (_variant_t)1.0, _T("Specifies the synthetic defect's width (Default unit = cm)"));
 	pSize->AddSubItem(m_pWidth);
-	m_pHeight = new CMFCPropertyGridProperty(_T("Height"), (_variant_t)0.0, _T("Specifies the synthetic defect's height (Default unit = cm)"));
+	m_pHeight = new CMFCPropertyGridProperty(_T("Height"), (_variant_t)1.0, _T("Specifies the synthetic defect's height (Default unit = cm)"));
 	pSize->AddSubItem(m_pHeight);
-	m_pDepth = new CMFCPropertyGridProperty(_T("Depth"), (_variant_t)0.0, _T("Specifies the synthetic defect's depth (Default unit = cm)"));
+	m_pDepth = new CMFCPropertyGridProperty(_T("Depth"), (_variant_t)1.0, _T("Specifies the synthetic defect's depth (Default unit = cm)"));
 	pSize->AddSubItem(m_pDepth);
 	m_wndPropList.AddProperty(pSize);
 
@@ -245,26 +245,14 @@ afx_msg LRESULT CPropertiesWnd::OnUpdateProperty(WPARAM wParam, LPARAM lParam)
 			props->type = 3;
 	}
 
-	if (m_pWidth->IsModified())
-	{
-		IsPropertiesModified = TRUE;
-		COleVariant width = m_pWidth->GetValue();
-		props->width = (float)width.dblVal;
-	}
+	COleVariant width = m_pWidth->GetValue();
+	props->width = (float)width.dblVal;
 
-	if (m_pHeight->IsModified())
-	{
-		IsPropertiesModified = TRUE;
-		COleVariant height = m_pHeight->GetValue();
-		props->height = (float)height.dblVal;
-	}
+	COleVariant height = m_pHeight->GetValue();
+	props->height = (float)height.dblVal;
 
-	if (m_pDepth->IsModified())
-	{
-		IsPropertiesModified = TRUE;
-		COleVariant depth = m_pDepth->GetValue();
-		props->depth = (float)depth.dblVal;
-	}
+	COleVariant depth = m_pDepth->GetValue();
+	props->depth = (float)depth.dblVal;
 
 	if (m_pPoints->IsModified())
 	{
