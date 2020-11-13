@@ -728,13 +728,16 @@ void CPipeline::DoModeling()
 	Eigen::MatrixXd modelV, baseV;
 	if (!ConvertEigenMatrixForVertex(modelV, m_modelVertices) && !ConvertEigenMatrixForVertex(baseV, m_baseVertices))
 	{
-		TRACE("Error: Failed to convert Eigen Matrix\n");
+		TRACE("Error: Failed to convert Eigen Matrix for vertices\n");
 		return;
 	}
 
 	Eigen::MatrixXi modelF, baseF;
-	ConvertEigenMatrixForFace(modelF, m_modelFaces);
-	ConvertEigenMatrixForFace(baseF, m_baseFaces);
+	if (!ConvertEigenMatrixForFace(modelF, m_modelFaces) && !ConvertEigenMatrixForFace(baseF, m_baseFaces))
+	{
+		TRACE("Error: Failed to convert Eigen Matrix for facets \n");
+		return;
+	}
 
 
 	// Load a mesh in OFF format
@@ -744,10 +747,10 @@ void CPipeline::DoModeling()
 }
 
 /// <summary>
-/// 
+/// Convert the data structure for vertices to Eigne Matrix for using libigl
 /// </summary>
-/// <param name="target"></param>
-/// <param name="source"></param>
+/// <param name="target"> Dynamic Eigen Matrix to be targeted </param>
+/// <param name="source"> Vector for vertex data to be sourced </param>
 BOOL CPipeline::ConvertEigenMatrixForVertex(Eigen::PlainObjectBase<Eigen::MatrixXd>& target, std::vector<Vertex> const& source)
 {
 	std::vector<std::vector<float>> tmp;
@@ -771,13 +774,30 @@ BOOL CPipeline::ConvertEigenMatrixForVertex(Eigen::PlainObjectBase<Eigen::Matrix
 }
 
 /// <summary>
-/// 
+/// Convert the data structure for faces to Eigne Matrix for using libigl
 /// </summary>
-/// <param name="target"></param>
-/// <param name="source"></param>
-void CPipeline::ConvertEigenMatrixForFace(Eigen::PlainObjectBase<Eigen::MatrixXi>& target, std::vector<aiFace> const& source)
+/// <param name="target"> Dynamic Eigen Matrix to be targeted </param>
+/// <param name="source"> Vector for vertex data to be sourced </param>
+BOOL CPipeline::ConvertEigenMatrixForFace(Eigen::PlainObjectBase<Eigen::MatrixXi>& target, std::vector<aiFace> const& source)
 {
+	// f vertex index//vertex normal index
+	std::vector<std::vector<int>> tmp;
+	tmp.clear();
+	tmp.resize(source.size());
+	for (int i = 0; i < source.size(); ++i)
+	{
+		std::vector<int> face;
+		face.resize(source[i].mNumIndices);
+		for (int j = 0; j < source[i].mNumIndices; ++j)
+			face[j] = source[i].mIndices[j];
+		tmp[i] = face;
+	}
 
+	bool success = igl::list_to_matrix(tmp, target);
+	if (!success)
+		return FALSE;
+
+	return TRUE;
 }
 
 CPipeline::~CPipeline()
