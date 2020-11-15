@@ -34,8 +34,6 @@ public:
 #endif // SHARED_HANDLERS
 
 // Implementation
-private:
-	CView* GetChildView();
 public:
 	virtual ~CSynthDefectDoc();
 #ifdef _DEBUG

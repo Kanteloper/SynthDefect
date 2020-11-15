@@ -76,19 +76,6 @@ BOOL CSynthDefectDoc::OnNewDocument()
 }
 
 /// <summary>
-/// Get the reference of View object in Document
-/// </summary>
-/// <returns> the pointer of CView object </returns>
-CView* CSynthDefectDoc::GetChildView()
-{
-	CView* target = nullptr;
-	POSITION pos = GetFirstViewPosition();
-	if (pos)
-		target = GetNextView(pos);
-	return target;
-}
-
-/// <summary>
 /// Called by the framework as part of the File 'Open' command
 /// </summary>
 /// <param name="lpszPathName">: Points to the path of the document to be opened</param>
