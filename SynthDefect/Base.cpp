@@ -29,36 +29,6 @@ void CBase::LoadBase(std::string const& pathName)
 	ProcessNode(scene->mRootNode, scene);
 }
 
-/// <summary>
-/// Export mesh file to OBJ file format
-/// </summary>
-/// <param name="fileName"> The desired file name </param>
-void CBase::ExportOBJ(std::string const& fileName)
-{
-	Assimp::Exporter exporter;
-	Assimp::Importer importer;
-
-	const aiScene* base_scene = importer.ReadFile(path,
-		aiProcess_CalcTangentSpace |
-		aiProcess_Triangulate |
-		aiProcess_JoinIdenticalVertices |
-		aiProcess_ValidateDataStructure);
-
-	if (!base_scene || base_scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !base_scene->mRootNode)
-	{
-		TRACE(importer.GetErrorString());
-		return;
-	}
-
-	const aiNode* node = base_scene->mRootNode;
-	for (unsigned int i = 0; i < node->mNumChildren; i++)
-	{
-		SaveNode(node->mChildren[i], base_scene);
-	}
-	
-	exporter.Export(base_scene, "obj", "..\\data\\defect\\" + fileName + ".obj");
-}
-
 CBase::~CBase()
 {
 }

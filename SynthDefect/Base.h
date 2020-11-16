@@ -17,7 +17,6 @@ private:
 
 	// Implements
 public:
-	virtual void ExportOBJ(std::string const& fileName);
 	~CBase();
 
 private:
