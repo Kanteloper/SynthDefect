@@ -7,7 +7,9 @@
 #include <iostream>
 #include <random>
 #include <time.h>
+#include <igl/writeOFF.h>
 #include <igl/readOFF.h>
+#include <igl/copyleft/cork/mesh_boolean.h>
 
 /******************* Constants *******************/
 
@@ -723,27 +725,24 @@ glm::mat4 CPipeline::CalculateScaleMatrix(glm::mat4 const& m)
 /// </summary>
 void CPipeline::DoModeling()
 {
-	// std::vector<Vertex> -> std::vector<std::vector<float>>
-	// std::vector<aiFace> -> std::vector<std::vector<int>>
-	Eigen::MatrixXd modelV, baseV;
-	if (!ConvertEigenMatrixForVertex(modelV, m_modelVertices) && !ConvertEigenMatrixForVertex(baseV, m_baseVertices))
+	Eigen::MatrixXd modelV, baseV, resultV;
+	if (!ConvertEigenMatrixForVertex(modelV, m_modelVertices) || !ConvertEigenMatrixForVertex(baseV, m_baseVertices))
 	{
 		TRACE("Error: Failed to convert Eigen Matrix for vertices\n");
 		return;
 	}
 
-	Eigen::MatrixXi modelF, baseF;
-	if (!ConvertEigenMatrixForFace(modelF, m_modelFaces) && !ConvertEigenMatrixForFace(baseF, m_baseFaces))
+	Eigen::MatrixXi modelF, baseF, resultF;
+	if (!ConvertEigenMatrixForFace(modelF, m_modelFaces) || !ConvertEigenMatrixForFace(baseF, m_baseFaces))
 	{
 		TRACE("Error: Failed to convert Eigen Matrix for facets \n");
 		return;
 	}
 
-
-	// Load a mesh in OFF format
-	//Eigen::MatrixXd V;
-	//Eigen::MatrixXi F;
-	//std::cout << igl::readOFF("../data/cube.off", V, F) << std::endl;
+	igl::copyleft::cork::mesh_boolean(modelV, modelF, baseV, baseF, igl::MESH_BOOLEAN_TYPE_MINUS, resultV, resultF);
+	
+	// Output off file
+	igl::writeOFF("../data/out.off", resultV, resultF);
 }
 
 /// <summary>
