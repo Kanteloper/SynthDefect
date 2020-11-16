@@ -6,6 +6,8 @@
 #include <string>
 #include <assimp/Exporter.hpp>
 
+#include <iostream>
+
 CModel::CModel() 
 {
 	m_max = glm::vec3(0.0f, 0.0f, 0.0f);
@@ -28,7 +30,6 @@ void CModel::LoadModel(LPCTSTR const& pathName)
 	Assimp::Importer importer;
 	path = ConvertStdString(pathName);
 	const aiScene* model_scene = importer.ReadFile(path,
-		aiProcess_CalcTangentSpace |
 		aiProcess_Triangulate |
 		aiProcess_ValidateDataStructure);
 
@@ -38,36 +39,6 @@ void CModel::LoadModel(LPCTSTR const& pathName)
 		return;
 	}
   	ProcessNode(model_scene->mRootNode, model_scene);
-}
-
-/// <summary>
-/// Export mesh file to OBJ file format
-/// </summary>
-/// <param name="fileName"> The desired file name </param>
-void CModel::ExportOBJ(std::string const& fileName)
-{
-	Assimp::Exporter exporter;
-	Assimp::Importer importer;
-
-	const aiScene* model_scene = importer.ReadFile(path,
-		aiProcess_CalcTangentSpace |
-		aiProcess_Triangulate |
-		aiProcess_JoinIdenticalVertices |
-		aiProcess_ValidateDataStructure);
-
-	if (!model_scene || model_scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !model_scene->mRootNode)
-	{
-		TRACE(importer.GetErrorString());
-		return;
-	}
-
-	const aiNode* node = model_scene->mRootNode;
-	for (unsigned int i = 0; i < node->mNumChildren; i++)
-	{
-		SaveNode(node->mChildren[i], model_scene);
-	}
-
-	exporter.Export(model_scene, "obj", "..\\data\\target\\" + fileName + ".obj");
 }
 
 /// <summary>
@@ -101,32 +72,6 @@ void CModel::ProcessNode(const aiNode* node, const aiScene* scene)
 	for (unsigned int i = 0; i < node->mNumChildren; i++)
 	{
 		ProcessNode(node->mChildren[i], scene);
-	}
-}
-
-/// <summary>
-/// 
-/// </summary>
-/// <param name="node"></param>
-/// <param name="scene"></param>
-void CModel::SaveNode(const aiNode* node, const aiScene* scene)
-{
-	for (unsigned int i = 0; i < node->mNumMeshes; i++)
-	{
-		// the node object only contains indices to index the actual objects in the scene
-		// the scene contains all the data, node is just to keep stuff organized
-		aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-		for (unsigned int i = 0; i < mesh->mNumVertices; i++)
-		{
-			mesh->mVertices[i].x = GetVerticesFromModel().at(i).Position.x;
-			mesh->mVertices[i].y = GetVerticesFromModel().at(i).Position.y;
-			mesh->mVertices[i].z = GetVerticesFromModel().at(i).Position.z;
-		}
-	}
-	// then do the same for each of its children
-	for (unsigned int i = 0; i < node->mNumChildren; i++)
-	{
-		SaveNode(node->mChildren[i], scene);
 	}
 }
 
@@ -214,7 +159,10 @@ CMesh CModel::ProcessMesh(const aiMesh* mesh, const aiScene* scene)
 		aiFace face = mesh->mFaces[i];
 		faces.push_back(face);
 		for (unsigned int j = 0; j < face.mNumIndices; j++)
+		{
+			//std::cout << face.mIndices[j] << std::endl;
 			indices.push_back(face.mIndices[j]);
+		}
 	}
 
 	// process indieces

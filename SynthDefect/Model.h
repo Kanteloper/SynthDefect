@@ -27,7 +27,6 @@ private:
 	// Impelementation
 public:
 	void DrawModel();
-	virtual void ExportOBJ(std::string const& fileName);
 	std::vector<aiFace> GetFacesFromModel() const;
 	std::vector<Vertex> GetVerticesFromModel() const;
 	glm::vec3 GetModelCentroid() const;
@@ -39,7 +38,6 @@ public:
 
 protected:
 	void ProcessNode(const aiNode* node, const aiScene* scene);
-	void SaveNode(const aiNode* node, const aiScene* scene);
 
 private:
 	void LoadModel(LPCTSTR const& pathName);
