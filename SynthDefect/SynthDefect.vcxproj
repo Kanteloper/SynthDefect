@@ -124,7 +124,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <AdditionalLibraryDirectories>D:\Project\Research\SynthDefect\vcpkg\installed\x64-windows\lib;../lib;$(VCInstallDir)Auxiliary\VS\UnitTest\lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>freeglut.lib;glew32.lib;glew32s.lib;Open3D.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>freeglut.lib;glew32.lib;glew32s.lib;Open3D.lib;cork.lib;igl_cork.lib;igl_cgal.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
